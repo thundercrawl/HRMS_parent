@@ -23,9 +23,12 @@ public class DateUtil {
 	public static final String END_DAY_FOMAT_A = "yyyy/MM/dd 23:59:59";
 	public static final String END_DAY_FOMAT_B = "yyyy-MM-dd 23:59:59";
 	public static final String SHORT_EN_FORMAT = "yyyyMMdd";
+	public static final String YEAR_EN_FORMAT = "yyyy";
 	public static final String MINUTE_FORMAT = "yyyyMMddHHmm";
 	public static final String SHORT_FORMAT_HOUR = "HH:mm";
 	public static final String CN_SHORT_FORMAT = "MM月dd日";
+
+
 	
 	public static final String CN_CUT_FORMAT = "MM月dd日 HH:mm";
 	public static final String CN_NOSECOND_FORMAT = "yyyy年MM月dd日 HH:mm";
@@ -433,6 +436,41 @@ public class DateUtil {
 		calendar.set(Calendar.SECOND, 59);
 		return calendar.getTime();
 	}
+
+	//计算两个日期相差年数
+	public static int yearBetweenTwoDate(String startDate,String endDate){
+		Calendar calBegin = Calendar.getInstance(); //获取日历实例
+		Calendar calEnd = Calendar.getInstance();
+		calBegin.setTime(stringTodate(startDate,DateUtil.YEAR_EN_FORMAT)); //字符串按照指定格式转化为日期
+		calEnd.setTime(stringTodate(endDate,DateUtil.YEAR_EN_FORMAT));
+		return calEnd.get(Calendar.YEAR) - calBegin.get(Calendar.YEAR);
+	}
+	//字符串按照指定格式转化为日期
+	public static Date stringTodate(String dateStr, String formatStr) {
+		// 如果时间为空则默认当前时间
+		Date date = null;
+		SimpleDateFormat format = new SimpleDateFormat(formatStr);
+		if (dateStr != null && !dateStr.equals("")) {
+			String time = "";
+			try {
+				Date dateTwo = format.parse(dateStr);
+				time = format.format(dateTwo);
+				date = format.parse(time);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			String timeTwo = format.format(new Date());
+			try {
+				date = format.parse(timeTwo);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return date;
+	}
+
 	public static void main(String[] args){
 		System.err.println(DateUtil.formatDate(DateUtil.SHORT_FORMAT, set(new Date(), DATE, 25)));
 		

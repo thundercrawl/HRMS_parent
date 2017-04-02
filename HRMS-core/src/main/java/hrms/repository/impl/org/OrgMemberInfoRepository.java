@@ -2,6 +2,7 @@ package hrms.repository.impl.org;
 
 import hrms.common.Constant;
 import hrms.entity.OrgMemberInfo;
+import hrms.model.OrgMemberDetail;
 import hrms.repository.RepositorySupport;
 import hrms.util.ParseUtil;
 import hrms.vo.LoginInfo;
@@ -58,4 +59,24 @@ public class OrgMemberInfoRepository extends RepositorySupport<OrgMemberInfo> {
         return true;
     }
 
+    /**
+     * @describe 查询用户的部门编号、部门名称和职称
+     * @param userID
+     * @return
+     */
+    public OrgMemberDetail findOrg(Integer userID){
+        String sql = "select a.ORG_ID,a.ORG_NAME,b.JOB_NAME FROM org_info a,org_member_info b " +
+                " WHERE a.ORG_ID = b.ORG_ID AND b.USER_ID = ? AND b.STATUS = ? ";
+        List<Object> objects = this.executeSql(sql, userID, Constant.STATUS_ABLE);
+        if(objects == null || objects.size() < 1){
+            return null;
+        }
+        Object[] o = (Object[]) objects.get(0);
+        OrgMemberDetail detail = new OrgMemberDetail();
+        detail.setUserID(userID);
+        detail.setOrgID(ParseUtil.parseInt(o[0]));
+        detail.setOrgName(ParseUtil.parseString(o[1]));
+        detail.setJobName(ParseUtil.parseString(o[2]));
+        return detail;
+    }
 }

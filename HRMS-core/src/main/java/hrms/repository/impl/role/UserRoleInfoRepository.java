@@ -7,7 +7,10 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 谢益文 on 2017/3/20.
@@ -29,5 +32,30 @@ public class UserRoleInfoRepository extends RepositorySupport<UserRoleInfo> {
             return null;
         }
         return roles;
+    }
+
+    /**
+     * @describe 查询一组用户的权限
+     * @param userIds
+     * @return
+     */
+    public Map findUserRole(Collection<Integer> userIds){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserRoleInfo.class);
+        detachedCriteria.add(Restrictions.in("userId",userIds))
+                .add(Restrictions.eq("status",Constant.ROLE_ABLE));
+        List<UserRoleInfo> all = this.findAll(detachedCriteria);
+        Map<Integer,Integer> resultMap = new HashMap<>();
+
+        if(all == null || all.size() < 1){
+            for(UserRoleInfo userRoleInfo:all){
+                resultMap.put(userRoleInfo.getUserId(),Constant.ROLE_WORKER_VALUE);
+            }
+        }else{
+            for(UserRoleInfo userRoleInfo:all){
+                resultMap.put(userRoleInfo.getUserId(),userRoleInfo.getRoleId());
+            }
+        }
+        return resultMap;
+
     }
 }

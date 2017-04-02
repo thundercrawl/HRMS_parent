@@ -1,6 +1,7 @@
 package hrms.service.impl.user;
 
 import hrms.common.CommonParams;
+import hrms.po.FindUserParam;
 import hrms.po.LoginParam;
 import hrms.po.RegisterUserInfo;
 import hrms.vo.MsgVo;
@@ -24,7 +25,7 @@ public interface UserInfoService {
      */
     public MsgVo login(LoginParam param);
 
-    public MsgVo findUsers(Integer userID,CommonParams commonParams);
+    public MsgVo findUsers(FindUserParam param,Integer userID, CommonParams commonParams);
 
     public MsgVo findUserDetail(Integer userID,CommonParams commonParams);
 }

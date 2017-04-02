@@ -4,11 +4,14 @@ import hrms.common.CommonParams;
 import hrms.common.Constant;
 import hrms.common.ErrorCode;
 import hrms.entity.*;
+import hrms.model.OrgMemberDetail;
+import hrms.po.FindUserParam;
 import hrms.po.LoginParam;
 import hrms.po.RegisterUserInfo;
 import hrms.repository.impl.org.OrgInfoRepository;
 import hrms.repository.impl.org.OrgManagerInfoRepository;
 import hrms.repository.impl.org.OrgMemberInfoRepository;
+import hrms.repository.impl.picture.PictureInfoReposity;
 import hrms.repository.impl.role.RoleInfoRepository;
 import hrms.repository.impl.role.UserRoleInfoRepository;
 import hrms.repository.impl.sys.SysParamConfigRepository;
@@ -18,25 +21,19 @@ import hrms.service.impl.user.UserInfoService;
 import hrms.util.*;
 import hrms.vo.LoginInfo;
 import hrms.vo.MsgVo;
+import hrms.vo.ShowUserVo;
+import hrms.vo.UserDetail;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by 谢益文 on 2017/3/20.
  */
 @Service("userInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
-
-    private static final int DEFAULT_SM_ROLE_ID = 1;
-    private static final int DEFAULT_HR_ROLE_ID = 2;
-    private static final int DEFAULT_WORKER_ROLE_ID = 5;
-
     @Resource
     private UserInfoRepository userInfoRepository;
     @Resource
@@ -53,6 +50,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private SysParamConfigRepository sysParamConfigRepository;
     @Resource
     private UserSensitiveInfoRepository userSensitiveInfoRepository;
+    @Resource
+    private PictureInfoReposity pictureInfoReposity;
 
     @Override
     public MsgVo save(List<RegisterUserInfo> registerUserInfos, CommonParams commonParams) {
@@ -63,25 +62,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         boolean isSM = false;
         boolean isHR = false;
 
-        int hrRoleId = DEFAULT_HR_ROLE_ID;
-        int smRoleId = DEFAULT_SM_ROLE_ID;
-        int workerRoleID = DEFAULT_WORKER_ROLE_ID;
-
-        //获取配置的系统管理员和hr的权限编号
-        SysParamConfig hrConfig = sysParamConfigRepository.findByID(Constant.ROLE_HR);
-        if(hrConfig != null){
-            hrRoleId = ParseUtil.parseInt(hrConfig.getParamValue());
-        }
-        SysParamConfig smConfig = sysParamConfigRepository.findByID(Constant.ROLE_SYSTEM_MANAGER);
-        if(smConfig != null){
-            smRoleId = ParseUtil.parseInt(smConfig.getParamValue());
-        }
-        SysParamConfig workerConfig = sysParamConfigRepository.findByID(Constant.ROLE_WORKER);
-        if(workerConfig != null){
-            workerRoleID = ParseUtil.parseInt(workerConfig.getParamValue());
-        }
-
-
         List<OrgManagerInfo> orgManagerBatch = new ArrayList<>();
         List<UserInfo> userInfoBatch = new ArrayList<>();
 
@@ -91,10 +71,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             return MsgVo.fail(ErrorCode.ONLY_HR);
         }
         for(UserRoleInfo userRoleInfo:userRoleInfos){
-              if(hrRoleId == userRoleInfo.getRoleId().intValue()){
+              if(Constant.ROLE_HR_VALUE == userRoleInfo.getRoleId().intValue()){
                   isHR = true;
               }
-              if(smRoleId == userRoleInfo.getRoleId().intValue()){
+              if(Constant.ROLE_SYSTEM_MANAGER_VALUE == userRoleInfo.getRoleId().intValue()){
                   isSM = true;
               }
         }
@@ -161,24 +141,39 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         //注册敏感信息 和 用户头像
         List<UserSensitiveInfo> userSensitiveBatch = new ArrayList<>();
+        List<PictureInfo> userPictureBatch = new ArrayList<>();
         for(RegisterUserInfo registerUserInfo:registerUserInfos){
+            Integer userId = phoneMap.get(registerUserInfo.getUserPhone()).getUserId();
+
             //注册敏感信息
             UserSensitiveInfo userSensitiveInfo = new UserSensitiveInfo();
             userSensitiveInfo.setDataOfBirth(registerUserInfo.getDataOfBirth());
             userSensitiveInfo.setUserCardNumber(registerUserInfo.getUserCardNumber());
-            userSensitiveInfo.setUserId(phoneMap.get(registerUserInfo.getUserPhone()).getUserId());
+            userSensitiveInfo.setUserId(userId);
             userSensitiveInfo.setWorkTime(registerUserInfo.getWorkTime());
             userSensitiveBatch.add(userSensitiveInfo);
+
             //注册用户头像
-            String paramId = Constant.DEFAULT_USER_PHOTO_HEAD;
+            String paramId = Constant.DEFAULT_USER_PHOTO_HEAD+(int)(Math.random()*8);
+            SysParamConfig defaultPhoto = sysParamConfigRepository.findByID(paramId);
+            PictureInfo pictureInfo = new PictureInfo();
+            pictureInfo.setCreateTime(DateUtil.formatDate());
+            pictureInfo.setCreateUserId(operId);
+            pictureInfo.setDesc(registerUserInfo.getUserName()+" 默认头像");
+            pictureInfo.setPicStatus(Constant.STATUS_ABLE);
+            pictureInfo.setPicUrl(defaultPhoto.getParamValue());
+            pictureInfo.setRelId(userId);
+            pictureInfo.setRelType(Constant.REL_TYPE_USER_PHOTO);
+            userPictureBatch.add(pictureInfo);
         }
         userSensitiveInfoRepository.batchSave(userSensitiveBatch);
+        pictureInfoReposity.batchSave(userPictureBatch);
 
         //注册权限
         List<UserRoleInfo> userRoleBatch = new ArrayList<>();
         for(RegisterUserInfo registerUserInfo:registerUserInfos){
             //验证是否可以授予该权限
-            if(! isSM && workerRoleID != registerUserInfo.getRoleID().intValue() ){
+            if(! isSM && Constant.ROLE_WORKER_VALUE != registerUserInfo.getRoleID().intValue() ){
                 return MsgVo.fail(ErrorCode.REGISTER_PERMISSION_DENIED);
             }
             //验证权限是否存在
@@ -276,12 +271,60 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public MsgVo findUsers(Integer userID, CommonParams commonParams) {
-        return null;
+    public MsgVo findUsers(FindUserParam param,Integer userID, CommonParams commonParams) {
+        UserInfo oper = userInfoRepository.findOne(ParseUtil.parseLong(userID));
+        if(oper == null){
+            return MsgVo.fail(ErrorCode.USER_EMPTY);
+        }
+        List<UserRoleInfo> userRoles = userRoleInfoRepository.findUserRole(userID);
+        boolean isOrgManager = false;
+        boolean haveSensitiveRole = false;
+        for(UserRoleInfo userRole:userRoles){
+            if(userRole.getRoleId() == Constant.ROLE_SYSTEM_MANAGER_VALUE ||
+                    userRole.getRoleId() == Constant.ROLE_FINANCE_VALUE ||
+                    userRole.getRoleId() == Constant.ROLE_HR_VALUE){
+                haveSensitiveRole = true;
+                break;
+            }
+        }
+        if(! haveSensitiveRole){
+            OrgMemberDetail orgDetail = orgMemberInfoRepository.findOrg(oper.getUserId());
+            isOrgManager = orgManagerInfoRepository.isManager(oper.getUserId(), orgDetail.getOrgID());
+        }
+
+        List<UserDetail> userDetails = new ArrayList<>();
+        if(haveSensitiveRole){
+            userDetails = userInfoRepository.findUsers(param, true, commonParams.getPage(), commonParams.getPagesize());
+        }else{
+            userDetails = userInfoRepository.findUsers(param, false, commonParams.getPage(), commonParams.getPagesize());
+        }
+        Map<String, ShowUserVo> map = new HashMap<>();
+        ShowUserVo voParam = new ShowUserVo();
+        voParam.setUserInfos(userDetails);
+        if(userDetails == null || userDetails.size() < 1){
+            map.put("result",voParam);
+            return MsgVo.success(map);
+        }
+        Set<Integer> userIds = new HashSet<>();
+        for(UserDetail userDetail:voParam.getUserInfos()){
+            userIds.add(userDetail.getUserID());
+        }
+
+        Map<Integer,Integer> userRole = userRoleInfoRepository.findUserRole(userIds);
+        if(userRole == null){
+            for(UserDetail userDetail:voParam.getUserInfos()){
+                userDetail.setRoleId(userRole.get(userDetail.getUserID()));
+            }
+        }
+
+        map.put("result",voParam);
+        return MsgVo.success(map);
     }
 
     @Override
     public MsgVo findUserDetail(Integer userID, CommonParams commonParams) {
+
+
         return null;
     }
 }

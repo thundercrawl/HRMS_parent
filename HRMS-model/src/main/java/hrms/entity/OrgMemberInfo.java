@@ -101,7 +101,7 @@ public class OrgMemberInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "OrgMemberInfo{" +
+        return "OrgMemberDetail{" +
                 "orgMemberId=" + orgMemberId +
                 ", userId=" + userId +
                 ", orgId=" + orgId +

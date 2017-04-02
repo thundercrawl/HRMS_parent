@@ -6,10 +6,16 @@ public class Constant implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	//权限
-	public static final String ROLE_HR = "HR";
-	public static final String ROLE_SYSTEM_MANAGER = "SYSTEM_MANAGER";
-	public static final String ROLE_FINANCE = "FINANCE"; //财务
-	public static final String ROLE_WORKER = "ROLE_WORKER"; //普通职员
+	public static final String ROLE_HR_NAME = "HR";
+	public static final String ROLE_SYSTEM_MANAGER_NAME = "SYSTEM_MANAGER";
+	public static final String ROLE_FINANCE_NAME = "FINANCE"; //财务
+	public static final String ROLE_WORKER_NAME= "ROLE_WORKER"; //普通职员
+
+	public static final int ROLE_HR_VALUE = 2;
+	public static final int ROLE_SYSTEM_MANAGER_VALUE = 1;
+	public static final int ROLE_FINANCE_VALUE = 3; //财务
+	public static final int ROLE_WORKER_VALUE = 5; //普通职员
+
 	public static final byte ROLE_ABLE = 1;
 	public static final byte ROLE_DISABLE = 0;
 
