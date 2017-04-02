@@ -1,0 +1,332 @@
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td {
+	margin: 0;
+	padding: 0;
+}
+
+* {
+	font-family: Microsoft Yahei;
+	font-size: 14px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #222;
+	outline: none;
+}
+
+body {
+	background-color:#F7FAFF;
+	/*min-width: 1200px;*/
+}
+
+ul,
+li {
+	list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: normal;
+}
+
+a {
+	text-decoration: none;
+}
+
+.clearfix {
+	overflow: auto;
+	_height: 1%;
+}
+
+
+/* 骨灰级清除浮动方法 */
+
+.clear {
+	clear: both;
+}
+
+.wrapper{
+	width:100%;
+	height:auto;
+	min-width:1024px;
+	padding:50px 30px;
+}
+/* 推送设置页面顶部 */
+.push-message{
+	padding:0 20px;
+	width:100%;
+	height:40px;
+	line-height:40px;
+	border-bottom:2px solid #EFEFEF;
+}
+.push-message span{
+	padding:8px 0;
+	color:#6E6F70;
+	border-bottom:2px solid #329ADC;
+}
+/* 推送设置页面顶部 */
+
+/* 推送设置页面内容 */
+.message-content{
+	margin-top:20px;
+	width:100%;
+	height:auto;
+}
+.push-search-circle{
+	float:left;
+	padding-right:20px;
+	width:50%;
+	height:500px;
+	background-color:#F7FAFF;
+}
+.push-search{
+	width:100%;
+	height:auto;
+	background-color:#FFF;
+	border-radius:5px;
+}
+.push-range{
+	float:right;
+	width:50%;
+	height:auto;
+	background-color:#FFF;
+}
+.push-search-top{
+	padding-left:25px;
+	width:100%;
+	height:40px;
+	line-height:40px;
+	color:#6E6F70;
+	background-color:#EFEFEF;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+}
+.push-search-content{
+	position:relative;
+	padding:20px 25px;
+	width:100%;
+	height:460px;
+	background-color:#FFF;
+	border-bottom-left-radius:5px;
+	border-bottom-right-radius:5px;
+}
+.find-methods{
+	margin-bottom:20px;
+	width:100%;
+	height:auto;
+}
+.find-methods-left{
+	float:left;
+	padding-top:8px;
+	height:auto;
+	color:#6E6F70;
+}
+.find-methods-right{
+	position:relative;
+	float:right;
+	height:auto;
+}
+.w18{
+	width:18%;
+}
+.w82{
+	width:82%;
+}
+.w25{
+	width:20%;
+}
+.w75{
+	width:80%;
+}
+.select-result,.person-choose{
+	margin-top:-1px;
+	width:165px;
+	height:auto;
+	border:1px solid #EFEFEF;
+	overflow:auto;
+	display:none;
+}
+.select-result li,.person-choose li{
+	padding:0 10px;
+	width:100%;
+	height:36px;
+	line-height:36px;
+	color:#6E6F70;
+	overflow:hidden;
+  	text-overflow:ellipsis;
+ 	white-space:nowrap;
+	cursor:pointer;
+}
+.select-result li:hover,.person-choose li:hover{
+	background-color:#69CBF7;
+	color:#FFF;
+}
+.textarea{
+	padding:4px;
+	text-indent:1em;
+	resize:none;
+	border:1px solid #CEE3FF;
+}
+.please-choose{
+	position:relative;
+	padding:0 10px;
+	width:165px;
+	height:34px;
+	line-height:34px;
+	color:#6E6F70;
+	border:1px solid #CEE3FF;
+}
+.please-choose span{
+	color:#6E6F70;
+}
+.angle-down{
+	position:absolute;
+	right:10px;
+	top:8px;
+	width:16px;
+}
+.btn-searchs{
+	display: inline-block;
+    line-height: 34px;
+    margin-left: 30px;
+    color: #FFF;
+    background-color: #05A8F1;
+    cursor: pointer;
+    padding: 1px 22px;
+    border-radius: 4px;
+}
+.btn-sures{
+	position:absolute;
+	bottom:30px;
+	padding:8px 24px;
+	border:none;
+	border-radius:5px;
+	color:#FFF;
+	background-color:#05A8F1;
+	cursor:pointer;
+}
+.click-result{
+	width:100%;
+	height:100px;
+}	
+.click-result li{
+	position:relative;
+	padding:0 15px;
+	width:100%;
+	height:40px;
+	line-height:40px;
+	overflow:hidden;
+  	text-overflow:ellipsis;
+ 	white-space:nowrap;
+}
+.click-result li:hover{
+	background-color:#EFEFEF;
+}
+.click-result img{
+	position:absolute;
+	right:15px;
+	top:12px;
+	width:16px;
+}
+.cover-layer{
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+	position: fixed;
+	top:0;
+	left: 0;
+	z-index: 2;
+	display: none;
+}
+.kindly-reminder{
+	position:absolute;
+	left:50%;
+	top:50%;
+	margin-top:-120px;
+	margin-left:-200px;
+	width:400px;
+	height:auto;
+}
+.kindly-reminder-top{
+	position:relative;
+	padding:0 25px;
+	width:100%;
+	height:40px;
+	line-height:40px;
+	background-color:#05A8F1;
+	color:#FFF;
+	font-size:14px;
+}
+.kindly-reminder-top img{
+	position:absolute;
+	width:18px;
+	right:25px;
+	top:10px;
+	cursor:pointer;
+}
+.kindly-reminder-content{
+	padding:30px 0;
+	width:100%;
+	height:100px;
+	background-color:#FFF;
+	text-align:center;
+	font-size:16px;
+	color:#646464;
+}
+.circle-table{
+	width:100%;
+	height:296px;
+	overflow:auto;
+}
+.show-table{
+	width:100%;
+	height:auto;
+	table-layout:fixed;
+}
+.show-table tr{
+	width:100%;
+	height:40px;
+	line-height:40px;
+	cursor:pointer;
+}
+.show-table tr th,.show-table tr td{
+	text-align:center;
+	overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+/* 推送设置页面内容 */
+
+
+
+
+
+

@@ -1,0 +1,782 @@
+a,
+address,
+b,
+big,
+blockquote,
+body,
+center,
+cite,
+code,
+dd,
+del,
+div,
+dl,
+dt,
+em,
+fieldset,
+font,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+html,
+i,
+iframe,
+img,
+ins,
+label,
+legend,
+li,
+ol,
+p,
+pre,
+small,
+span,
+strong,
+u,
+ul,
+var {
+	margin: 0;
+	padding: 0;
+}
+
+.clearfix {
+	*+height: 1%;
+}
+
+.clearfix:after {
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clear{
+	clear:both;
+}
+li {
+	list-style: none;
+}
+
+body {
+	width: 100%;
+	min-width: 1024px;
+	height: 100%;
+	font: 14px "Microsoft Yahei";
+	background: #fff;
+	z-index: 1;
+	color: #222;
+}
+
+* {
+	font-size: 12px
+}
+
+html {
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+input,
+button,
+select {
+	outline: none;
+}
+
+img {
+	border: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+/*租赁合同*/
+.wrap{
+	padding:30px;width:100%;height:auto;
+}
+.contract-top{
+	padding-left:20px;
+	width:100%;
+	height:auto;
+	border-bottom:1px solid #808080;
+}
+.contract-top img{
+	width:200px;
+}
+.contract-title{
+	margin-top:40px;
+	width:100%;
+	line-height:40px;
+	font-size:24px;
+	text-align:center;
+	color:#000;
+}
+.contract-identifier{
+	width:100%;
+	line-height:40px;
+	text-align:right;
+}
+.contract-identifier input{
+	width:150px;
+	border:none;
+	color:#000;
+}
+.contract-sign-time{
+	width:100%;
+	line-height:40px;
+	text-align:center;
+}
+.contract-sign-time input{
+	width:30px;
+	text-align:center;
+	border:none;
+	color:#000;
+}
+h2{
+	margin-top:20px;
+}
+.contract-content{
+	width:100%;
+	height:auto;
+}
+.supplier{
+	margin-top:40px;
+	width:100%;
+	height:auto;
+	border-collapse:collapse;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+color:#000;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color:#000;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+color:#000;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+color:#000;
+}
+.supplier-four tr td{
+	width:25%;
+}
+.supplier-three tr td{
+	width:33.3333333%;
+}
+.supplier tr td{
+	position:relative;
+	padding:0 10px;
+	height:40px;
+	line-height:40px;
+	border:2px solid white;
+	font-size:14px;
+}
+.special-td{
+	background-color:#244061;
+	color:#FFF;
+	font-weight:bold;
+}
+.textCenter{
+	text-align:center;
+}
+.special-fill-td{
+	background-color:#D8D8D8;
+	color:#fff;
+}
+.test_box1{  
+	width: 100%; 
+	color: #000; 
+	min-height: 20px;  
+	/*设置最小高度*/  
+	max-height: 1000px;  
+	/*设置最大高度超过300px时出现滚动条*/  
+	_height: 120px;  
+	margin-left: auto;  
+	margin-right: auto;  
+	padding: 4px;  
+	outline: 0;  
+	border: none;  
+	font-size: 14px;
+	line-height: 24px;  
+	word-wrap: break-word;  
+	overflow-x: hidden;  
+	overflow-y: auto;
+} 
+.test_box2{  
+	width: 100%; 
+	color: #000; 
+	min-height: 100px;  
+	/*设置最小高度*/  
+	max-height: 1000px;  
+	/*设置最大高度超过300px时出现滚动条*/  
+	_height: 120px;  
+	margin-left: auto;  
+	margin-right: auto;  
+	padding: 10px;  
+	outline: 0;  
+	border: none;  
+	font-size: 14px;
+	line-height: 24px;  
+	word-wrap: break-word;  
+	overflow-x: hidden;  
+	overflow-y: auto;
+}
+.special-have-td{
+	background-color:#7F7F7F;
+	color:#FFF;
+}
+td input{
+	width:100%;
+	height:40px;
+	line-height:40px;
+	background-color:#D8D8D8;
+	border:none;
+	font-size:14px;
+} 
+td textarea{
+	
+}padding:30px 0;
+	width:100%;
+	height:120px;
+	resize:none;
+	background-color:#D8D8D8;
+	border:none;
+	outline:none;
+	color:#000;
+.contract-bottom{
+	margin-bottom:100px;
+	width:100%;
+	height:auto;
+}
+.clause-details{
+	position:relative;
+	margin-top:20px;
+	padding-left:40px;
+	width:100%;
+	height:auto;
+}
+.clause-details span{
+	position:absolute;
+	left:10px;
+}
+.clause-details div{
+	position:absolute;
+	left:25px;
+	top:5px;
+	width:6px;
+	height:6px;
+	border-radius:50%;
+	background-color:#000;
+}
+/*租赁合同*/
+
+
+/*办伴表格*/
+.check-top{
+	width:100%;
+	height:auto;
+}
+.check-top img{
+	width:200px;
+}
+.check-top-message{
+	float:right;
+	width:50%;
+	height:auto;
+}
+.check-top-message p{
+	text-align:right;
+	font-size:16px;
+	font-weight:bold;
+	line-height:37px;
+}
+.contract-pay-notice{
+	margin-top:40px;
+	width:100%;
+	line-height:40px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	color:#000;
+}
+.pay-table{
+	width:100%;
+	height:auto;
+	border-collapse:collapse;
+}
+.mt40{
+	margin-top:40px;
+}
+.pay-table tr td{
+	position:relative;
+	padding:0 10px;
+	height:40px;
+	line-height:26px;
+	font-size:14px;
+	text-align:center;
+	color:#000;
+} 
+.fwd{
+	font-weight:bold;
+}
+.bg-none{
+	background-color:#FFF !important;
+}
+.bg-none input{
+	background-color:#FFF !important;
+}
+.w50{
+	width:50% !important;
+}
+.fr{
+	float:right;
+}
+.border-gray tr td{
+	border:2px solid #DBDDDD;
+}
+.border-black{
+	border-bottom:2px solid #000;
+}
+.cutoff-rule{
+	margin-top: 50px;
+    height: 70px;
+    border: none;
+    border-top: 70px solid #E6EFEF;
+}
+.bank-information{
+	margin:50px 0;
+	width:100%;
+	height:auto;
+	text-align:center;
+	font-size:20px;
+	font-weight:bold;
+}
+.bank-information p{
+	font-size:24px;
+}
+.bank-information-message{
+	margin:0 auto;
+	width:90%;
+	height:auto;
+}
+.bank-information-message li{
+	padding:5px 0;
+	padding-left: 70px;
+	width:100%;
+	height:auto;
+	line-height:40px;
+}
+.bank-information-message li p{
+	float:left;
+	width:150px;
+	font-size:16px;
+}
+.bank-information-message .circle-input{
+	padding-left:150px;
+	width:100%;
+	height:auto;
+}
+.bank-information-message .circle-input input[type=text]{
+	padding:0 10px;
+	width:50%;
+	height:40px;
+	border-radius:5px;
+	border:1px solid #BBB;
+	background-color:#FFF;
+}
+.bank-information-message .circle-input div{
+	width: 100%; 
+	color: #000; 
+	min-height: 40px;  
+	/*设置最小高度*/  
+	max-height: 1000px;  
+	/*设置最大高度超过300px时出现滚动条*/  
+	_height: 120px;  
+	padding: 7px 10px;  
+	outline: 0;  
+	border:none;
+	background-color:#FFF;
+	border-radius:5px;
+	font-size: 16px;
+	line-height: 24px;  
+	word-wrap: break-word;  
+	overflow-x: hidden;  
+	overflow-y: auto;
+}
+/*办伴表格*/
+
+/*销售运营交接项目*/
+.table-sales-connect{
+	width: 100%;
+	height:auto;
+	border-collapse:collapse;
+}
+.table-sales-connect tr th{
+	background-color:#0070C0;
+	height:50px;
+	line-height:50px;
+	font-size:22px;
+}
+.table-sales-connect tr td{
+	position:relative;
+	padding:0 10px;
+	height:40px;
+	line-height:40px;
+	border:1px solid #000;
+	font-size:14px;
+	text-align:center;
+}
+.mt{
+	margin-top:-1px;
+}
+.choose-yesno{
+	width:100%;
+	height:40px;
+	line-height:40px;
+}
+.choose-yesno span{
+	display:block;
+	height:40px;
+}
+.show-yesno{
+	position:absolute;
+	left:0;
+	width:100%;
+	height:auto;
+	background-color:#F9F5F5;
+	z-index:9;
+	cursor:pointer;
+	display:none;
+}
+.show-yesno li{
+	padding:0 10px;
+	width:100%;
+	line-height:35px;
+}
+.show-yesno li:hover{
+	background-color:#1E90FF;
+	color:#FFF;
+}
+/*销售运营交接项目*/
+
+/*弹窗*/
+.open-win {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	bottom: 0px;
+	z-index: 999;
+	display:none;
+}
+.open-win-bg {
+	width: 100%;
+	height: 100%;
+	background-color: #000000;
+	opacity: 0.5;
+	z-index: 999;
+}
+.show-window{
+	position:fixed;
+	top:30%;
+	left:50%;
+	margin-left:-25%;
+	min-width:512px;
+	width:50%;
+	height:auto;
+	background-color:#FFF;
+	z-index:999;
+	font-size:14px;
+	display:none;
+}
+.show-window-header{
+	width:100%;
+	height:30px;
+	line-height:30px;
+	background-color:#E6E6E6;
+}
+.show-window-header i{
+	float:right;
+	margin-right:8px;
+	cursor:pointer;
+}
+.input-reason{
+	margin:20px 5% 0 5%;
+	padding:0 10px;
+	width:90%;
+	height:40px;
+	line-height:40px;
+}
+.choose-time{
+	margin-top:20px;
+	margin-left:5%;
+	font-size:14px;
+}
+.show-window .input-sure{
+	margin: 10px auto;
+    padding: 8px 12px;
+    background-color: #11B393;
+    border: none;
+    border-radius: 5px;
+    color: #FFF;
+    cursor: pointer;
+    display: block;
+}
+.show-window input[type=text]:focus {
+    border: 1px solid #09C;
+}
+.circle-choose-cost{
+	width:100%;
+	height:auto;
+	text-align:center;
+}
+.circle-choose-cost input[type=button]{
+	margin:0 50px;
+	padding: 8px 12px;
+    background-color:#CCC;
+    border: none;
+    border-radius: 5px;
+    color: #FFF;
+    cursor: pointer;
+}
+.save-time{
+	margin:0 5%;
+	width:90%;
+	height:40px;
+	line-height:40px;
+}
+.forbidden{
+	width:100%;
+	line-height:60px;
+	font-size:16px;
+	text-align:center;
+	display:none;
+}
+.forbidden i{
+	margin-left:10px;
+	font-size:36px;
+	vertical-align:middle;
+	color:#F8591F;
+}
+/*弹窗*/
+
+
+/*渠道查询功能*/
+.wrap-bg-gray{
+	padding:30px;
+	width:100%;
+	height:auto!important; /*for ie6 bug and ie7+,moz,webkit 正确*/
+	height:100%; /*修复IE6,all browser*/
+	min-height:100%; /*for ie6 bug and ie7+,moz,webkit 正确*/
+	background-color:#F0F0F2;
+}
+.input-border{
+	padding:0 10px;
+	border:1px solid #BBB;
+	background-color:#FFF;
+	border-radius:5px;
+}
+.bg-none .datepicker-demo-block{
+	border:1px solid #BBB;
+	border-radius:5px;
+}
+.bg-none .rendez-vous-fullscreen input{
+    height: 36px;
+    line-height: 36px;
+	border-radius:5px;
+	text-align: left;
+    padding: 0 10px;
+}
+.supplier-pd0 tr td{
+	padding:0;
+}
+.supplier-gray tr td{
+	border:2px solid #F0F0F2;
+}
+.supplier-gray .input-border:focus{
+	border:1px solid #38F;
+}
+.find-clear-new{
+	padding:20px 0;
+	width:100%;
+	height:auto;
+}
+.have-border{
+	border-bottom:1px solid #BBB;
+}
+.find-clear-new li{
+	width:10%;
+	height:24px;
+	float:right;
+}
+.find-clear-new li button,.new-window{
+	padding:4px 10px;
+	border:none;
+	border:1px solid #BBB;
+	background-color:#FFF;
+	border-radius:5px;
+	cursor:pointer;
+}
+.find-clear-new li button:hover,.new-window:hover{
+	background-color:#CDCDCD;
+	color:#FFF;
+}
+.special-color td{
+	color:#BEC7C0 !important;
+}
+.mt20{
+	margin-top:20px;
+}
+.bg-gray{
+	background-color:#F0F0F2;
+}
+/*渠道查询功能*/
+
+/*新建渠道弹窗*/
+.remark{
+	padding:20px;
+	width:100%;
+	height:auto;
+	font-size:14px;
+}
+.remark-detail{
+	padding:0 20px;
+	width:100%;
+	height:auto;
+}
+.remark-detail textarea{
+	padding:10px;
+	width:100%;
+	height:80px;
+	resize:none;
+	background-color:#FFF;
+	border:1px solid #BBB;
+	color:#000;
+}
+.pd20{
+	padding:20px;
+}
+.t20{
+	top:20% !important;
+}
+.edit-span{
+	margin:0 6px;
+	color:#FEA353;
+}
+/*新建渠道弹窗*/
+
+
+/*菜单管理*/
+.menu-manage-left{
+	float:left;
+	padding:20px;
+	width:30%;
+	height:auto;
+	background-color:#9F9;
+}
+.menu-manage-right{
+	float:right;
+	padding:20px;
+	width:70%;
+	height:auto;
+	background-color:#F99;
+}
+.one-level{
+	width:100%;
+	height:auto;
+}
+.one-level > li{
+	position:relative;
+	padding-left:20px;
+	width:100%;
+	height:auto;
+	line-height:30px;
+	cursor:pointer;
+}
+.toggle-arrow {
+	position:absolute;
+	top:1px;
+	left:2px;
+}
+.two-level{
+	width:100%;
+	height:auto;
+	display:none;
+}
+.two-level > li{
+	padding-left:20px;
+	width:100%;
+	line-height:30px;
+	cursor:pointer;
+}
+.menu-detail{
+	width:100%;
+	height:auto;
+}
+.menu-detail li{
+	padding:5px 0;
+	width:100%;
+	height:auto;
+	line-height:40px;
+}
+.menu-detail li p{
+	float:left;
+	width:75px;
+}
+.circle-input{
+	padding-left:75px;
+	width:100%;
+	height:auto;
+}
+.circle-input input[type=text]{
+	padding:0 10px;
+	width:50%;
+	height:40px;
+	border-radius:5px;
+	border:1px solid #BBB;
+	background-color:#FFF;
+}
+.circle-input input[type=text]:focus{
+	border:1px solid #38F;
+}
+.circle-input div{
+	width: 50%; 
+	color: #000; 
+	min-height: 40px;  
+	/*设置最小高度*/  
+	max-height: 1000px;  
+	/*设置最大高度超过300px时出现滚动条*/  
+	_height: 120px;  
+	padding: 7px 10px;  
+	outline: 0;  
+	border: 1px solid #BBB;
+	background-color:#FFF;
+	border-radius:5px;
+	font-size: 12px;
+	line-height: 24px;  
+	word-wrap: break-word;  
+	overflow-x: hidden;  
+	overflow-y: auto;
+}
+.circle-input div:focus{
+	border:1px solid #38F;
+}
+.disNone{
+	display:none;
+}
+/*菜单管理*/
+
+
+
+
+
+
+

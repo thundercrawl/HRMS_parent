@@ -1,0 +1,35 @@
+.alert-box{
+	
+    display: none;
+}
+.alert-box label{
+	font-weight: normal;
+}
+.alert-box h4{
+	padding-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+.alert-box h4 > i{
+float: right;
+    margin-top: -15px;
+    margin-right: -20px;
+}
+.button-group{
+	text-align: center;
+}
+.button-group .btn{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.form-group > div{
+	position:relative;
+}
+.form-group .alert-cha{
+	height:38px;
+	line-height:36px;    
+	position: absolute;
+    right: -2px;
+    display: none;
+
+}

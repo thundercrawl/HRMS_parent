@@ -1,0 +1,213 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td
+	{
+	margin: 0;
+	padding: 0;
+}
+
+
+
+ul,li {
+	list-style: none;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal;
+}
+
+a {
+	text-decoration: none;
+}
+
+.clearfix {
+	overflow: auto;
+	_height: 1%;
+}
+
+/* style="width: 100%;height: auto;background-color: #e8e8e8;padding: 20px;" */
+.rent-box {
+	width: 100%;
+	height: auto;
+    overflow-y: auto;
+}
+
+/* style="width: 832px;height: auto;margin-right: auto;margin-left: auto;margin-bottom: 20px;padding-top: 60px;padding-left: 50px;padding-right: 50px;padding-bottom: 50px;background-color: #fff;box-shadow: 1px 2px 4px rgba(0,0,0,.3);" */
+.rent-wrap{
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 20px;
+}
+.rent-contract {
+	width: 832px;
+	height: auto;	
+	padding-top: 60px;
+	padding-left: 50px;
+	padding-right: 50px;	
+	padding-bottom: 50px;
+	background-color: #fff;
+	box-shadow: 1px 2px 4px rgba(0,0,0,.3);
+}
+
+/* style="width: 100%;height: auto;margin-bottom: 40px;font-size: 25px;text-align: center;line-height: 50px;font-weight: bold;" */
+.rent-contract h1 {
+	width: 100%;
+	height: auto;
+	margin-bottom: 40px;
+	font-size: 25px;
+	text-align: center;
+	line-height: 50px;
+	font-weight: bold;
+}
+
+.rent-con {
+	width: 100%;
+	height: auto;
+	margin-bottom: 20px;
+	font-size: 0;
+}
+
+.rent-con p,
+.rent-con h4 {
+	padding-left: 10px;
+	padding-right: 10px;
+	letter-spacing: 1px;
+}
+
+
+.rent-con p {
+	    display: inline-block;
+    width: 50%;
+    line-height: 24px;
+    text-align: left;
+}
+
+.rent-con h4 {
+	    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    line-height: 40px;
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: #D6D6D6 1px solid;
+    text-align: left;
+}
+/* style="float: left;display: block;width: 100px;text-align: left;" */
+.rent-con p > span {
+	float: left;
+    display: block;
+    width: 100px;
+    text-align: left;
+}
+
+/* style="width: 120px;font-weight: bold;font-size: 15px;margin-right: 10px;" */
+.font-bold p > span {
+    width: 120px;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 10px;
+}
+.rent-con p.rent-w {
+	width: 100%;
+}
+
+.rent-con h2 {
+	width: 100%;
+	height: auto;
+	border-bottom: #ccc 1px solid;
+	font-weight: bold;
+}
+
+/* style="width: 100%;height: auto;border-collapse: collapse;text-align: center;" */
+.rent-con table {
+	width: 100%;
+	height: auto;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+/* style="line-height: 25px;background-color: #E6E6E6;" */
+.rent-con table th {
+	line-height: 25px;
+	background-color: #E6E6E6;
+	font-size:12px
+}
+
+/* style='line-height: 30px;vertical-align: middle;' */
+.rent-con td {
+	line-height: 30px;
+	vertical-align: middle;
+	font-size:12px
+}
+
+/* style="padding: 10px;background-color: #E6E6E6;" */
+.rent-f {
+	padding: 10px;
+	background-color: #E6E6E6;
+}
+
+/* style="width: 100%;font-weight: 600;border-bottom: 1px solid #ccc;line-height: 35px;height: 40px;" */
+.rent-f p {
+	width: 100%;
+	font-weight: 600;
+	border-bottom: 1px solid #ccc;
+	line-height: 35px;
+	height: 40px;
+}
+
+/* style="float: right;width: auto;font-weight: normal;" */
+.rent-f p > span {
+	float: right;
+	width: auto;
+	font-weight: normal;
+}
+
+.signature {
+	margin-bottom: 10px;
+}
+
+
+
+.signature p>span {
+	display: block;
+	width: 100%;
+	height: 20px;
+	margin-top: -5px;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.rent-firstpay {
+	margin-bottom: 10px;
+}
+
+.rent-p p {
+	width: 100%;
+	height: auto;
+	text-indent: 20px;
+}
+
+
+.rent-p p > span{
+	float: left;
+	width: auto;
+}
+
+.td-border {
+	border-bottom: #ccc 1px solid;
+}
+
+.td-border td {
+	padding-bottom: 10px;
+}
+
+.td-top td {
+	padding-top: 10px;
+}
+
+.rent-box.tab1{
+}
+.rent-con h6{
+	text-align: left;
+    font-size: 15px;
+    line-height: 40px;
+    font-weight: bold;
+}

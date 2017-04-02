@@ -1,0 +1,52 @@
+/*背景颜色*/
+
+.bg-green {
+	background-color: #7bc764;
+}
+
+
+/*公位介绍背景*/
+
+.bg-blue {
+	background-color: #368eb7;
+}
+
+
+/*按钮红色*/
+
+.btn-red {
+	background-color: #fc8d73
+}
+
+.icon-blue1 {
+	background-color: #45b7eb;
+}
+
+.icon-blue2 {
+	background-color: #1c91c6;
+}
+
+.icon-blue3 {
+	background-color: #1074a4;
+}
+
+.icon-blue4 {
+	background-color: #244f6b;
+}
+
+
+/*文字大小*/
+
+
+/*标题*/
+
+.font-24 {
+	font-size: 24px;
+}
+
+
+/*表格*/
+
+.font-18 {
+	font-size: 18px;
+}
