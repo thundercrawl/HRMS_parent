@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:soap="http://cxf.apache.org/bindings/soap" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd
+			http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+			http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<bean id="authInterceptor" class="hrms.api.restful.interceptor.AuthInterceptor">
+		<property name="authPaths"><!-- 用户不登陆也可以访问 -->
+			<set>
+				<value>/userInfo/login</value>
+			</set>
+		</property>
+	</bean>
+
+	<bean class="org.apache.cxf.jaxrs.JAXRSServerFactoryBean"
+		init-method="create">
+		<property name="address" value="/" />
+		<property name="serviceBeans">
+			<list>
+				<bean class="hrms.api.restful.UserInfoRestful" />
+			</list>
+		</property>
+		<property name="providers">
+			<list>
+				<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			</list>
+		</property>
+	</bean>
+	<cxf:bus>
+		<cxf:inInterceptors>
+			<bean class="hrms.api.restful.interceptor.SignCheckInterceptor" />
+			<bean class="hrms.api.restful.interceptor.ParameterCheckInterceptor" />
+			<ref bean="authInterceptor" />
+		</cxf:inInterceptors>
+		<cxf:outInterceptors>
+			<bean class="hrms.api.restful.interceptor.OutLoggerInterceptor" />
+		</cxf:outInterceptors>
+		<!-- <cxf:inFaultInterceptors> <bean class="com.banban.api.interceptor.FaultInterceptor"/> 
+			</cxf:inFaultInterceptors> -->
+	</cxf:bus>
+</beans>

@@ -47,7 +47,6 @@
     
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></bean>
 
-    <bean id="qiniuProperties" name="qiniuProperties" class="hrms.model.common.QiniuProperties"/>
     <bean id="appProperties" name="appProperties" class="hrms.model.common.AppProperties"/>
 
 </beans>

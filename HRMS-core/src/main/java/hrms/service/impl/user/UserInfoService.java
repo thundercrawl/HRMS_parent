@@ -23,4 +23,8 @@ public interface UserInfoService {
      * @return
      */
     public MsgVo login(LoginParam param);
+
+    public MsgVo findUsers(Integer userID,CommonParams commonParams);
+
+    public MsgVo findUserDetail(Integer userID,CommonParams commonParams);
 }

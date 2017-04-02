@@ -2,6 +2,7 @@ package hrms.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -34,6 +35,7 @@ public class SysParamConfig implements Serializable {
         this.operId = operId;
     }
 
+    @Id
     @Column(name = "PARAM_ID", length = 50)
     public String getParamId() {
         return paramId;

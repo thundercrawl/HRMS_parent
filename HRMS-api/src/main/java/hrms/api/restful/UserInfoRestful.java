@@ -7,9 +7,11 @@ import hrms.annotation.HRMSParam;
 import hrms.common.CommonParams;
 import hrms.common.ErrorCode;
 import hrms.exception.InvalidException;
+import hrms.po.LoginParam;
 import hrms.po.SaveUserParam;
 import hrms.service.impl.user.UserInfoService;
 import hrms.util.LoggerWriter;
+import hrms.util.StringUtil;
 import hrms.vo.MsgVo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +50,87 @@ public class UserInfoRestful {
 			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",param.getRegisterUserInfos(), userId,orgId);
 			userInfoService.save(param.getRegisterUserInfos(),commonParam);
 			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",param.getRegisterUserInfos(), userId,orgId);
+			return MsgVo.success(null);
+
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/test")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo test (@HRMSParam("object")SaveUserParam param, CommonParams commonParam){
+		try {
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户");
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+		return null;
+	}
+
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo login (@HRMSParam("object")LoginParam loginParam, CommonParams commonParam){
+		try {
+			if(loginParam == null ||
+					StringUtil.isEmpty(loginParam.getUserPasswd()) ||
+					StringUtil.isEmpty(loginParam.getUserPhone())){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",loginParam, commonParam);
+			userInfoService.login(loginParam);
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",loginParam, commonParam);
+			return MsgVo.success(null);
+
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/findUsers")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo findUsers(@HRMSParam("object")Integer userID, CommonParams commonParam){
+		try {
+			if(commonParam.getPage() == null ||
+					commonParam.getPagesize() == null ||
+					commonParam.getOrgId() == null || commonParam.getUserId() == null || userID == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",userID, commonParam);
+			userInfoService.findUsers(userID,commonParam);
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",userID, commonParam);
+			return MsgVo.success(null);
+
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/findUserDetail")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo findUserDetail(@HRMSParam("object")Integer userID, CommonParams commonParam){
+		try {
+			if(commonParam.getOrgId() == null || commonParam.getUserId() == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",userID, commonParam);
+			userInfoService.findUserDetail(userID,commonParam);
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",userID, commonParam);
 			return MsgVo.success(null);
 
 		}catch (InvalidException e1){

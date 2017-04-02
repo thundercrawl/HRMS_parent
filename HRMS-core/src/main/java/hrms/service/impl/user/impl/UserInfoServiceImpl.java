@@ -272,9 +272,16 @@ public class UserInfoServiceImpl implements UserInfoService {
             return MsgVo.error(ErrorCode.ENTITY_COPY_ERROR);
         }
 
+        return null;
+    }
 
+    @Override
+    public MsgVo findUsers(Integer userID, CommonParams commonParams) {
+        return null;
+    }
 
-
+    @Override
+    public MsgVo findUserDetail(Integer userID, CommonParams commonParams) {
         return null;
     }
 }
