@@ -26,7 +26,7 @@
 	<div class="login-head clearfix">
 		<img src="img/logo.png">
 		<p>
-			<span>办伴业务支撑系统</span>
+			<span>人力资源管理系统</span>
 		</p>
 
 	</div>
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 		</div>
-		<div class="footer">Copyright © 上海办伴科技发展有限公司. All Rights Reserved.</div>
+		<div class="footer">Copyright © 谢益文. All Rights Reserved.</div>
 		
 <!-- <script type="text/javascript" src="js/ldjs/encrypt/sha1.js"></script> -->
 <script type="text/javascript" src="js/login.js"></script>

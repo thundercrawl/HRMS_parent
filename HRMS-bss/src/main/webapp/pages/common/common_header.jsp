@@ -50,7 +50,7 @@
       </button>
       <a class="navbar-brand"  href="filter/view/index"> <img
 			alt="Charisma Logo" src="plugin/img/logo20.png" class="hidden-xs" />
-			<span>办伴业务后台管理</span></a>
+			<span>人力资源管理</span></a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
