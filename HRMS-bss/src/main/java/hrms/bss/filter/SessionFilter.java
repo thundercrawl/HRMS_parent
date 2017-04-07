@@ -58,13 +58,14 @@ public class SessionFilter implements Filter {
         
         Object sessionObj = request.getSession().getAttribute(sessionKey);
         // 如果Session为空，则跳转到指定页面
-        if (sessionObj == null
+       /* if (sessionObj == null
         		|| !(sessionObj instanceof LoginInfo)
         		|| ((UserInfo)sessionObj).getUserId() == null) {
             response.sendRedirect(contextPath + StringUtils.defaultIfEmpty(forwardUrl, "/") + "?redirect=" + URLEncoder.encode(redirect, "UTF-8"));
         } else {
             chain.doFilter(req, res);
-        }
+        }*/
+        chain.doFilter(request, response);
     }
  
     @Override

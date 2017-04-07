@@ -76,6 +76,7 @@
 					<div class="nav-sm nav nav-stacked"></div>
 					
 					<ul class="nav nav-pills nav-stacked main-menu">
+					<li><a class="ajax-link" href="filter/user/getAllUser" id="getAllUser"><span>用户管理</span></a></li>
 					<li class="accordion"><a href="#"><span> 渠道管理</span></a>
 							<ul class="nav nav-pills nav-stacked">
 								<li><a class="ajax-link" href="filter/channel/jumpToAllChannel" id="jumpToAllChannel"><span>渠道管理</span></a></li>
