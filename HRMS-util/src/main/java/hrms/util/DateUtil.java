@@ -33,6 +33,8 @@ public class DateUtil {
 	public static final String CN_CUT_FORMAT = "MM月dd日 HH:mm";
 	public static final String CN_NOSECOND_FORMAT = "yyyy年MM月dd日 HH:mm";
 	public static final String EN_NOSECOND_FORMAT = "yyyy-MM-dd HH:mm";
+
+	public static final String BASE_DATE_FORMAT = "yyyy-MM-dd";
 	
     public final static int ERA = 0;
     public final static int YEAR = 1;

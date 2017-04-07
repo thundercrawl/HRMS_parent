@@ -1,7 +1,7 @@
-package hrms.service.impl.sys.impl;
+package hrms.service.sys.impl;
 
 import hrms.repository.impl.sys.SysEnumDataRepository;
-import hrms.service.impl.sys.SysEnumDataService;
+import hrms.service.sys.SysEnumDataService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

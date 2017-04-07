@@ -1,6 +1,6 @@
-package hrms.service.impl.init;
+package hrms.service.init;
 
-import hrms.service.impl.sys.SysEnumDataService;
+import hrms.service.sys.SysEnumDataService;
 import hrms.util.EnumerateUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

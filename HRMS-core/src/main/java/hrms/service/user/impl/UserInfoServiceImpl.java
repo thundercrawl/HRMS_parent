@@ -1,4 +1,4 @@
-package hrms.service.impl.user.impl;
+package hrms.service.user.impl;
 
 import hrms.common.CommonParams;
 import hrms.common.Constant;
@@ -8,6 +8,7 @@ import hrms.model.OrgMemberDetail;
 import hrms.po.FindUserParam;
 import hrms.po.LoginParam;
 import hrms.po.RegisterUserInfo;
+import hrms.po.UpdateUserParam;
 import hrms.repository.impl.org.OrgInfoRepository;
 import hrms.repository.impl.org.OrgManagerInfoRepository;
 import hrms.repository.impl.org.OrgMemberInfoRepository;
@@ -17,7 +18,7 @@ import hrms.repository.impl.role.UserRoleInfoRepository;
 import hrms.repository.impl.sys.SysParamConfigRepository;
 import hrms.repository.impl.user.UserInfoRepository;
 import hrms.repository.impl.user.UserSensitiveInfoRepository;
-import hrms.service.impl.user.UserInfoService;
+import hrms.service.user.UserInfoService;
 import hrms.util.*;
 import hrms.vo.LoginInfo;
 import hrms.vo.MsgVo;
@@ -147,6 +148,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 
             //注册敏感信息
             UserSensitiveInfo userSensitiveInfo = new UserSensitiveInfo();
+            Date date = DateUtil.parse(registerUserInfo.getDataOfBirth(), DateUtil.BASE_DATE_FORMAT);
+            if(DateUtil.now().before(date)){
+                return MsgVo.error(ErrorCode.DATE_ERROR);
+            }
             userSensitiveInfo.setDataOfBirth(registerUserInfo.getDataOfBirth());
             userSensitiveInfo.setUserCardNumber(registerUserInfo.getUserCardNumber());
             userSensitiveInfo.setUserId(userId);
@@ -247,6 +252,14 @@ public class UserInfoServiceImpl implements UserInfoService {
             return MsgVo.error(ErrorCode.USER_PASSWORD_ERROR);
         }
 
+        //更新年龄
+        UserSensitiveInfo one = userSensitiveInfoRepository.findOne(ParseUtil.parseLong(userInfo.getUserId()));
+        int betweenTwoDate = DateUtil.yearBetweenTwoDate(one.getDataOfBirth(), DateUtil.formatDate());
+        if(betweenTwoDate != userInfo.getUserAge()){
+            userInfo.setUserAge(betweenTwoDate);
+            userInfoRepository.save(userInfo);
+        }
+
         //获取登录所需信息
         LoginInfo loginInfo = orgMemberInfoRepository.findByUserID(userInfo.getUserId());
         if(loginInfo != null){
@@ -271,36 +284,47 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public MsgVo findUsers(FindUserParam param,Integer userID, CommonParams commonParams) {
+    public MsgVo findUsers(FindUserParam param, CommonParams commonParams) {
+        Integer userID = commonParams.getUserId();
         UserInfo oper = userInfoRepository.findOne(ParseUtil.parseLong(userID));
+
+        boolean isOrgManager = false;
+        boolean isManager = false;
+        boolean isSM = false;
+
         if(oper == null){
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
+
         List<UserRoleInfo> userRoles = userRoleInfoRepository.findUserRole(userID);
-        boolean isOrgManager = false;
-        boolean haveSensitiveRole = false;
+
         for(UserRoleInfo userRole:userRoles){
-            if(userRole.getRoleId() == Constant.ROLE_SYSTEM_MANAGER_VALUE ||
-                    userRole.getRoleId() == Constant.ROLE_FINANCE_VALUE ||
-                    userRole.getRoleId() == Constant.ROLE_HR_VALUE){
-                haveSensitiveRole = true;
+            if(userRole.getRoleId() == Constant.ROLE_SYSTEM_MANAGER_VALUE ){
+                isSM = true;
                 break;
             }
-        }
-        if(! haveSensitiveRole){
-            OrgMemberDetail orgDetail = orgMemberInfoRepository.findOrg(oper.getUserId());
-            isOrgManager = orgManagerInfoRepository.isManager(oper.getUserId(), orgDetail.getOrgID());
+            if(userRole.getRoleId() == Constant.ROLE_HR_VALUE){
+                isManager = true;
+            }
         }
 
-        List<UserDetail> userDetails = new ArrayList<>();
-        if(haveSensitiveRole){
-            userDetails = userInfoRepository.findUsers(param, true, commonParams.getPage(), commonParams.getPagesize());
-        }else{
-            userDetails = userInfoRepository.findUsers(param, false, commonParams.getPage(), commonParams.getPagesize());
+        if(!isSM && ! isManager){
+            OrgMemberDetail orgDetail = orgMemberInfoRepository.findOrg(oper.getUserId());
+            isOrgManager = orgManagerInfoRepository.isManager(oper.getUserId(), orgDetail.getOrgID());
+            if(! orgDetail.getOrgID().equals(commonParams.getOrgId())){
+                return MsgVo.error(ErrorCode.NO_AUTH);
+            }
         }
+
+
+        //获取数据
+        List<UserDetail> userDetails = new ArrayList<>();
+        userDetails = userInfoRepository.findUserBaseInfos(param, commonParams.getPage(), commonParams.getPagesize());
+
         Map<String, ShowUserVo> map = new HashMap<>();
         ShowUserVo voParam = new ShowUserVo();
         voParam.setUserInfos(userDetails);
+        //没有结果集
         if(userDetails == null || userDetails.size() < 1){
             map.put("result",voParam);
             return MsgVo.success(map);
@@ -310,10 +334,31 @@ public class UserInfoServiceImpl implements UserInfoService {
             userIds.add(userDetail.getUserID());
         }
 
+        //设置权限
         Map<Integer,Integer> userRole = userRoleInfoRepository.findUserRole(userIds);
         if(userRole == null){
             for(UserDetail userDetail:voParam.getUserInfos()){
                 userDetail.setRoleId(userRole.get(userDetail.getUserID()));
+                if(userDetail.getRoleId().intValue() == Constant.ROLE_SYSTEM_MANAGER_VALUE){
+                    userDetail.setHasRole((byte) 0);
+                }
+                else if(userDetail.getRoleId().intValue() == Constant.ROLE_HR_VALUE){
+                    if(isSM ){
+                        userDetail.setHasRole((byte) 1);
+                    }else{
+                        userDetail.setHasRole((byte) 0);
+                    }
+                }
+                else if(userDetail.getRoleId().intValue() == Constant.ROLE_WORKER_VALUE ||
+                        userDetail.getRoleId().intValue() == Constant.ROLE_FINANCE_VALUE){
+                    if(isManager || isSM){
+                        userDetail.setHasRole((byte) 1);
+                    }else{
+                        userDetail.setHasRole((byte) 0);
+                    }
+                }else{
+                    userDetail.setHasRole((byte) 0);
+                }
             }
         }
 
@@ -323,8 +368,68 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public MsgVo findUserDetail(Integer userID, CommonParams commonParams) {
+        UserDetail userDetail = new UserDetail();
+        if(userID.intValue() == commonParams.getUserId()){
+            userDetail.setIsMine((byte) 1);
+            userDetail = userInfoRepository.findUserDetail(userID,true);
+        }else{
+            userDetail.setIsMine((byte) 0);
+            userDetail = userInfoRepository.findUserDetail(userID,false);
+        }
 
+        Map<String,UserDetail> map = new HashMap<>();
+        map.put("result",userDetail);
+        return MsgVo.success(map);
+    }
 
-        return null;
+    @Override
+    public MsgVo updateUser(UpdateUserParam param, CommonParams commonParams) {
+        //权限验证
+        Integer oper = commonParams.getUserId();
+        UserInfo operInfo = userInfoRepository.findOne(ParseUtil.parseLong(oper));
+        if(operInfo == null || operInfo.getUserStatus() == Constant.STATUS_DISABLE){
+            return MsgVo.fail(ErrorCode.USER_EMPTY);
+        }
+        if(operInfo.getWorkStatus() == Constant.STATUS_DISABLE){
+            return MsgVo.fail(ErrorCode.TOKEN_TIMEOUT);
+        }
+        boolean hrOrSM = userRoleInfoRepository.isHROrSM(oper);
+        if(! hrOrSM){
+            return MsgVo.fail(ErrorCode.ROLE_ERROR);
+        }
+
+        UserInfo userInfo = userInfoRepository.findOne(ParseUtil.parseLong(param.getUserID()));
+        if(! StringUtil.isEmpty(param.getUserName())){
+            userInfo.setUserName(param.getUserName());
+        }
+        if(! StringUtil.isEmpty(param.getUserPhone()) &&
+                Validator.isMobile(param.getUserPhone())){
+            userInfo.setUserPhone(param.getUserPhone());
+        }
+        if(! StringUtil.isEmpty(param.getUserSex()) &&
+                (param.getUserSex() ==1 ||param.getUserSex() ==0 )){
+            userInfo.setSex(param.getUserSex());
+        }
+        if(! StringUtil.isEmpty(param.getUserEmail()) &&
+                Validator.isEmail(param.getUserEmail())){
+            userInfo.setUserEmail(param.getUserEmail());
+        }
+        if(! StringUtil.isEmpty(param.getBirthOfDate()) &&
+                DateUtil.now().after(DateUtil.parse(param.getBirthOfDate(),DateUtil.BASE_DATE_FORMAT))){
+            UserSensitiveInfo userSensitiveInfo = userSensitiveInfoRepository.findOne(ParseUtil.parseLong(param.getUserID()));
+            userSensitiveInfo.setDataOfBirth(param.getBirthOfDate());
+            userSensitiveInfoRepository.save(userSensitiveInfo);
+
+            //更新年龄
+            UserSensitiveInfo one = userSensitiveInfoRepository.findOne(ParseUtil.parseLong(userInfo.getUserId()));
+            int betweenTwoDate = DateUtil.yearBetweenTwoDate(one.getDataOfBirth(), DateUtil.formatDate());
+            if(betweenTwoDate != userInfo.getUserAge()){
+                userInfo.setUserAge(betweenTwoDate);
+            }
+        }
+
+        userInfoRepository.save(userInfo);
+
+        return MsgVo.success(null);
     }
 }

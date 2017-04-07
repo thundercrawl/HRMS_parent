@@ -58,4 +58,36 @@ public class UserRoleInfoRepository extends RepositorySupport<UserRoleInfo> {
         return resultMap;
 
     }
+
+    /**
+     * @describe 查询是否拥有指定权限
+     * @param roleID
+     * @param userID
+     * @return
+     */
+    public UserRoleInfo findByRole(Integer roleID,Integer userID){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserRoleInfo.class);
+        detachedCriteria.add(Restrictions.eq("userId",userID))
+                .add(Restrictions.eq("roleId",roleID))
+                .add(Restrictions.eq("status",Constant.ROLE_ABLE));
+        return findOne(detachedCriteria);
+    }
+
+    /**
+     * @describe 是否有hr或系统管理员权限
+     * @param userID
+     * @return
+     */
+    public boolean isHROrSM(Integer userID){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserRoleInfo.class);
+        detachedCriteria.add(Restrictions.eq("userId",userID))
+                .add(Restrictions.in("roleId",new String[]{Constant.ROLE_HR_VALUE+"",Constant.ROLE_SYSTEM_MANAGER_VALUE+""}))
+                .add(Restrictions.eq("status",Constant.ROLE_ABLE));
+        UserRoleInfo one = findOne(detachedCriteria);
+        if(one != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

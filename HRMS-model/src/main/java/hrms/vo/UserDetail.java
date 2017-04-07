@@ -28,6 +28,25 @@ public class UserDetail {
     private String dataOfBirth;
     private String workTime;
 
+    private Byte isMine;
+    private Byte hasRole;  //0:没有操作权限  1：有
+
+    public Byte getHasRole() {
+        return hasRole;
+    }
+
+    public void setHasRole(Byte hasRole) {
+        this.hasRole = hasRole;
+    }
+
+    public Byte getIsMine() {
+        return isMine;
+    }
+
+    public void setIsMine(Byte isMine) {
+        this.isMine = isMine;
+    }
+
     public String getUserPhoto() {
         return userPhoto;
     }

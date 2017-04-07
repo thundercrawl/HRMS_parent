@@ -8,6 +8,11 @@ public enum ErrorCode {
 	EMPTY("0001", "没有查询到数据"), NO_RESULT("40001", "当前条件下无搜索结果，返回推荐结果"),
 	PARAMERROR("0002","参数错误"),
 	PARAM_EMPTY("0003","参数有为空的"),
+	RESULT_EMPTY("0004","结果集为空"),
+	NAME_REPEAT("0005","名称重复，请确认！"),
+	ROLE_ERROR("0006","权限不足"),
+	DATE_ERROR("0007","时间错误"),
+
 
 	//权限
 	ONLY_HR("0010","只有HR或系统管理员有操作权限"),
@@ -26,6 +31,8 @@ public enum ErrorCode {
 	USER_DISABLE("0018","账户已删除，请重新注册后登录"),
 	USER_WORK_DISABLE("0019","账户被禁用了，请联系HR或管理员解禁"),
 
+	//部门
+	PARENT_ORG_EMPTY("0021","上级部门不存在！"),
 
 
 	//架构验证

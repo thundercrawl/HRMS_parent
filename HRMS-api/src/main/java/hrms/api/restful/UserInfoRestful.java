@@ -7,9 +7,10 @@ import hrms.annotation.HRMSParam;
 import hrms.common.CommonParams;
 import hrms.common.ErrorCode;
 import hrms.exception.InvalidException;
+import hrms.po.FindUserParam;
 import hrms.po.LoginParam;
 import hrms.po.SaveUserParam;
-import hrms.service.impl.user.UserInfoService;
+import hrms.service.user.UserInfoService;
 import hrms.util.LoggerWriter;
 import hrms.util.StringUtil;
 import hrms.vo.MsgVo;
@@ -100,16 +101,16 @@ public class UserInfoRestful {
 	@POST
 	@Path("/findUsers")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public MsgVo findUsers(@HRMSParam("object")Integer userID, CommonParams commonParam){
+	public MsgVo findUsers(@HRMSParam("object")FindUserParam param, CommonParams commonParam){
 		try {
 			if(commonParam.getPage() == null ||
 					commonParam.getPagesize() == null ||
-					commonParam.getOrgId() == null || commonParam.getUserId() == null || userID == null){
+					commonParam.getOrgId() == null || commonParam.getUserId() == null){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",userID, commonParam);
-			userInfoService.findUsers(userID,commonParam);
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",userID, commonParam);
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户", commonParam);
+			userInfoService.findUsers(param,commonParam);
+			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功", commonParam);
 			return MsgVo.success(null);
 
 		}catch (InvalidException e1){

@@ -1,9 +1,10 @@
-package hrms.service.impl.user;
+package hrms.service.user;
 
 import hrms.common.CommonParams;
 import hrms.po.FindUserParam;
 import hrms.po.LoginParam;
 import hrms.po.RegisterUserInfo;
+import hrms.po.UpdateUserParam;
 import hrms.vo.MsgVo;
 
 import java.util.List;
@@ -25,7 +26,27 @@ public interface UserInfoService {
      */
     public MsgVo login(LoginParam param);
 
-    public MsgVo findUsers(FindUserParam param,Integer userID, CommonParams commonParams);
+    /**
+     * @describe 条件查找用户
+     * @param param
+     * @param commonParams
+     * @return
+     */
+    public MsgVo findUsers(FindUserParam param, CommonParams commonParams);
 
+    /**
+     * @describe 查看用户详情
+     * @param userID
+     * @param commonParams
+     * @return
+     */
     public MsgVo findUserDetail(Integer userID,CommonParams commonParams);
+
+    /**
+     * @describe 更新用户资料
+     * @param param
+     * @param commonParams
+     * @return
+     */
+    public MsgVo updateUser(UpdateUserParam param, CommonParams commonParams);
 }

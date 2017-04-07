@@ -23,4 +23,5 @@ public class RoleInfoRepository extends RepositorySupport<RoleInfo> {
         return this.findOne(detachedCriteria);
     }
 
+
 }
