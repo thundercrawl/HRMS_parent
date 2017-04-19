@@ -18,7 +18,7 @@ public interface OrgInfoService {
     public MsgVo findAllOrg(String orgName);
 
     /**
-     * @describe
+     * @describe 新增部门
      * @param orgParam
      * @param commonParams
      * @return
@@ -26,7 +26,7 @@ public interface OrgInfoService {
     public MsgVo save(SaveOrgParam orgParam, CommonParams commonParams);
 
     /**
-     * @describe 更新名称、描述
+     * @describe 更新部门名称、描述
      * @param orgParam
      * @param commonParams
      * @return

@@ -43,10 +43,19 @@ public interface UserInfoService {
     public MsgVo findUserDetail(Integer userID,CommonParams commonParams);
 
     /**
-     * @describe 更新用户资料
+     * @describe 更新用户资料    姓名、出生年月、性別、手机号码、email
      * @param param
      * @param commonParams
      * @return
      */
     public MsgVo updateUser(UpdateUserParam param, CommonParams commonParams);
+
+    /**
+     * @describe 上传用户头像
+     * @author xieyw
+     * @param url
+     * @param commonParams
+     * @return
+     */
+    public MsgVo uploadUserPhoto(String url,CommonParams commonParams);
 }

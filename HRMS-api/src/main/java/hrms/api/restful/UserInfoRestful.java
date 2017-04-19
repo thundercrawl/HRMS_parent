@@ -10,6 +10,7 @@ import hrms.exception.InvalidException;
 import hrms.po.FindUserParam;
 import hrms.po.LoginParam;
 import hrms.po.SaveUserParam;
+import hrms.po.UpdateUserParam;
 import hrms.service.user.UserInfoService;
 import hrms.util.LoggerWriter;
 import hrms.util.StringUtil;
@@ -33,7 +34,7 @@ public class UserInfoRestful {
 	private UserInfoService userInfoService;
 
 	/**
-	 * busi_code:10001
+	 * 
 	 * @describe 批量注册用户
 	 */
 	@POST
@@ -48,31 +49,17 @@ public class UserInfoRestful {
 					param.getRegisterUserInfos().size() < 1){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",param.getRegisterUserInfos(), userId,orgId);
-			userInfoService.save(param.getRegisterUserInfos(),commonParam);
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",param.getRegisterUserInfos(), userId,orgId);
-			return MsgVo.success(null);
+			LoggerWriter.addWrite(log, " 批量注册用户",param.getRegisterUserInfos(), userId,orgId);
+			MsgVo msgVo = userInfoService.save(param.getRegisterUserInfos(), commonParam);
+			LoggerWriter.addWrite(log, " 批量注册用户成功",param.getRegisterUserInfos(), userId,orgId);
+			return msgVo;
 
 		}catch (InvalidException e1){
 			return MsgVo.error(e1.getErrorCode());
 		}catch (Exception e) {
-			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			log.error(" 批量注册用户失败 Catch Exception:" + e.getMessage());
 			return MsgVo.fail(ErrorCode.UNKNOW);
 		}
-	}
-
-	@POST
-	@Path("/test")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public MsgVo test (@HRMSParam("object")SaveUserParam param, CommonParams commonParam){
-		try {
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户");
-		}catch (InvalidException e1){
-			return MsgVo.error(e1.getErrorCode());
-		}catch (Exception e) {
-			return MsgVo.fail(ErrorCode.UNKNOW);
-		}
-		return null;
 	}
 
 	@POST
@@ -85,15 +72,16 @@ public class UserInfoRestful {
 					StringUtil.isEmpty(loginParam.getUserPhone())){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",loginParam, commonParam);
-			userInfoService.login(loginParam);
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",loginParam, commonParam);
-			return MsgVo.success(null);
+			LoggerWriter.addWrite(log, " 批量注册用户",loginParam, commonParam);
+			MsgVo msgVo = userInfoService.login(loginParam);
+			LoggerWriter.addWrite(log, " 批量注册用户成功",loginParam, commonParam);
+
+			return msgVo;
 
 		}catch (InvalidException e1){
 			return MsgVo.error(e1.getErrorCode());
 		}catch (Exception e) {
-			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			log.error(" 批量注册用户失败 Catch Exception:" + e.getMessage());
 			return MsgVo.fail(ErrorCode.UNKNOW);
 		}
 	}
@@ -108,15 +96,16 @@ public class UserInfoRestful {
 					commonParam.getOrgId() == null || commonParam.getUserId() == null){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户", commonParam);
-			userInfoService.findUsers(param,commonParam);
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功", commonParam);
-			return MsgVo.success(null);
+			LoggerWriter.addWrite(log, " 批量注册用户", commonParam);
+			MsgVo msgVo = userInfoService.findUsers(param, commonParam);
+			LoggerWriter.addWrite(log, " 批量注册用户成功", commonParam);
+
+			return msgVo;
 
 		}catch (InvalidException e1){
 			return MsgVo.error(e1.getErrorCode());
 		}catch (Exception e) {
-			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			log.error(" 批量注册用户失败 Catch Exception:" + e.getMessage());
 			return MsgVo.fail(ErrorCode.UNKNOW);
 		}
 	}
@@ -129,17 +118,61 @@ public class UserInfoRestful {
 			if(commonParam.getOrgId() == null || commonParam.getUserId() == null){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户",userID, commonParam);
-			userInfoService.findUserDetail(userID,commonParam);
-			LoggerWriter.addWrite(log, "busi_code:10001 批量注册用户成功",userID, commonParam);
-			return MsgVo.success(null);
+			LoggerWriter.addWrite(log, " 批量注册用户",userID, commonParam);
+			MsgVo msgVo = userInfoService.findUserDetail(userID, commonParam);
+			LoggerWriter.addWrite(log, " 批量注册用户成功",userID, commonParam);
+
+			return msgVo;
 
 		}catch (InvalidException e1){
 			return MsgVo.error(e1.getErrorCode());
 		}catch (Exception e) {
-			log.error("busi_code:10001 批量注册用户失败 Catch Exception:" + e.getMessage());
+			log.error(" 批量注册用户失败 Catch Exception:" + e.getMessage());
 			return MsgVo.fail(ErrorCode.UNKNOW);
 		}
 	}
+
+	@POST
+	@Path("/updateUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo updateUser(@HRMSParam("object")UpdateUserParam param, CommonParams commonParam){
+		try {
+			if(commonParam.getOrgId() == null || commonParam.getUserId() == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			LoggerWriter.addWrite(log, " 更新用户资料",param, commonParam);
+			MsgVo msgVo = userInfoService.updateUser(param, commonParam);
+			LoggerWriter.addWrite(log, " 更新用户资料成功",param, commonParam);
+
+			return msgVo;
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			log.error(" 批量注册用户失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/uploadUserPhoto")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo uploadUserPhoto(@HRMSParam("object")String url, CommonParams commonParam){
+		try {
+			if(StringUtil.isEmpty(url) || commonParam.getOrgId() == null || commonParam.getUserId() == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			LoggerWriter.addWrite(log, " 上传用户头像",url,commonParam);
+			MsgVo msgVo = userInfoService.uploadUserPhoto(url, commonParam);
+			LoggerWriter.addWrite(log, " 上传用户头像成功",url,commonParam);
+
+			return msgVo;
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			log.error(" 上传用户头像失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
 	
 }

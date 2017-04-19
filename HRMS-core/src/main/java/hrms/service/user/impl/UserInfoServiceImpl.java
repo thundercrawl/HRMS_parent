@@ -432,4 +432,27 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         return MsgVo.success(null);
     }
+
+    @Override
+    public MsgVo uploadUserPhoto(String url, CommonParams commonParams) {
+        Integer userId = commonParams.getUserId();
+
+        PictureInfo userPhoto = pictureInfoReposity.findUserPhoto(userId);
+        if(userPhoto != null){
+            userPhoto.setPicStatus(Constant.STATUS_DISABLE);
+            pictureInfoReposity.save(userPhoto);
+        }
+
+        PictureInfo pictureInfo = new PictureInfo();
+        pictureInfo.setRelId(userId);
+        pictureInfo.setRelType(Constant.REL_TYPE_USER_PHOTO);
+        pictureInfo.setCreateTime(DateUtil.formatDate());
+        pictureInfo.setPicUrl(url);
+        pictureInfo.setPicStatus(Constant.STATUS_ABLE);
+        pictureInfo.setDesc(userId+"的用户头像");
+
+        pictureInfoReposity.save(pictureInfo);
+
+        return MsgVo.success(null);
+    }
 }
