@@ -39,9 +39,9 @@
 			<from name="from1" method="post" action="">
 			<input type="hidden" name="organizeId" value="1" id="organizeId">
 				<p>
-					用户名<span id="loginnameError" class="warning">${msg }</span>
+					手机号码<span id="loginnameError" class="warning">${msg }</span>
 				</p>
-				<input type="text" name="loginname" id="loginname" placeholder="请输入用户名"  class="">
+				<input type="text" name="loginname" id="loginname" placeholder="请输入手机号码"  class="">
 				<p>
 					密码<span id="loginpassError" class="warning">${msg }</span>
 				</p>

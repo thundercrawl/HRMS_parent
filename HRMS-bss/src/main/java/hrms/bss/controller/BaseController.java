@@ -38,17 +38,16 @@ public class BaseController {
 		return basePath;
 	}
 
-	public Long getCurrentUserOrgId() {
+	public Integer getCurrentUserOrgId() {
 		Object orgid = getCurrentUser().getOrgId();
 		if (orgid != null)
-			return Long.parseLong(orgid.toString());
-		return Long.parseLong(""+0);
+			return Integer.parseInt(orgid.toString());
+		return Integer.parseInt(""+0);
 	}
 	
 	public Map<String, String> uploadImage(HttpServletRequest request,String imagePath){
 		Map<String, String> localUpload = UploadImageUtil.localUpload(request, imagePath,appProperties.getFileServerPath());
-		
-		
+
 		return localUpload;
 	}
 

@@ -20,11 +20,11 @@ public class PictureInfo implements Serializable {
     private Byte picStatus;
     private String createTime;
     private Integer createUserId;
-    private String desc;
+    private String picDesc;
 
     public PictureInfo(){}
 
-    public PictureInfo(Integer picId, Integer relId, Integer relType, String picUrl, Byte picStatus, String createTime, Integer createUserId, String desc) {
+    public PictureInfo(Integer picId, Integer relId, Integer relType, String picUrl, Byte picStatus, String createTime, Integer createUserId, String picDesc) {
         this.picId = picId;
         this.relId = relId;
         this.relType = relType;
@@ -32,7 +32,7 @@ public class PictureInfo implements Serializable {
         this.picStatus = picStatus;
         this.createTime = createTime;
         this.createUserId = createUserId;
-        this.desc = desc;
+        this.picDesc = picDesc;
     }
 
     @Id
@@ -100,13 +100,13 @@ public class PictureInfo implements Serializable {
         this.createUserId = createUserId;
     }
 
-    @Column(name = "DESC", length = 255)
-    public String getDesc() {
-        return desc;
+    @Column(name = "PIC_DESC", length = 255)
+    public String getPicDesc() {
+        return picDesc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setPicDesc(String picDesc) {
+        this.picDesc = picDesc;
     }
 
     @Override
@@ -119,7 +119,6 @@ public class PictureInfo implements Serializable {
                 ", picStatus=" + picStatus +
                 ", createTime='" + createTime + '\'' +
                 ", createUserId=" + createUserId +
-                ", desc='" + desc + '\'' +
                 '}';
     }
 }

@@ -28,7 +28,7 @@ public enum ErrorCode {
 
 	ENTITY_COPY_ERROR("0013","实体拷贝错误"),
 
-	REGISTER_REPEAT("0014","一个手机号码只能注册一个账号"),
+	REGISTER_REPEAT("0014","一个手机号码只能绑定一个账号"),
 	REGISTER_ORG_MANAGER_FAIL("0015","该部门不存在或已存在部门经理，无法重复设置"),
 	REGISTER_ORG_MANAGER_REPEAT("0020","一个用户只能有一个在职部门"),
 

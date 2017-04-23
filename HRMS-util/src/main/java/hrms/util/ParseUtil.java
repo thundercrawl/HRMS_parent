@@ -1,5 +1,7 @@
 package hrms.util;
 
+import hrms.entity.UserInfo;
+
 import java.math.BigDecimal;
 
 public class ParseUtil {
@@ -71,5 +73,11 @@ public class ParseUtil {
 			return null;
 		}
 		return BigDecimal.valueOf(parseDouble(obj));
+	}
+
+	public static void main(String[] args){
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserId(1);
+		System.out.println(ParseUtil.parseLong(userInfo.getUserId()));
 	}
 }

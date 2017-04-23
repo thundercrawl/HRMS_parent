@@ -12,7 +12,7 @@ import hrms.po.UpdateUserParam;
 import hrms.repository.impl.org.OrgInfoRepository;
 import hrms.repository.impl.org.OrgManagerInfoRepository;
 import hrms.repository.impl.org.OrgMemberInfoRepository;
-import hrms.repository.impl.picture.PictureInfoReposity;
+import hrms.repository.impl.picture.PictureInfoRepository;
 import hrms.repository.impl.role.RoleInfoRepository;
 import hrms.repository.impl.role.UserRoleInfoRepository;
 import hrms.repository.impl.sys.SysParamConfigRepository;
@@ -24,7 +24,6 @@ import hrms.vo.LoginInfo;
 import hrms.vo.MsgVo;
 import hrms.vo.ShowUserVo;
 import hrms.vo.UserDetail;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -52,7 +51,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Resource
     private UserSensitiveInfoRepository userSensitiveInfoRepository;
     @Resource
-    private PictureInfoReposity pictureInfoReposity;
+    private PictureInfoRepository pictureInfoRepository;
 
     @Override
     public MsgVo save(List<RegisterUserInfo> registerUserInfos, CommonParams commonParams) {
@@ -80,33 +79,31 @@ public class UserInfoServiceImpl implements UserInfoService {
               }
         }
 
-        if(! (isHR && isSM) ){
+        if(! (isHR || isSM) ){
             return MsgVo.fail(ErrorCode.ONLY_HR);
         }
+
+        Set<String> phoneSet = new HashSet<>();
+
         for(RegisterUserInfo registerUserInfo:registerUserInfos){
             //参数校验
             if(registerUserInfo == null ||
-                    StringUtils.isEmpty(registerUserInfo.getDataOfBirth()) ||
-                    registerUserInfo.getRoleID() == null ||
+                     StringUtil.isEmpty(registerUserInfo.getOrgName()) ||
+                    StringUtil.isEmpty(registerUserInfo.getUserName()) ||
                     ! Validator.isIDCard(registerUserInfo.getUserCardNumber()) ||
                     ! Validator.isEmail(registerUserInfo.getUserEmail()) ||
-                    ! Validator.isUsername(registerUserInfo.getUserName()) ||
-                    StringUtils.isEmpty(registerUserInfo.getUserPasswd()) ||
                     ! Validator.isMobile(registerUserInfo.getUserPhone()) ||
-                    ! Validator.isAge(registerUserInfo.getUserAge().toString()) ||
-                    registerUserInfo.getSex() == null ||
-                    (registerUserInfo.getSex() != 2 && registerUserInfo.getSex() != 1) ||
-                    registerUserInfo.getWorkStatus() == null ||
-                    (registerUserInfo.getWorkStatus() != 0 && registerUserInfo.getWorkStatus() != 1) ||
-                    registerUserInfo.getUserStatus() == null ||
-                    (registerUserInfo.getUserStatus() != 0 && registerUserInfo.getUserStatus() != 1) ||
-                    registerUserInfo.getIsOrgManager() == null ||
+                    registerUserInfo.getIsOrgManager() == null
+                    || registerUserInfo.getSex() == null ||
+                    (registerUserInfo.getSex() != 2 && registerUserInfo.getSex() != 1)||
                     (registerUserInfo.getIsOrgManager() != 0 && registerUserInfo.getIsOrgManager() != 1) ||
                     ! Validator.isTimeNoSecond(registerUserInfo.getDataOfBirth()) ||
                     ! Validator.isTimeNoSecond(registerUserInfo.getWorkTime())
                     ){
                 return MsgVo.error(ErrorCode.PARAMERROR);
             }
+
+            phoneSet.add(registerUserInfo.getUserPhone());
 
             //验证手机号码
             UserInfo byPhone = userInfoRepository.findWorkerByPhone(registerUserInfo.getUserPhone());
@@ -123,13 +120,19 @@ public class UserInfoServiceImpl implements UserInfoService {
             userInfo.setCreateTime(DateUtil.formatDate());
             userInfo.setCreateUserId(operId);
 
-            try {
-                CopyEntityUtil.Copy(registerUserInfo,userInfo);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return MsgVo.error(ErrorCode.ENTITY_COPY_ERROR);
-            }
+            userInfo.setUserAge(DateUtil.yearBetweenTwoDate(registerUserInfo.getDataOfBirth(),DateUtil.formatDate()));
+            userInfo.setUserStatus(Constant.STATUS_ABLE);
+            userInfo.setWorkStatus(Constant.STATUS_ABLE);
+
+            userInfo.setUserPhone(registerUserInfo.getUserPhone());
+            userInfo.setUserEmail(registerUserInfo.getUserEmail());
+            userInfo.setSex(ParseUtil.parseString(registerUserInfo.getSex()));
+            userInfo.setUserName(registerUserInfo.getUserName());
             userInfoBatch.add(userInfo);
+        }
+
+        if(phoneSet.size() != registerUserInfos.size()){
+            return MsgVo.error(ErrorCode.REGISTER_REPEAT);
         }
 
         List<UserInfo> userInfos = userInfoRepository.batchSave(userInfoBatch);
@@ -152,19 +155,19 @@ public class UserInfoServiceImpl implements UserInfoService {
             if(DateUtil.now().before(date)){
                 return MsgVo.error(ErrorCode.DATE_ERROR);
             }
-            userSensitiveInfo.setDataOfBirth(registerUserInfo.getDataOfBirth());
+            userSensitiveInfo.setDataOfBirth(DateUtil.formatDate(DateUtil.BASE_DATE_FORMAT,date));
             userSensitiveInfo.setUserCardNumber(registerUserInfo.getUserCardNumber());
             userSensitiveInfo.setUserId(userId);
             userSensitiveInfo.setWorkTime(registerUserInfo.getWorkTime());
             userSensitiveBatch.add(userSensitiveInfo);
 
             //注册用户头像
-            String paramId = Constant.DEFAULT_USER_PHOTO_HEAD+(int)(Math.random()*8);
+            String paramId = Constant.DEFAULT_USER_PHOTO_HEAD+(int)(Math.random()*7);
             SysParamConfig defaultPhoto = sysParamConfigRepository.findByID(paramId);
             PictureInfo pictureInfo = new PictureInfo();
             pictureInfo.setCreateTime(DateUtil.formatDate());
             pictureInfo.setCreateUserId(operId);
-            pictureInfo.setDesc(registerUserInfo.getUserName()+" 默认头像");
+            pictureInfo.setPicDesc(registerUserInfo.getUserName()+" 默认头像");
             pictureInfo.setPicStatus(Constant.STATUS_ABLE);
             pictureInfo.setPicUrl(defaultPhoto.getParamValue());
             pictureInfo.setRelId(userId);
@@ -172,7 +175,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             userPictureBatch.add(pictureInfo);
         }
         userSensitiveInfoRepository.batchSave(userSensitiveBatch);
-        pictureInfoReposity.batchSave(userPictureBatch);
+        pictureInfoRepository.batchSave(userPictureBatch);
 
         //注册权限
         List<UserRoleInfo> userRoleBatch = new ArrayList<>();
@@ -182,7 +185,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                 return MsgVo.fail(ErrorCode.REGISTER_PERMISSION_DENIED);
             }
             //验证权限是否存在
-            RoleInfo roleInfo = roleInfoRepository.findOne(ParseUtil.parseLong(registerUserInfo.getRoleID()));
+            RoleInfo roleInfo = roleInfoRepository.findById(registerUserInfo.getRoleID());
             if(roleInfo == null){
                 return MsgVo.error(ErrorCode.PERMISSION_NOT_DEFINED);
             }
@@ -199,26 +202,36 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<OrgMemberInfo> orgMemberBatch = new ArrayList<>();
         for(RegisterUserInfo registerUserInfo:registerUserInfos){
             Integer userID = phoneMap.get(registerUserInfo.getUserPhone()).getUserId();
+
+            OrgInfo orgInfo = orgInfoRepository.findByName(registerUserInfo.getOrgName());
+
+            if(orgInfo == null){
+                OrgInfo newOrg = new OrgInfo();
+                newOrg.setOrgStatus(Constant.STATUS_ABLE);
+                newOrg.setCreateTime(DateUtil.formatDate());
+                newOrg.setCreateUserId(commonParams.getUserId());
+                newOrg.setDesc(registerUserInfo.getOrgName());
+                newOrg.setOrgName(registerUserInfo.getOrgName());
+                newOrg.setParentOrgId(0);
+                orgInfo = orgInfoRepository.save(newOrg);
+            }
+
             if(1 == registerUserInfo.getIsOrgManager().byteValue()){
                 //验证是否可以授予经理权限
-                Integer managerID = orgManagerInfoRepository.getManager(registerUserInfo.getOrgId());
+                Integer managerID = orgManagerInfoRepository.getManager(orgInfo.getOrgId());
                 if(managerID == null){
                     //部门没有经理，可以设置为经理
                     OrgManagerInfo orgManagerInfo = new OrgManagerInfo();
                     orgManagerInfo.setStatus(Constant.STATUS_ABLE);
                     orgManagerInfo.setUserId(userID);
-                    orgManagerInfo.setOrgId(registerUserInfo.getOrgId());
+                    orgManagerInfo.setOrgId(orgInfo.getOrgId());
                     orgManagerBatch.add(orgManagerInfo);
                 }else{
                     return MsgVo.fail(ErrorCode.REGISTER_ORG_MANAGER_FAIL);
                 }
             }
-            boolean hasOrg = orgMemberInfoRepository.hasOrg(registerUserInfo.getOrgId());
-            if(hasOrg){
-                return MsgVo.fail(ErrorCode.REGISTER_ORG_MANAGER_REPEAT);
-            }
             OrgMemberInfo orgMemberInfo = new OrgMemberInfo();
-            orgMemberInfo.setOrgId(registerUserInfo.getOrgId());
+            orgMemberInfo.setOrgId(orgInfo.getOrgId());
             orgMemberInfo.setUserId(userID);
             orgMemberInfo.setStatus(Constant.STATUS_ABLE);
             orgMemberInfo.setJoinTime(DateUtil.formatDate());
@@ -253,7 +266,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         //更新年龄
-        UserSensitiveInfo one = userSensitiveInfoRepository.findOne(ParseUtil.parseLong(userInfo.getUserId()));
+        UserSensitiveInfo one = userSensitiveInfoRepository.findByID(userInfo.getUserId());
         int betweenTwoDate = DateUtil.yearBetweenTwoDate(one.getDataOfBirth(), DateUtil.formatDate());
         if(betweenTwoDate != userInfo.getUserAge()){
             userInfo.setUserAge(betweenTwoDate);
@@ -261,7 +274,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         //获取登录所需信息
-        LoginInfo loginInfo = orgMemberInfoRepository.findByUserID(userInfo.getUserId());
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo = orgMemberInfoRepository.findByUserID(userInfo.getUserId());
         if(loginInfo != null){
             if(orgManagerInfoRepository.isManager(userInfo.getUserId(),loginInfo.getOrgId())){
                 loginInfo.setIsManager((byte) 1);
@@ -272,24 +286,43 @@ public class UserInfoServiceImpl implements UserInfoService {
             loginInfo.setIsManager((byte) 0);
         }
 
-        //信息设置
-        try {
-            CopyEntityUtil.Copy(userInfo,loginInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return MsgVo.error(ErrorCode.ENTITY_COPY_ERROR);
+
+        List<UserRoleInfo> userRoles = userRoleInfoRepository.findUserRole(userInfo.getUserId());
+        if(userRoles != null && userRoles.size() > 0){
+            for(UserRoleInfo userRoleInfo:userRoles){
+                if(Constant.ROLE_SYSTEM_MANAGER_VALUE == userRoleInfo.getRoleId().intValue()){
+                    loginInfo.setIsSM((byte) 1);
+                }
+                if(Constant.ROLE_HR_VALUE == userRoleInfo.getRoleId().intValue()){
+                    loginInfo.setIsHR((byte) 1);
+                }
+                if(Constant.ROLE_FINANCE_VALUE == userRoleInfo.getRoleId().intValue()){
+                    loginInfo.setIsFINANCE((byte) 1);
+                }
+            }
         }
 
-        return null;
+        PictureInfo userPhoto = pictureInfoRepository.findUserPhoto(userInfo.getUserId());
+        //信息设置
+        loginInfo.setJoinTime(one.getWorkTime());
+
+        loginInfo.setUserId(userInfo.getUserId());
+        loginInfo.setUserName(userInfo.getUserName());
+        loginInfo.setUserPhoto(userPhoto.getPicUrl());
+        loginInfo.setUserSex(userInfo.getSex());
+
+        Map<String,LoginInfo> map = new HashMap();
+        map.put("result",loginInfo);
+        return MsgVo.success(map);
     }
 
     @Override
     public MsgVo findUsers(FindUserParam param, CommonParams commonParams) {
         Integer userID = commonParams.getUserId();
-        UserInfo oper = userInfoRepository.findOne(ParseUtil.parseLong(userID));
+        UserInfo oper = userInfoRepository.findByUserId(userID);
 
         boolean isOrgManager = false;
-        boolean isManager = false;
+        boolean isHR = false;
         boolean isSM = false;
 
         if(oper == null){
@@ -304,16 +337,13 @@ public class UserInfoServiceImpl implements UserInfoService {
                 break;
             }
             if(userRole.getRoleId() == Constant.ROLE_HR_VALUE){
-                isManager = true;
+                isHR = true;
             }
         }
 
-        if(!isSM && ! isManager){
+        if(!isSM && ! isHR){
             OrgMemberDetail orgDetail = orgMemberInfoRepository.findOrg(oper.getUserId());
             isOrgManager = orgManagerInfoRepository.isManager(oper.getUserId(), orgDetail.getOrgID());
-            if(! orgDetail.getOrgID().equals(commonParams.getOrgId())){
-                return MsgVo.error(ErrorCode.NO_AUTH);
-            }
         }
 
 
@@ -336,22 +366,33 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         //设置权限
         Map<Integer,Integer> userRole = userRoleInfoRepository.findUserRole(userIds);
-        if(userRole == null){
+        if(userRole != null && userRole.size() > 0){
             for(UserDetail userDetail:voParam.getUserInfos()){
-                userDetail.setRoleId(userRole.get(userDetail.getUserID()));
-                if(userDetail.getRoleId().intValue() == Constant.ROLE_SYSTEM_MANAGER_VALUE){
+
+                if(userDetail.getUserID().intValue() == commonParams.getUserId().intValue()){
+                    userDetail.setIsMine((byte) 1);
+                }else{
+                    userDetail.setIsMine((byte) 0);
+                }
+
+                if(isSM){
+                    userDetail.setHasRole((byte) 1);
+                    continue;
+                }
+                Integer roleId = userRole.get(userDetail.getUserID());
+                if(roleId.intValue() == Constant.ROLE_SYSTEM_MANAGER_VALUE){
                     userDetail.setHasRole((byte) 0);
                 }
-                else if(userDetail.getRoleId().intValue() == Constant.ROLE_HR_VALUE){
+                else if(roleId.intValue() == Constant.ROLE_HR_VALUE){
                     if(isSM ){
                         userDetail.setHasRole((byte) 1);
                     }else{
                         userDetail.setHasRole((byte) 0);
                     }
                 }
-                else if(userDetail.getRoleId().intValue() == Constant.ROLE_WORKER_VALUE ||
-                        userDetail.getRoleId().intValue() == Constant.ROLE_FINANCE_VALUE){
-                    if(isManager || isSM){
+                else if(roleId.intValue() == Constant.ROLE_WORKER_VALUE ||
+                        roleId.intValue() == Constant.ROLE_FINANCE_VALUE){
+                    if(isHR || isSM){
                         userDetail.setHasRole((byte) 1);
                     }else{
                         userDetail.setHasRole((byte) 0);
@@ -386,7 +427,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public MsgVo updateUser(UpdateUserParam param, CommonParams commonParams) {
         //权限验证
         Integer oper = commonParams.getUserId();
-        UserInfo operInfo = userInfoRepository.findOne(ParseUtil.parseLong(oper));
+        UserInfo operInfo = userInfoRepository.findByUserId(oper);
         if(operInfo == null || operInfo.getUserStatus() == Constant.STATUS_DISABLE){
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
@@ -398,17 +439,21 @@ public class UserInfoServiceImpl implements UserInfoService {
             return MsgVo.fail(ErrorCode.ROLE_ERROR);
         }
 
-        UserInfo userInfo = userInfoRepository.findOne(ParseUtil.parseLong(param.getUserID()));
+        UserInfo userInfo = userInfoRepository.findByUserId(param.getUserID());
         if(! StringUtil.isEmpty(param.getUserName())){
             userInfo.setUserName(param.getUserName());
         }
         if(! StringUtil.isEmpty(param.getUserPhone()) &&
                 Validator.isMobile(param.getUserPhone())){
+            UserInfo byPhone = userInfoRepository.findByPhone(param.getUserPhone());
+            if(byPhone != null){
+                return MsgVo.fail(ErrorCode.REGISTER_REPEAT);
+            }
             userInfo.setUserPhone(param.getUserPhone());
         }
         if(! StringUtil.isEmpty(param.getUserSex()) &&
                 (param.getUserSex() ==1 ||param.getUserSex() ==0 )){
-            userInfo.setSex(param.getUserSex());
+            userInfo.setSex(param.getUserSex().toString());
         }
         if(! StringUtil.isEmpty(param.getUserEmail()) &&
                 Validator.isEmail(param.getUserEmail())){
@@ -416,12 +461,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         if(! StringUtil.isEmpty(param.getBirthOfDate()) &&
                 DateUtil.now().after(DateUtil.parse(param.getBirthOfDate(),DateUtil.BASE_DATE_FORMAT))){
-            UserSensitiveInfo userSensitiveInfo = userSensitiveInfoRepository.findOne(ParseUtil.parseLong(param.getUserID()));
+            UserSensitiveInfo userSensitiveInfo = userSensitiveInfoRepository.findByID(param.getUserID());
             userSensitiveInfo.setDataOfBirth(param.getBirthOfDate());
             userSensitiveInfoRepository.save(userSensitiveInfo);
 
             //更新年龄
-            UserSensitiveInfo one = userSensitiveInfoRepository.findOne(ParseUtil.parseLong(userInfo.getUserId()));
+            UserSensitiveInfo one = userSensitiveInfoRepository.findByID(userInfo.getUserId());
             int betweenTwoDate = DateUtil.yearBetweenTwoDate(one.getDataOfBirth(), DateUtil.formatDate());
             if(betweenTwoDate != userInfo.getUserAge()){
                 userInfo.setUserAge(betweenTwoDate);
@@ -434,24 +479,42 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public MsgVo uploadUserPhoto(String url, CommonParams commonParams) {
+    public MsgVo uploadUserPhoto(String picName, CommonParams commonParams) {
         Integer userId = commonParams.getUserId();
 
-        PictureInfo userPhoto = pictureInfoReposity.findUserPhoto(userId);
+        PictureInfo userPhoto = pictureInfoRepository.findUserPhoto(userId);
         if(userPhoto != null){
             userPhoto.setPicStatus(Constant.STATUS_DISABLE);
-            pictureInfoReposity.save(userPhoto);
+            pictureInfoRepository.save(userPhoto);
         }
-
         PictureInfo pictureInfo = new PictureInfo();
         pictureInfo.setRelId(userId);
         pictureInfo.setRelType(Constant.REL_TYPE_USER_PHOTO);
         pictureInfo.setCreateTime(DateUtil.formatDate());
-        pictureInfo.setPicUrl(url);
+        pictureInfo.setPicUrl(picName);
         pictureInfo.setPicStatus(Constant.STATUS_ABLE);
-        pictureInfo.setDesc(userId+"的用户头像");
+        pictureInfo.setPicDesc(userId+"的用户头像");
+        pictureInfo.setCreateUserId(userId);
 
-        pictureInfoReposity.save(pictureInfo);
+        pictureInfoRepository.save(pictureInfo);
+
+        return MsgVo.success(null);
+    }
+
+    @Override
+    public MsgVo resetPwd(Integer userID, CommonParams commonParams) {
+
+        boolean hrOrSM = userRoleInfoRepository.isHROrSM(commonParams.getUserId());
+        if(!hrOrSM){
+            return MsgVo.error(ErrorCode.ONLY_HR);
+        }
+        UserInfo userInfo = userInfoRepository.findByUserId(userID);
+        if(userInfo == null){
+            return MsgVo.error(ErrorCode.USER_EMPTY);
+        }
+        UserSensitiveInfo userSensitiveInfo = userSensitiveInfoRepository.findByID(userID);
+        userInfo.setUserPasswd(Md5Util.md5(userSensitiveInfo.getUserCardNumber().substring(userSensitiveInfo.getUserCardNumber().length()-6)));
+        userInfoRepository.save(userInfo);
 
         return MsgVo.success(null);
     }

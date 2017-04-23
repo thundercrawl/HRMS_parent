@@ -7,19 +7,15 @@ public class RegisterUserInfo {
 
     private String userName;
     private String userPhone;
-    private String userPasswd;
     private Byte sex;
     private String userEmail;
-    private Byte workStatus;
-    private Byte userStatus;
     private String userCardNumber;
     private String dataOfBirth;
     private String workTime;
     private Integer roleID;
 
     private Byte isOrgManager;
-    private Integer userAge;
-    private Integer orgId;
+    private String orgName;
     private String jobName;
 
     public RegisterUserInfo() {
@@ -33,28 +29,12 @@ public class RegisterUserInfo {
         this.jobName = jobName;
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
-    }
-
-    public Integer getUserAge() {
-        return userAge;
-    }
-
-    public void setUserAge(Integer userAge) {
-        this.userAge = userAge;
-    }
-
-    public String getUserPasswd() {
-        return userPasswd;
-    }
-
-    public void setUserPasswd(String userPasswd) {
-        this.userPasswd = userPasswd;
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
     public Byte getIsOrgManager() {
@@ -95,22 +75,6 @@ public class RegisterUserInfo {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
-    }
-
-    public Byte getWorkStatus() {
-        return workStatus;
-    }
-
-    public void setWorkStatus(Byte workStatus) {
-        this.workStatus = workStatus;
-    }
-
-    public Byte getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(Byte userStatus) {
-        this.userStatus = userStatus;
     }
 
     public String getUserCardNumber() {

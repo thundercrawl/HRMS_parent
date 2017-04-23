@@ -73,29 +73,21 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping(value = "/login", method={RequestMethod.POST})
 	public void login(LoginParam loginParam, ModelMap modelMap, HttpServletResponse response) {
-		String url = "userInfo/login";
-		String msg = 2+"";
 
-		LoginInfo loginInfo = new LoginInfo();
+        String url = "userInfo/login";
+		String msg = 2+"";
 
 		BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
 		CommonParams commonParams = new CommonParams();
+        commonParams.setPage(0);
+        commonParams.setPagesize(3);
+
 		JSONObject postJson = BssReturnJson.postJson(url, loginParam, commonParams, JSONObject.class);
 		String resultStatus = postJson.getString("status");
 		if(resultStatus.equals("0000")){
 			JSONObject data = postJson.getJSONObject("data");
-			JSONObject resultMap = data.getJSONObject("resultMap");
-			JSONObject orgInfo = data.getJSONObject("orgInfo");
-			if(resultMap!=null){
-				Object adminId = resultMap.get("adminId");
-				Object adminRname = resultMap.get("adminRname");
-				Object adminPhone = resultMap.get("adminPhone");
-				Object adminIdCard = resultMap.get("adminIdCard");
-				Object adminSex = resultMap.get("adminSex");
-				Object adminAge = resultMap.get("adminAge");
-				Object adminEmail = resultMap.get("adminEmail");
-				Object status = resultMap.get("status");
-				Object userId = resultMap.get("userId");
+			if(data!=null){
+                LoginInfo loginInfo = JSONObject.parseObject(data.get("result").toString(),LoginInfo.class);
 				getHttpSession().setAttribute(appProperties.getSessionKey(), loginInfo);
 				msg = 1+"";
 			}

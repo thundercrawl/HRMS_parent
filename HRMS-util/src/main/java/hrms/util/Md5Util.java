@@ -168,7 +168,7 @@ public class Md5Util {
     }
 
 	public static void main(String[] args) {
-		String s = "ssssss";
-		System.out.println(Md5Util.md5(s).length());
+
+		System.out.println("0095c0019f809adc71c787c3e5f044fa".equals(Md5Util.md5("xieyiwen")));
 	}
 }

@@ -474,8 +474,6 @@ public class DateUtil {
 	}
 
 	public static void main(String[] args){
-		System.err.println(DateUtil.formatDate(DateUtil.SHORT_FORMAT, set(new Date(), DATE, 25)));
-		
 		//	public static final String BASE_FORMAT3 = "MM-dd HH:mm";
 //		public static final String BASE_FORMAT4 = "yy-MM-dd HH:mm";
 //		System.err.println(formatDate(BASE_FORMAT2, parse("2016-08-24 01:02")));

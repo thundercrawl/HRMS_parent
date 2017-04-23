@@ -79,12 +79,12 @@ public class UserRoleInfoRepository extends RepositorySupport<UserRoleInfo> {
      * @return
      */
     public boolean isHROrSM(Integer userID){
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserRoleInfo.class);
-        detachedCriteria.add(Restrictions.eq("userId",userID))
-                .add(Restrictions.in("roleId",new String[]{Constant.ROLE_HR_VALUE+"",Constant.ROLE_SYSTEM_MANAGER_VALUE+""}))
-                .add(Restrictions.eq("status",Constant.ROLE_ABLE));
-        UserRoleInfo one = findOne(detachedCriteria);
-        if(one != null){
+        String sql = "select USER_ROLE_ID ,CREATE_TIME ,CREATE_USER_ID ,ROLE_ID ,STATUS,USER_ID " +
+                " from user_role_info " +
+                " where USER_ID=? and ROLE_ID in ( "+Constant.ROLE_HR_VALUE+", "+Constant.ROLE_SYSTEM_MANAGER_VALUE+" )  and STATUS=?";
+
+        List<Object> objects = executeSql(sql, userID, Constant.ROLE_ABLE);
+        if(objects != null && objects.size() > 0){
             return true;
         }else{
             return false;

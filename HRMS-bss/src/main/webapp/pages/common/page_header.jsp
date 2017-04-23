@@ -13,7 +13,7 @@
 <head>
 	<base href="<%=basePath%>" />
 	<meta charset="UTF-8" />
-    <title>办伴科技 分布式移动办公领导者 联合办公 服务式商务中心</title>
+    <title>才华有限公司 人力资源管理后台</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
     <meta name="author" content="Muhammad Usman">

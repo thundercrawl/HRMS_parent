@@ -30,12 +30,12 @@ public class RepositorySupport<T> implements BaseRepository<T> {
 		System.out.println(domainClass);
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public T findOne(Long id) {
 		return (T) getCurrentSession().get(getDomainClass(), id);
 	}
-	
+	*/
 	@Override
 	public T findOne(DetachedCriteria detachedCriteria) {
 		List<T> list = findAll(detachedCriteria, 0, 1);

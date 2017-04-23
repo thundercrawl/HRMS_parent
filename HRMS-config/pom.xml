@@ -11,6 +11,7 @@
 
     <name>HRMS-config</name>
     <artifactId>HRMS-config</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

@@ -53,9 +53,18 @@ public interface UserInfoService {
     /**
      * @describe 上传用户头像
      * @author xieyw
-     * @param url
+     * @param picName
      * @param commonParams
      * @return
      */
-    public MsgVo uploadUserPhoto(String url,CommonParams commonParams);
+    public MsgVo uploadUserPhoto(String picName,CommonParams commonParams);
+
+    /**
+     * @describe 重置密码
+     * @author xieyw
+     * @param userID
+     * @param commonParams
+     * @return
+     */
+    public MsgVo resetPwd(Integer userID,CommonParams commonParams);
 }

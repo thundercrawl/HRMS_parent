@@ -2,6 +2,8 @@ package hrms.repository.impl.user;
 
 import hrms.entity.UserSensitiveInfo;
 import hrms.repository.RepositorySupport;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,6 +12,11 @@ import org.springframework.stereotype.Repository;
 @Repository("userSensitiveInfoRepository")
 public class UserSensitiveInfoRepository extends RepositorySupport<UserSensitiveInfo> {
 
+    public UserSensitiveInfo findByID(Integer userID){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserSensitiveInfo.class);
+        detachedCriteria.add(Restrictions.eq("userId",userID));
+        return this.findOne(detachedCriteria);
+    }
 
 
 }

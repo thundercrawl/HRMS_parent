@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>HRMS</groupId>
+        <artifactId>HRMS_parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>HRMS-image</artifactId>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>HRMS</groupId>
+            <artifactId>HRMS-common-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 图片上传 -->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+            <!-- 配置加入jetty服务器，开发时我们一般使用jetty服务器 -->
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <stopKey/>
+                    <stopPort/>
+                    <!-- 设置扫描target/classes内部文件变化时间间隔 -->
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
+                    <webApp>
+                        <contextPath>/HRMS-image</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>
+            <!-- war打包插件, 设定war包名称不带版本号 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <warName>HRMS-image</warName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

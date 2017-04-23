@@ -29,9 +29,8 @@ $(function() {
 				type : 'POST',
 				url :"login/login",
 				data : {
-					adminLname : $("#loginname").val(),
-					organizeId :organizeId,
-					adminPwd :$('#loginpass').val()
+                    userPhone : $("#loginname").val(),
+                    userPasswd :$('#loginpass').val()
 				},
 				dataType : 'json',
 				async : false,
@@ -86,19 +85,32 @@ function invokeValidateFunction(inputName) {
 }
 
 function validateLoginname() {
-	var bool = true;
-	$("#loginnameError").css("display", "none");
-	var value = $("#loginname").val();
-	if (!value) {// 非空校验
-		$("#loginnameError").css("display", "");
-		$("#loginnameError").text("用户名不能为空！");
-		bool = false;
-	} else if (value.length < 3) {// 长度校验
-		$("#loginnameError").css("display", "");
-		$("#loginnameError").text("用户名长度必须在3 ~ 20之间！");
-		bool = false;
+    var bool = true;
+    $("#loginnameError").css("display", "none");
+    var value = $("#loginname").val();
+    if (!value) {// 非空校验
+        $("#loginnameError").css("display", "");
+        $("#loginnameError").text("用户名不能为空！");
+        bool = false;
+    }
+    return bool;
+}
+
+function validatePhone() {
+    var bool = true;
+    $("#loginnameError").css("display", "none");
+    var value = $("#loginname").val();
+    if (!value) {// 非空校验
+        $("#loginnameError").css("display", "");
+        $("#loginnameError").text("手机号码不能为空！");
+        bool = false;
+    }
+    if(value.length != 11 && value.length != 13){
+        $("#loginnameError").css("display", "");
+        $("#loginnameError").text("手机号码格式错误！");
+        bool = false;
 	}
-	return bool;
+    return bool;
 }
 
 function validateLoginpass() {

@@ -12,7 +12,6 @@ import hrms.repository.impl.role.UserRoleInfoRepository;
 import hrms.repository.impl.user.UserInfoRepository;
 import hrms.service.org.OrgInfoService;
 import hrms.util.DateUtil;
-import hrms.util.ParseUtil;
 import hrms.util.StringUtil;
 import hrms.vo.MsgVo;
 import org.springframework.stereotype.Service;
@@ -59,7 +58,7 @@ public class OrgInfoServiceImpl implements OrgInfoService {
     public MsgVo save(SaveOrgParam orgParam, CommonParams commonParams) {
 
         Integer oper = commonParams.getUserId();
-        UserInfo operInfo = userInfoRepository.findOne(ParseUtil.parseLong(oper));
+        UserInfo operInfo = userInfoRepository.findByUserId(oper);
         if(operInfo == null || operInfo.getUserStatus() == Constant.STATUS_DISABLE){
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
@@ -75,7 +74,7 @@ public class OrgInfoServiceImpl implements OrgInfoService {
             return MsgVo.fail(ErrorCode.NAME_REPEAT);
         }
         if(orgParam.getParentOrgId().intValue() != 0){
-            OrgInfo parentOrg = orgInfoRepository.findOne(ParseUtil.parseLong(orgParam.getParentOrgId()));
+            OrgInfo parentOrg = orgInfoRepository.findById(orgParam.getParentOrgId());
             if(parentOrg == null || parentOrg.getOrgStatus() == Constant.STATUS_DISABLE){
                 return MsgVo.fail(ErrorCode.PARENT_ORG_EMPTY);
             }
@@ -97,7 +96,7 @@ public class OrgInfoServiceImpl implements OrgInfoService {
     @Override
     public MsgVo update(UpdateOrgParam orgParam, CommonParams commonParams) {
         Integer oper = commonParams.getUserId();
-        UserInfo operInfo = userInfoRepository.findOne(ParseUtil.parseLong(oper));
+        UserInfo operInfo = userInfoRepository.findByUserId(oper);
         if(operInfo == null || operInfo.getUserStatus() == Constant.STATUS_DISABLE){
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
@@ -109,7 +108,7 @@ public class OrgInfoServiceImpl implements OrgInfoService {
             return MsgVo.fail(ErrorCode.ROLE_ERROR);
         }
 
-        OrgInfo orgInfo = orgInfoRepository.findOne(ParseUtil.parseLong(orgParam.getOrgId()));
+        OrgInfo orgInfo = orgInfoRepository.findById(orgParam.getOrgId());
         if(orgInfo == null || orgInfo.getOrgStatus() == Constant.STATUS_DISABLE){
             return MsgVo.fail(ErrorCode.PARENT_ORG_EMPTY);
         }

@@ -39,7 +39,7 @@
 				还有一点需要说明的是，该参数的值不包含web应用的 ContextPath。
 			</description>
 			<param-name>excepUrlRegex</param-name>
-			<param-value>/filter/(thirdparty/door/record||board/attention||board/pic||microprobe/upMacRecord||wifi/identy||wifi/upMac||readCard/[\S]*)</param-value>
+			<param-value>/filter/(login/login)</param-value>
 		</init-param>
 		
 	</filter>

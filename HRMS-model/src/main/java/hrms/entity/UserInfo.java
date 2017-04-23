@@ -16,7 +16,7 @@ public class UserInfo implements Serializable{
     private Integer userId;
     private String userName;
     private String userPhone;
-    private Byte sex;
+    private String sex;
     private String userEmail;
     private String createTime;
     private Integer createUserId;
@@ -28,7 +28,7 @@ public class UserInfo implements Serializable{
 
     public UserInfo(){}
 
-    public UserInfo(Integer userId, String userName, String userPhone, Byte sex, String userEmail, String createTime, Integer createUserId, Byte workStatus, Byte userStatus, String userPasswd,Integer userAge) {
+    public UserInfo(Integer userId, String userName, String userPhone, String sex, String userEmail, String createTime, Integer createUserId, Byte workStatus, Byte userStatus, String userPasswd, Integer userAge) {
         this.userId = userId;
         this.userName = userName;
         this.userPhone = userPhone;
@@ -71,11 +71,11 @@ public class UserInfo implements Serializable{
     }
 
     @Column(name = "USER_SEX", length = 1)
-    public Byte getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Byte sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 

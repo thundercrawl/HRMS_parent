@@ -20,7 +20,6 @@ public class UserDetail {
     private String orgName;
     private String jobName;
 
-    private Integer roleId;
     private Byte isManager;
 
     //sensitive
@@ -30,6 +29,12 @@ public class UserDetail {
 
     private Byte isMine;
     private Byte hasRole;  //0:没有操作权限  1：有
+
+    public UserDetail() {
+        hasRole = 0;
+        isMine = 0;
+        isManager = 0;
+    }
 
     public Byte getHasRole() {
         return hasRole;
@@ -165,14 +170,6 @@ public class UserDetail {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 
     public Byte getIsManager() {

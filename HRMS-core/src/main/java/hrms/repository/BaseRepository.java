@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface BaseRepository<T> {
-	
-	public T findOne(Long id);
+
+//	public T findOne(Long id);
 	public T findRandomOne(String sql, Object... params);
 	public T findOne(DetachedCriteria detachedCriteria);
 	

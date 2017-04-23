@@ -89,7 +89,7 @@ public class OrgInfo implements Serializable {
         this.orgStatus = orgStatus;
     }
 
-    @Column(name = "DESC", length = 255)
+    @Column(name = "ORG_DESC", length = 255)
     public String getDesc() {
         return desc;
     }

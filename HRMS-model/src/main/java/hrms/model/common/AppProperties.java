@@ -15,6 +15,10 @@ public class AppProperties implements Serializable{
 	private String orgKey;
 	@Value("${app.apiurl}")
 	private String apiUrl;
+	@Value("${resolutionRatio}")
+	private String resolutionRatio;
+	@Value("${imageUploadPath}")
+	private String imageUploadPath;
 
 	public String getSessionKey() {
 		return sessionKey;
@@ -34,6 +38,12 @@ public class AppProperties implements Serializable{
 
 	public String getFileServerPath() {
 		return fileServerPath;
+	}
+	public String getResolutionRatio() {
+		return resolutionRatio;
+	}
+	public String getImageUploadPath() {
+		return imageUploadPath;
 	}
 
 	public void setFileServerPath(String fileServerPath) {

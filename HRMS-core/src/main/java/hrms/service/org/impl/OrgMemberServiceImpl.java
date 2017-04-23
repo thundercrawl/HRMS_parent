@@ -16,7 +16,6 @@ import hrms.repository.impl.role.UserRoleInfoRepository;
 import hrms.repository.impl.user.UserInfoRepository;
 import hrms.service.org.OrgMemberService;
 import hrms.util.DateUtil;
-import hrms.util.ParseUtil;
 import hrms.vo.MsgVo;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -46,7 +45,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
     public MsgVo addOrg(AddOrg param, CommonParams commonParams) {
         Integer operID = commonParams.getUserId();
 
-        UserInfo oper = userInfoRepository.findOne(ParseUtil.parseLong(operID));
+        UserInfo oper = userInfoRepository.findByUserId(operID);
         if(oper == null){
             return MsgVo.error(ErrorCode.USER_EMPTY);
         }
@@ -65,7 +64,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
         Integer orgID = param.getOrgID();
         Integer userID = param.getUserID();
 
-        OrgInfo orgInfo = orgInfoRepository.findOne(ParseUtil.parseLong(orgID));
+        OrgInfo orgInfo = orgInfoRepository.findById(orgID);
         if(orgInfo == null){
             return MsgVo.error(ErrorCode.ORG_EMPTY);
         }
@@ -73,7 +72,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
             return MsgVo.error(ErrorCode.ORG_DELETE);
         }
 
-        UserInfo userInfo = userInfoRepository.findOne(ParseUtil.parseLong(userID));
+        UserInfo userInfo = userInfoRepository.findByUserId(userID);
         if(userInfo == null){
             return MsgVo.error(ErrorCode.USER_EMPTY);
         }
@@ -119,7 +118,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
         Integer orgID = param.getOrgID();
         Integer userID = param.getUserID();
 
-        UserInfo oper = userInfoRepository.findOne(ParseUtil.parseLong(operID));
+        UserInfo oper = userInfoRepository.findByUserId(operID);
         if(oper == null){
             return MsgVo.error(ErrorCode.USER_EMPTY);
         }
@@ -130,7 +129,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
             return MsgVo.error(ErrorCode.ONLY_HR);
         }
 
-        OrgInfo orgInfo = orgInfoRepository.findOne(ParseUtil.parseLong(orgID));
+        OrgInfo orgInfo = orgInfoRepository.findById(orgID);
         if(orgInfo == null){
             return MsgVo.error(ErrorCode.ORG_EMPTY);
         }
@@ -138,7 +137,7 @@ public class OrgMemberServiceImpl implements OrgMemberService {
             return MsgVo.error(ErrorCode.ORG_DELETE);
         }
 
-        UserInfo userInfo = userInfoRepository.findOne(ParseUtil.parseLong(userID));
+        UserInfo userInfo = userInfoRepository.findByUserId(userID);
         if(userInfo == null){
             return MsgVo.error(ErrorCode.USER_EMPTY);
         }

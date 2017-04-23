@@ -28,7 +28,7 @@
 </div>
 <footer >
 	<p class="copyright">
-		<a href="http://usman.it" target="_blank">Copyright © 上海办伴科技发展有限公司. All Rights Reserved.</a>
+		<a href="http://usman.it" target="_blank">Copyright © 谢益文. All Rights Reserved.</a>
 	</p>
 </footer>
 <!--/.fluid-container-->

@@ -10,10 +10,10 @@
         <module>HRMS-model</module>
         <module>HRMS-util</module>
         <module>HRMS-bss</module>
-      <module>HRMS-common-core</module>
-      <module>HRMS-api</module>
-      <module>HRMS-core</module>
-        <module>HRMSimage</module>
+        <module>HRMS-common-core</module>
+        <module>HRMS-api</module>
+        <module>HRMS-core</module>
+        <module>HRMS-image</module>
     </modules>
     <groupId>HRMS</groupId>
   <artifactId>HRMS_parent</artifactId>

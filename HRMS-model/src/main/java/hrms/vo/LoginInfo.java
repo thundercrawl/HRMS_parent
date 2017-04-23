@@ -1,9 +1,12 @@
 package hrms.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by 谢益文 on 2017/3/22.
  */
-public class LoginInfo {
+public class LoginInfo implements Serializable{
+
     private Integer userId;
     private String userName;
     private String userSex;
@@ -11,11 +14,45 @@ public class LoginInfo {
     private Integer orgId;
     private String orgName;
     private String jobName;
-    private Integer roleId;
-    private String roleName;
 
     private Byte isManager;
+    private Byte isHR;
+    private Byte isFINANCE;
+    private Byte isSM;
+
     private String joinTime;
+
+
+    public LoginInfo() {
+        isFINANCE = 0;
+        isHR = 0;
+        isManager = 0;
+        isSM = 0;
+    }
+
+    public Byte getIsHR() {
+        return isHR;
+    }
+
+    public void setIsHR(Byte isHR) {
+        this.isHR = isHR;
+    }
+
+    public Byte getIsFINANCE() {
+        return isFINANCE;
+    }
+
+    public void setIsFINANCE(Byte isFINANCE) {
+        this.isFINANCE = isFINANCE;
+    }
+
+    public Byte getIsSM() {
+        return isSM;
+    }
+
+    public void setIsSM(Byte isSM) {
+        this.isSM = isSM;
+    }
 
     public String getJoinTime() {
         return joinTime;
@@ -89,19 +126,4 @@ public class LoginInfo {
         this.jobName = jobName;
     }
 
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
 }

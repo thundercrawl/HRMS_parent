@@ -26,6 +26,18 @@ public class OrgInfoRepository extends RepositorySupport<OrgInfo> {
         }
         return all;
     }
+
+    public OrgInfo findByName(String orgName){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(OrgInfo.class);
+        detachedCriteria.add(Restrictions.eq("orgName",orgName))
+                .add(Restrictions.eq("orgStatus", Constant.STATUS_ABLE));
+        OrgInfo one = this.findOne(detachedCriteria);
+        if(one == null){
+            return null;
+        }
+        return one;
+    }
+
     public List<OrgInfo> findAllOrg(){
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(OrgInfo.class);
         detachedCriteria.add(Restrictions.eq("orgStatus", Constant.STATUS_ABLE));
@@ -48,4 +60,9 @@ public class OrgInfoRepository extends RepositorySupport<OrgInfo> {
         return this.findOne(detachedCriteria);
     }
 
+    public OrgInfo findById(Integer orgID){
+        DetachedCriteria d = DetachedCriteria.forClass(OrgInfo.class);
+        d.add(Restrictions.eq("orgId",orgID));
+        return this.findOne(d);
+    }
 }

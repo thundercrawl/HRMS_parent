@@ -23,5 +23,9 @@ public class RoleInfoRepository extends RepositorySupport<RoleInfo> {
         return this.findOne(detachedCriteria);
     }
 
-
+    public RoleInfo findById(Integer roleID){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(RoleInfo.class);
+        detachedCriteria.add(Restrictions.eq("roleId",roleID));
+        return this.findOne(detachedCriteria);
+    }
 }

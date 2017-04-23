@@ -20,7 +20,7 @@ import java.net.URLEncoder;
 public abstract class ReturnJson {
 	private Log logger = LogFactory.getLog(ReturnJson.class);
 	
-	private static String DEFAULT_API_URL = "http://localhost:8080/banbanbao-api";
+	private static String DEFAULT_API_URL = "http://localhost:8888/HRMS-api/";
 	
 	private AppProperties appProperties;
 	private String apiUrl;
@@ -42,6 +42,7 @@ public abstract class ReturnJson {
 	public <T>T postJson(String url, Object modelObj, CommonParams cp, Class<T> clazz){
 		try {
 			logger.info("调用URL["+url+"]入参："+JSONObject.toJSONString(modelObj));
+			System.out.println("调用URL["+url+"]入参："+JSONObject.toJSONString(modelObj));
 			url = UrlUtil.merge(apiUrl, url);
 			HttpPost httpPost = new HttpPost(url);
 			StringEntity strEntity = new StringEntity(URLEncoder.encode(JsonUtil.toJsonString(new String[]{"object", "commonParam"}, modelObj, cp), "utf8"));

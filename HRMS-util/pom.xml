@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>HRMS-util</name>
     <artifactId>HRMS-util</artifactId>
