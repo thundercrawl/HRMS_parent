@@ -1,6 +1,5 @@
 package hrms.bss.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.model.common.Paginator;
 import hrms.po.FindUserDetailParam;
@@ -12,6 +11,11 @@ import hrms.util.Grid;
 import hrms.util.StringUtil;
 import hrms.vo.ShowUserVo;
 import hrms.vo.UserDetail;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 @RequestMapping(value = "/filter/user")
@@ -50,12 +53,15 @@ public class UserController extends BaseController{
 		String resultStatus = postJson.getString("status");
 		if(resultStatus.equals("0000")){
 			JSONObject data = postJson.getJSONObject("data");
+			//int count = (Integer) data.get("count");
+			Integer count = 13;
+			System.err.println(data);
 			if(data!=null){
 				ShowUserVo showUserVo = JSONObject.parseObject(data.get("result").toString(),ShowUserVo.class);
                 List<UserDetail> userInfos = showUserVo.getUserInfos();
                 Paginator<UserDetail> paginator = new Paginator<UserDetail>(
-                        userInfos, 3, 0 + 1, pageSize);
-                model.put("paginator", paginator);
+                		userInfos, count, page + 1,pageSize);
+        		model.put("paginator", paginator);
 				msg = 1+"";
 			}
 

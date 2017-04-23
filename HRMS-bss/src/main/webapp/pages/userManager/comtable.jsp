@@ -65,6 +65,11 @@
 		</c:if>
 	</tbody>
 </table>
+
+<jsp:include page="../common/paginator.jsp">
+	<jsp:param value="filter/user/searchUser" name="url"/>
+	<jsp:param value="tid" name="loadCmp"/>
+</jsp:include>
 <div id="transfer-alert1" style="display: none;">
 	<form class="user-form user-form1 user-info" id="alterUser"
 		  method="post" action="" style="margin-left: 25px;" enctype="multipart/form-data">
@@ -103,9 +108,6 @@
 </div>
 
 
-<jsp:include page="../common/paginator.jsp">
-	<jsp:param value="filter/user/searchUser" name="url"/>
-	<jsp:param value="projectable" name="loadCmp"/>
-</jsp:include>
 
 <script src="js/userManager/comTable.js"></script>
+<script src="js/pagination.js"></script>

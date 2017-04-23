@@ -181,7 +181,7 @@
 </div>
 <script src="js/jquery/jquery.form.js"></script>
 <script src="js/handlebars-v2.0.0.js"></script>
-<script src="js/virtualMember/company.js"></script>
-<script src="js/virtualMember/createComMem.js"></script> 
-<script src="js/pagination.js"></script>
+<!-- <script src="js/virtualMember/company.js"></script>
+<script src="js/virtualMember/createComMem.js"></script>  -->
+
 <script src="js/hrms-user/userSearch.js"></script>
