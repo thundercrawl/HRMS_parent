@@ -17,10 +17,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form name="form1" method="post" enctype="multipart/form-data" action="filter/image/uploadImg/">
+<form name="form1" method="post" enctype="multipart/form-data" action="filter/image/upload?relId=1&relType=1">
         <input type="file" name="imgFile" style="width:160px;" />
         <input type="submit" name="Submit" value="添加" />
     </form>
-    <img id='imgsrc' src='http://localhost:8080/HRMS-image/filter/image/tofindPic?imgName=junmo/201602180923386685_500_500.jpg'></img>
+    <img id='imgsrc' src='http://localhost:8080/filter/image/tofindPic?imgName=201704241759146103_120_120'></img>
 </body>
 </html>

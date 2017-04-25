@@ -1,21 +1,15 @@
 package hrms.bss.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.model.common.Paginator;
-import hrms.po.FindUserDetailParam;
-import hrms.po.FindUserParam;
-import hrms.po.UpdateUserParam;
+import hrms.po.*;
 import hrms.util.BssReturnJson;
 import hrms.util.DateUtil;
 import hrms.util.Grid;
 import hrms.util.StringUtil;
 import hrms.vo.ShowUserVo;
 import hrms.vo.UserDetail;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,21 +17,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSONObject;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/filter/user")
 public class UserController extends BaseController{
+
+    private static final int pageSize = 5;
+
 	@RequestMapping(value = "/getAllUser")
 	public ModelAndView getAllUser(HttpServletRequest request,ModelMap model) {
 		searchUser(null,0, model);
 		return new ModelAndView("userManager/user", model);
 	}
-	
+
+    @RequestMapping(value = "/searchUserIndex")
+    public ModelAndView searchUser(FindUserParam param, ModelMap model){
+        searchUser(param,0,model);
+        return new ModelAndView("userManager/user", model);
+    }
+
 	@RequestMapping(value = "/searchUser")
 	public ModelAndView searchUser(FindUserParam param,@RequestParam("page") int page, ModelMap model){
 
-	    final int pageSize = 10;
 
 		String url = "userInfo/findUsers";
 		String msg = 2+"";
@@ -54,14 +58,17 @@ public class UserController extends BaseController{
 		if(resultStatus.equals("0000")){
 			JSONObject data = postJson.getJSONObject("data");
 			//int count = (Integer) data.get("count");
-			Integer count = 13;
 			System.err.println(data);
 			if(data!=null){
 				ShowUserVo showUserVo = JSONObject.parseObject(data.get("result").toString(),ShowUserVo.class);
                 List<UserDetail> userInfos = showUserVo.getUserInfos();
+                Integer count = JSONObject.parseObject(data.get("count").toString(), Integer.class);
                 Paginator<UserDetail> paginator = new Paginator<UserDetail>(
                 		userInfos, count, page + 1,pageSize);
         		model.put("paginator", paginator);
+        		model.put("orgInfos",showUserVo.getOrgInfos());
+        		model.put("roleInfos",showUserVo.getRoleInfos());
+        		model.put("searchParam",param);
 				msg = 1+"";
 			}
 
@@ -107,7 +114,6 @@ public class UserController extends BaseController{
     @ResponseBody
     @RequestMapping(value = "/resetPwd")
     public Grid resetPwd(Integer userID, ModelMap modelMap){
-        final int pageSize = 10;
 
         String url = "userInfo/resetPwd";
 
@@ -130,7 +136,6 @@ public class UserController extends BaseController{
     @ResponseBody
     @RequestMapping(value = "/updateUser")
     public Grid updateUser(UpdateUserParam param, ModelMap modelMap){
-        final int pageSize = 10;
 
         String url = "userInfo/updateUser";
 
@@ -162,4 +167,32 @@ public class UserController extends BaseController{
 
         return grid;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/createUser")
+    public Grid createUser(RegisterUserInfo registerUserInfo,ModelMap modelMap){
+        String url = "userInfo/saveUser";
+
+        BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
+        CommonParams commonParams = new CommonParams();
+        commonParams.setPage(3);
+        commonParams.setPagesize(1);
+        commonParams.setUserId(1);
+        commonParams.setOrgId(1);
+
+        SaveUserParam param = new SaveUserParam();
+        List<RegisterUserInfo> list = new ArrayList<>();
+        list.add(registerUserInfo);
+        param.setRegisterUserInfos(list);
+
+        JSONObject postJson = BssReturnJson.postJson(url, param, commonParams, JSONObject.class);
+
+        Grid grid = new Grid();
+        grid.setCode(postJson.getString("status"));
+        grid.setMessage(postJson.getString("message"));
+
+        return grid;
+    }
+
+
 }

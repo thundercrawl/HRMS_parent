@@ -1,10 +1,7 @@
 package hrms.service.user;
 
 import hrms.common.CommonParams;
-import hrms.po.FindUserParam;
-import hrms.po.LoginParam;
-import hrms.po.RegisterUserInfo;
-import hrms.po.UpdateUserParam;
+import hrms.po.*;
 import hrms.vo.MsgVo;
 
 import java.util.List;
@@ -53,11 +50,11 @@ public interface UserInfoService {
     /**
      * @describe 上传用户头像
      * @author xieyw
-     * @param picName
+     * @param param
      * @param commonParams
      * @return
      */
-    public MsgVo uploadUserPhoto(String picName,CommonParams commonParams);
+    public MsgVo uploadUserPhoto(UploadUserPhoto param,CommonParams commonParams);
 
     /**
      * @describe 重置密码

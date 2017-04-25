@@ -158,20 +158,22 @@ public class UserInfoRestful {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public MsgVo uploadUserPhoto(@HRMSParam("object")UploadUserPhoto param, CommonParams commonParam){
 		try {
-			if(param == null || StringUtil.isEmpty(param.getPicName()) || commonParam.getOrgId() == null || commonParam.getUserId() == null){
+			if(param == null || StringUtil.isEmpty(param.getPicName())
+					|| param.getRelId() == null || param.getRelType() == null
+					|| commonParam.getOrgId() == null || commonParam.getUserId() == null){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
 			String picName = param.getPicName();
-			LoggerWriter.addWrite(log, " 上传用户头像",picName,commonParam);
-			MsgVo msgVo = userInfoService.uploadUserPhoto(picName, commonParam);
-			LoggerWriter.addWrite(log, " 上传用户头像成功",picName,commonParam);
+			LoggerWriter.addWrite(log, " 上传图片",picName,commonParam);
+			MsgVo msgVo = userInfoService.uploadUserPhoto(param,commonParam);
+			LoggerWriter.addWrite(log, " 上传图片成功",picName,commonParam);
 
 			return msgVo;
 		}catch (InvalidException e1){
 			return MsgVo.error(e1.getErrorCode());
 		}catch (Exception e) {
 			e.printStackTrace();
-			log.error(" 上传用户头像失败 Catch Exception:" + e.getMessage());
+			log.error(" 上传图片失败 Catch Exception:" + e.getMessage());
 			return MsgVo.fail(ErrorCode.UNKNOW);
 		}
 	}

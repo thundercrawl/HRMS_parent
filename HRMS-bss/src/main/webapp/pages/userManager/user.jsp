@@ -12,94 +12,93 @@
 		<div class="box-inner">
 			<div class="box-content"
 				style="overflow-x: scroll; min-height: 320px;">
-				
-					<div id="addComMembers" style="display: none;">
-						<form class="user-form user-form1 user-info" id="userIdPic"
-						method="post" action="" style="margin-right: 40px;" enctype="multipart/form-data">
-						<div>
-						<input type="hidden" id="comIdsss"> </div>
-						<div>
-							<label for="userName">名字<font style='color:red'>*</font>：</label> 
-							<input type="text" id="addUserName111" /> <span id="namespan" style="display: none;color: red;"  >姓名为字母和汉字,长度15</span>
-						</div>
-						<div>
-							<label for="userPw">密码<font style='color:red'>*</font>：</label> <input type="text" id="userPw111" />
-							<span id="passwordspan" style="display: none;color: red;">密码为6-18位字母数字或特殊符号</span>
-						</div>
-						<div>
-							<label for="userPhone">手机<font style='color:red'>*</font>：</label> <input type="text"
-								id="addUserPhone111" /> <span id="phonespan" style="display: none;color: red;">请输入正确格式的手机号码</span>
-						</div>
-						<div>
-							<label for="userMail">邮箱<font style='color:red'>*</font>：</label> <input type="text"
-								id="userMail111" />
-						</div>
-						<!-- <div>
-							<label for="userMail">个人图片：</label> 
-							<input type="file" id="comfile" name='file' value="请选择图片上传"> 
-							<input id='commemberImg' name="memberImg" type = "text" value="请选择图片上传">
-						</div> -->
-					</form>
-					
 
-						<div class="input-group col-md-3 colLee">
-							<a type="button" class="btn btn-primary" id="memCreMemSure">确定</a>
-						</div>
-						<div class="input-group col-md-3 colLee">
-							<a type="button" class="btn btn-primary" id="memCreMemQuit">取消</a>
-						</div>
-				</div>
-				
 				<div id="transfer-alert2" style="display: none;">
 				<form class="user-form user-form1 user-info" id="companyId1"
-					  method="post" action="" style="margin-left: 25px;" enctype="multipart/form-data">
+					  method="post" action="" style="margin-left: 25px;margin-bottom: 20px"  enctype="multipart/form-data">
 					<div>
-						<label for="companyName">用户编号<font style='color:red'>*</font>：</label> <input type="text"
-																									  id="companyNameAdd" /> <span id="namespan"></span>
+						<label for="userName">用户名称:</label> <input type="text"
+																		 id="userNameInput" />
 					</div>
 					<div>
-						<label for="companyAddress">用户名称：</label> <input type="text"
-																		 id="companyAddressAdd" />
-					</div>
-					<div>
-						<label for="userOrg">用户部门<font style='color:red'>*</font>：
-							<%--</label> <input type="text"
-																										  id="userOrgInput" />--%>
-							<select class="selectOrg" >
-								<option value="部门1"/>
-								<option value="部门2"/>
-								<option value="部门3"/>
-							</select>
-							<span id="orgspan"></span>
-					</div>
-					<div>
-						<label for="jobName">用户职位<font style='color:red'>*</font>：</label> <input type="text"
-																								  id="jobNameInput" /><span id="jobspan"></span>
-					</div>
-					<div>
-						<label for="userPhone">手机号：</label> <input type="text"
+						<label for="userPhone">手机号:</label> <input type="text"
 																   id="userPhoneInput" /> <span id="phonespan"></span>
 					</div>
 					<div>
+						<label for="userSex">性别:</label>
+							<input type="radio" checked="checked" name="userSexInput" value="1"/>男
+							<input type="radio" name="userSexInput" value="2"/>女
+							<span id="sexspan"></span>
 					</div>
 					<div>
-						<label for="userInreoduction">用户介绍：</label> <input type="text"
-																		   id="userInreoductionInput" />
+						<label for="userOrg">用户部门:</label>
+							<%--</label> <input type="text"
+																										  id="userOrgInput" />--%>
+							<select name="selectOrg">
+								<%--<option selected="selected" value="1">最高部门</option>--%>
+								<c:if test="${!(empty orgInfos)}">
+									<c:forEach items="${orgInfos}" var="o">
+										<option value="${o.orgId }">${o.orgName }</option>
+									</c:forEach>
+								</c:if>
+							</select>
 					</div>
 					<div>
-						<label for="userPhoto">用户头像：</label> <input type="file"
-																	id="file" name='file'> <input id='userPhotoImg'
-																								  name="userPhotoName" value="请选择图片上传" style="margin-left: -68px;">
+						<label for="userRole">用户权限:</label>
+						<%--</label> <input type="text"
+                                                                                                      id="userOrgInput" />--%>
+						<select name="selectRole">
+							<%--<option selected="selected" value="1">最高部门</option>--%>
+							<c:if test="${!(empty roleInfos)}">
+								<c:forEach items="${roleInfos}" var="o">
+									<option value="${o.roleId }">${o.roleName }</option>
+								</c:forEach>
+							</c:if>
+						</select>
 					</div>
+					<div>
+						<label for="userManager">部门经理:</label>
+						<input type="radio" name="userManagerInput" value="1"/>是
+						<input type="radio" checked="checked" name="userManagerInput" value="0"/>不是
+						<span id="managerSpan"></span>
+					</div>
+					<div>
+						<label for="jobName">用户职位:</label></label> <input type="text"
+																								  id="jobNameInput" /><span id="jobspan"></span>
+					</div>
+					<div>
+						<label for="userEmail">用户邮箱:</label></label> <input type="text"
+																										 id="userEmailInput" /> <span id="eamilSpan"></span>
+					</div>
+					<div>
+						<label for="userCard">身份证号:</label></label> <input type="text"
+																											id="userCardInput" /> <span id="cardSpan"></span>
+					</div>
+					<div>
+						<label for="userBirth">出生年月:</label></label> <input type="text"
+																										 id="userBirthInput" /> <span id="birthSpan">格式2001-01-01</span>
+					</div>
+					<div>
+						<label for="userWork">入职时间:</label></label> <input type="text"
+																											id="userWorkInput" /> <span id="workSpan">格式2001-01-01</span>
+					</div>
+					<%--<div>
+						<label for="userPhoto">用户头像</label>
+							<form name="form1" method="post" enctype="multipart/form-data" action="http://localhost:8080/filter/image/upload?relId=${userInfo.user}">
+								<input type="file" name="imgFile" value="请选择图片上传" style="width:160px;" />
+								<input type="submit" name="Submit" value="上传" />
+							</form>
+					</div>--%>
+
+				<div class="input-group col-md-3 colLee"
+					 style="margin: 2px 0; display: inline-block;">
+					<a type="button" class="btn btn-primary" id="userCreSure">确定</a>
+				</div>
+				<div class="input-group col-md-3 colLee"
+					 style="margin: 2px 0; display: inline-block;">
+					<a type="button" class="btn btn-primary shiny" id="userCreQuit">取消</a>
+				</div>
 				</form>
-				<div class="input-group col-md-3 colLee"
-					 style="margin: 2px 0; display: inline-block;">
-					<a type="button" class="btn btn-primary" id="comCreSure">确定</a>
-				</div>
-				<div class="input-group col-md-3 colLee"
-					 style="margin: 2px 0; display: inline-block;">
-					<a type="button" class="btn btn-primary shiny" id="comCreQuit">取消</a>
-				</div>
 			</div>
 				<div id="transfer-alert3" style="display: none;"></div>
 				<div id="import-alert" style="display: none;">
@@ -108,7 +107,7 @@
 						action="" enctype="multipart/form-data">
 						<table border="0" align="center">
 							<tr>
-								<td>上传文件：</td>
+								<td>上传文件</td>
 								<td><input name="file" type="file" size="20" id="excelfile"></td>
 							</tr>
 							<tr>
@@ -126,43 +125,43 @@
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">工号</span> <input type="text"
 										class="form-control" placeholder="ID" id="userID"
-										name="userID">
+										name="userID" value="${searchParam.userID}">
 								</div>
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">姓名</span> <input type="text"
 										class="form-control" placeholder="姓名" id="userName"
-										name="userName">
+										name="userName" value="${searchParam.userName}">
 								</div>
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">职位</span> <input type="text"
 										class="form-control" placeholder="职位" id="jobName"
-										name="jobName">
+										name="jobName" value="${searchParam.jobName}">
 								</div>
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">部门</span> <input type="text"
 										class="form-control" placeholder="部门" id="orgName"
-										name="orgName">
+										name="orgName" value="${searchParam.orgName}">
 								</div>
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">手机号</span> <input
 										type="text" class="form-control" placeholder="手机号码"
-										id="userPhone" name="userPhone" value="">
+										id="userPhone" name="userPhone" value="${searchParam.userPhone}">
 								</div>
 								<div class="input-group col-md-1 colLee">
 									<a href="javaScript:void(0);" class="btn btn-primary"
 										id="forUserSearch">查询</a>
 								</div>
 								<div class="input-group col-md-1 colLee" style="margin-right: 23px;">
-									<a class="btn btn-primary" class="btn btn-primary" id="companyCreate">创建用户</a>
+									<a class="btn btn-primary" class="btn btn-primary" id="userCreate">创建用户</a>
 								</div>
 								
                                 <div class="input-group col-md-1 colLee" >
 									<a href="javaScript:void(0);" class="btn btn-primary"
-										id="importComSearch">批量导入</a>
+										id="importUserExcel">批量导入</a>
 								</div>
 
 							</form>
@@ -183,5 +182,6 @@
 <script src="js/handlebars-v2.0.0.js"></script>
 <!-- <script src="js/virtualMember/company.js"></script>
 <script src="js/virtualMember/createComMem.js"></script>  -->
-
-<script src="js/hrms-user/userSearch.js"></script>
+<script src="js/hrms-user/user.js"></script>
+<%--
+<script src="js/hrms-user/userSearch.js"></script>--%>

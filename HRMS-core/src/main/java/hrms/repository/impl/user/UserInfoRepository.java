@@ -50,36 +50,36 @@ public class UserInfoRepository extends RepositorySupport<UserInfo> {
     public List<UserDetail> findUsers(FindUserParam param,boolean includeSensitive, int page, int pageSize){
         String sql = "";
         if(includeSensitive){
-            sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX,b.PIC_URL," +
+            sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX," +
                     "a.WORK_STATUS,c.USER_CARD_NUMBER,c.DATA_OF_BIRTH,c.WORK_TIME,d.JOB_NAME,e.ORG_NAME,e.ORG_ID " +
-                    " from user_info a,picture_info b,user_sensitive_info c,org_member_info d,org_info e " +
-                    " where  a.USER_ID = c.USER_ID AND a.USER_ID = b.REL_ID  " +
-                    "and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
-                    " AND b.REL_TYPE = ? AND a.USER_STATUS = ? AND b.PIC_STATUS = ?  ";
+                    " from user_info a,user_sensitive_info c,org_member_info d,org_info e " +
+                    " where  a.USER_ID = c.USER_ID " +
+                    " and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
+                    " AND a.USER_STATUS = ? ";
         }else{
-            sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX,b.PIC_URL," +
+            sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX," +
                     "a.WORK_STATUS,c.DATA_OF_BIRTH,d.JOB_NAME,e.ORG_NAME,e.ORG_ID " +
-                    " from user_info a,picture_info b,user_sensitive_info c,org_member_info d,org_info e " +
-                    " where  a.USER_ID = c.USER_ID AND a.USER_ID = b.REL_ID  " +
+                    " from user_info a,user_sensitive_info c,org_member_info d,org_info e " +
+                    " where  a.USER_ID = c.USER_ID " +
                     "and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
-                    " AND b.REL_TYPE = ? AND a.USER_STATUS = ? AND b.PIC_STATUS = ?  ";
+                    " AND a.USER_STATUS = ? ";
         }
         if(param != null){
             if(! StringUtil.isEmpty(param.getUserPhone())){
-                sql += " AND a.USER_PHONE LIKE '%"+param.getUserPhone()+"%' ";
+                sql += " AND a.USER_PHONE LIKE '%"+param.getUserPhone().trim()+"%' ";
             }
             if(! StringUtil.isEmpty(param.getUserName())){
-                sql += " AND a.USER_NAME LIKE '%"+param.getUserName()+"%' ";
+                sql += " AND a.USER_NAME LIKE '%"+param.getUserName().trim()+"%' ";
             }
             if(! StringUtil.isEmpty(param.getJobName())){
-                sql += " AND d.JOB_NAME LIKE '%"+param.getJobName()+"%' ";
+                sql += " AND d.JOB_NAME LIKE '%"+param.getJobName().trim()+"%' ";
             }
             if(! StringUtil.isEmpty(param.getOrgName())){
-                sql += " AND e.ORG_NAME LIKE '%"+param.getOrgName()+"%' ";
+                sql += " AND e.ORG_NAME LIKE '%"+param.getOrgName().trim()+"%' ";
             }
         }
 
-        List<Object> objects = this.executeSqlPage(sql, page, pageSize, Constant.REL_TYPE_USER_PHOTO, Constant.STATUS_ABLE, Constant.STATUS_ABLE);
+        List<Object> objects = this.executeSqlPage(sql, page, pageSize, Constant.STATUS_ABLE);
         if(objects == null || objects.size() < 1){
             return null;
         }
@@ -94,21 +94,20 @@ public class UserInfoRepository extends RepositorySupport<UserInfo> {
                 userDetail.setUserPhone(ParseUtil.parseString(o[2]));
                 userDetail.setUserSex(ParseUtil.parseByte(o[3]));
                 userDetail.setUserSexMessage(EnumerateUtil.translator("user_info-SEX-"+ParseUtil.parseByte(o[3])));
-                userDetail.setUserPhoto(ParseUtil.parseString(o[4]));
 
-                if((boolean)o[5])
+                if((boolean)o[4])
                     userDetail.setWorkStatus((byte) 1);
                 else{
                     userDetail.setWorkStatus((byte) 0);
                 }
                 userDetail.setWorkStatusMessage(EnumerateUtil.translator("user_info-WORK_STATUS-"+userDetail.getWorkStatus()));
 
-                userDetail.setUserCardNumber(ParseUtil.parseString(o[6]));
-                userDetail.setDataOfBirth(ParseUtil.parseString(o[7]));
-                userDetail.setUserAge(DateUtil.yearBetweenTwoDate(ParseUtil.parseString(o[7]),DateUtil.formatDate()));
-                userDetail.setWorkTime(ParseUtil.parseString(o[8]));
-                userDetail.setJobName(ParseUtil.parseString(o[9]));
-                userDetail.setOrgID(ParseUtil.parseInt(o[10]));
+                userDetail.setUserCardNumber(ParseUtil.parseString(o[5]));
+                userDetail.setDataOfBirth(ParseUtil.parseString(o[6]));
+                userDetail.setUserAge(DateUtil.yearBetweenTwoDate(ParseUtil.parseString(o[6]),DateUtil.formatDate()));
+                userDetail.setWorkTime(ParseUtil.parseString(o[7]));
+                userDetail.setJobName(ParseUtil.parseString(o[8]));
+                userDetail.setOrgID(ParseUtil.parseInt(o[9]));
                 userDetails.add(userDetail);
             }
         }else{
@@ -121,9 +120,8 @@ public class UserInfoRepository extends RepositorySupport<UserInfo> {
                 userDetail.setUserPhone(ParseUtil.parseString(o[2]));
                 userDetail.setUserSex(ParseUtil.parseByte(o[3]));
                 userDetail.setUserSexMessage(EnumerateUtil.translator("user_info-SEX-"+ParseUtil.parseByte(o[3])));
-                userDetail.setUserPhoto(ParseUtil.parseString(o[4]));
 
-                if((boolean)o[5])
+                if((boolean)o[4])
                     userDetail.setWorkStatus((byte) 1);
                 else{
                     userDetail.setWorkStatus((byte) 0);
@@ -131,42 +129,79 @@ public class UserInfoRepository extends RepositorySupport<UserInfo> {
                 userDetail.setWorkStatusMessage(EnumerateUtil.translator("user_info-WORK_STATUS-"+userDetail.getWorkStatus()));
 
                 userDetail.setUserCardNumber("");
-                userDetail.setDataOfBirth(ParseUtil.parseString(o[7]));
-                userDetail.setUserAge(DateUtil.yearBetweenTwoDate(ParseUtil.parseString(o[7]),DateUtil.formatDate()));
+                userDetail.setDataOfBirth(ParseUtil.parseString(o[6]));
+                userDetail.setUserAge(DateUtil.yearBetweenTwoDate(ParseUtil.parseString(o[6]),DateUtil.formatDate()));
                 userDetail.setWorkTime("");
-                userDetail.setJobName(ParseUtil.parseString(o[9]));
-                userDetail.setOrgID(ParseUtil.parseInt(o[10]));
+                userDetail.setJobName(ParseUtil.parseString(o[8]));
+                userDetail.setOrgID(ParseUtil.parseInt(o[9]));
                 userDetails.add(userDetail);
             }
         }
 
         return userDetails;
     }
+    public int findUserCount(FindUserParam param,boolean includeSensitive){
+        String sql = "";
+        if(includeSensitive){
+            sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX," +
+                    "a.WORK_STATUS,c.USER_CARD_NUMBER,c.DATA_OF_BIRTH,c.WORK_TIME,d.JOB_NAME,e.ORG_NAME,e.ORG_ID " +
+                    " from user_info a,user_sensitive_info c,org_member_info d,org_info e " +
+                    " where  a.USER_ID = c.USER_ID " +
+                    " and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
+                    " AND a.USER_STATUS = ? ";
+        }else{
+            sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX," +
+                    "a.WORK_STATUS,c.DATA_OF_BIRTH,d.JOB_NAME,e.ORG_NAME,e.ORG_ID " +
+                    " from user_info a,user_sensitive_info c,org_member_info d,org_info e " +
+                    " where  a.USER_ID = c.USER_ID " +
+                    "and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
+                    " AND a.USER_STATUS = ? ";
+        }
+        if(param != null){
+            if(! StringUtil.isEmpty(param.getUserPhone())){
+                sql += " AND a.USER_PHONE LIKE '%"+param.getUserPhone().trim()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getUserName())){
+                sql += " AND a.USER_NAME LIKE '%"+param.getUserName().trim()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getJobName())){
+                sql += " AND d.JOB_NAME LIKE '%"+param.getJobName().trim()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getOrgName())){
+                sql += " AND e.ORG_NAME LIKE '%"+param.getOrgName().trim()+"%' ";
+            }
+        }
+
+        return this.countSql(sql,Constant.STATUS_ABLE);
+    }
 
     public List<UserDetail> findUserBaseInfos(FindUserParam param, int page, int pageSize){
         String sql = "";
         sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX," +
                 "a.WORK_STATUS,c.DATA_OF_BIRTH,d.JOB_NAME,e.ORG_NAME,e.ORG_ID " +
-                " from user_info a,picture_info b,user_sensitive_info c,org_member_info d,org_info e " +
-                " where  a.USER_ID = c.USER_ID AND a.USER_ID = b.REL_ID  " +
+                " from user_info a,user_sensitive_info c,org_member_info d,org_info e " +
+                " where  a.USER_ID = c.USER_ID " +
                 "and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
-                " AND b.REL_TYPE = ? AND a.USER_STATUS = ? AND b.PIC_STATUS = ?  ";
+                " AND a.USER_STATUS = ? ";
         if(param != null){
+            if(! StringUtil.isEmpty(param.getUserID())) {
+                sql += " AND a.USER_ID LIKE '%"+param.getUserID().trim()+"%' ";
+            }
             if(! StringUtil.isEmpty(param.getUserPhone())){
-                sql += " AND a.USER_PHONE LIKE '%"+param.getUserPhone()+"%' ";
+                sql += " AND a.USER_PHONE LIKE '%"+param.getUserPhone().trim()+"%' ";
             }
             if(! StringUtil.isEmpty(param.getUserName())){
-                sql += " AND a.USER_NAME LIKE '%"+param.getUserName()+"%' ";
+                sql += " AND a.USER_NAME LIKE '%"+param.getUserName().trim()+"%' ";
             }
             if(! StringUtil.isEmpty(param.getJobName())){
-                sql += " AND d.JOB_NAME LIKE '%"+param.getJobName()+"%' ";
+                sql += " AND d.JOB_NAME LIKE '%"+param.getJobName().trim()+"%' ";
             }
             if(! StringUtil.isEmpty(param.getOrgName())){
-                sql += " AND e.ORG_NAME LIKE '%"+param.getOrgName()+"%' ";
+                sql += " AND e.ORG_NAME LIKE '%"+param.getOrgName().trim()+"%' ";
             }
         }
 
-        List<Object> objects = this.executeSqlPage(sql, page, pageSize, Constant.REL_TYPE_USER_PHOTO, Constant.STATUS_ABLE, Constant.STATUS_ABLE);
+        List<Object> objects = this.executeSqlPage(sql, page, pageSize, Constant.STATUS_ABLE);
         if(objects == null || objects.size() < 1){
             return null;
         }
@@ -197,6 +232,34 @@ public class UserInfoRepository extends RepositorySupport<UserInfo> {
         }
 
         return userDetails;
+    }
+    public int findUserBaseInfoCount(FindUserParam param){
+        String sql = "";
+        sql = "select a.USER_ID,a.USER_NAME,a.USER_PHONE,a.USER_SEX," +
+                "a.WORK_STATUS,c.DATA_OF_BIRTH,d.JOB_NAME,e.ORG_NAME,e.ORG_ID " +
+                " from user_info a,user_sensitive_info c,org_member_info d,org_info e " +
+                " where  a.USER_ID = c.USER_ID " +
+                "and d.ORG_ID = e.ORG_ID and d.USER_ID = a.USER_ID" +
+                " AND a.USER_STATUS = ? ";
+        if(param != null){
+            if(param.getUserID() != null ) {
+                sql += " AND a.USER_ID LIKE '%"+param.getUserID()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getUserPhone())){
+                sql += " AND a.USER_PHONE LIKE '%"+param.getUserPhone()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getUserName())){
+                sql += " AND a.USER_NAME LIKE '%"+param.getUserName()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getJobName())){
+                sql += " AND d.JOB_NAME LIKE '%"+param.getJobName()+"%' ";
+            }
+            if(! StringUtil.isEmpty(param.getOrgName())){
+                sql += " AND e.ORG_NAME LIKE '%"+param.getOrgName()+"%' ";
+            }
+        }
+
+        return this.countSql(sql, Constant.STATUS_ABLE);
     }
     public UserDetail findUserDetail(Integer userID,boolean includeSensitive){
         String sql = "";

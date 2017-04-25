@@ -28,4 +28,12 @@ public class PictureInfoRepository extends RepositorySupport<PictureInfo> {
 
         return this.findOne(detachedCriteria);
     }
+    public PictureInfo findUPhotoByType(Integer userID,Integer relType){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(PictureInfo.class);
+        detachedCriteria.add(Restrictions.eq("picStatus", Constant.STATUS_ABLE))
+                .add(Restrictions.eq("relId",userID))
+                .add(Restrictions.eq("relType",relType));
+
+        return this.findOne(detachedCriteria);
+    }
 }

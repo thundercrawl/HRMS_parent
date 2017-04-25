@@ -2,12 +2,14 @@ package hrms.repository.impl.org;
 
 import hrms.common.Constant;
 import hrms.entity.OrgInfo;
+import hrms.model.OrgBaseInfo;
 import hrms.repository.RepositorySupport;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +48,24 @@ public class OrgInfoRepository extends RepositorySupport<OrgInfo> {
             return null;
         }
         return all;
+    }
+
+    public List<OrgBaseInfo> findBaseAllOrg(){
+        List<OrgBaseInfo> list = new ArrayList<>();
+
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(OrgInfo.class);
+        detachedCriteria.add(Restrictions.eq("orgStatus", Constant.STATUS_ABLE));
+        List<OrgInfo> all = this.findAll(detachedCriteria);
+        if(all == null || all.size() < 1){
+            return null;
+        }
+        for(OrgInfo orgInfo:all){
+            OrgBaseInfo orgBaseInfo= new OrgBaseInfo();
+            orgBaseInfo.setOrgName(orgInfo.getOrgName());
+            orgBaseInfo.setOrgId(orgInfo.getOrgId()+"");
+            list.add(orgBaseInfo);
+        }
+        return list;
     }
 
     /**

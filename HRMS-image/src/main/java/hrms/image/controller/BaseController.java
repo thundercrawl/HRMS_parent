@@ -11,7 +11,8 @@ public class BaseController {
 	protected HttpServletRequest request;
 	@Resource(name="appProperties")
 	protected AppProperties appProperties;
-	
+
+
 	protected String lineSeparator = System.getProperty("line.separator", "\n");
 	
 	

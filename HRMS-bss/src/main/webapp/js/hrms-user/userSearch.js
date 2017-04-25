@@ -6,8 +6,9 @@ $(function(){
         var orgName = $("#orgName").val();
         var jobName = $("#jobName").val();
         $('#companySearchCondition').val($('#forid').serialize());
-        $('#tid').load("filter/user/searchUser",$('#forid').serialize(), function(){
-            $('.pagination>li>a').on('click', pageFunc);
-        });
+       /* $('#tid').load("filter/user/searchUserIndex",$('#forid').serialize());*/
+        var pagenum=$("#pagenum").val();
+        pagenum--;
+        $('#content').load("filter/user/searchUserIndex?userID="+userID+"&userName="+userName+"&userPhone="+userPhone+"&orgName="+orgName+"&jobName="+jobName+"&page="+pagenum);
     })
 });

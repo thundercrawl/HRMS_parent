@@ -4,11 +4,10 @@ import hrms.common.CommonParams;
 import hrms.common.Constant;
 import hrms.common.ErrorCode;
 import hrms.entity.*;
+import hrms.model.OrgBaseInfo;
 import hrms.model.OrgMemberDetail;
-import hrms.po.FindUserParam;
-import hrms.po.LoginParam;
-import hrms.po.RegisterUserInfo;
-import hrms.po.UpdateUserParam;
+import hrms.model.RoleBaseInfo;
+import hrms.po.*;
 import hrms.repository.impl.org.OrgInfoRepository;
 import hrms.repository.impl.org.OrgManagerInfoRepository;
 import hrms.repository.impl.org.OrgMemberInfoRepository;
@@ -246,8 +245,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public MsgVo login(LoginParam param) {
-        String userPasswd = param.getUserPasswd();
-        String userPhone = param.getUserPhone();
+        String userPasswd = param.getUserPasswd().trim();
+        String userPhone = param.getUserPhone().trim();
 
         UserInfo userInfo = userInfoRepository.findByPhone(userPhone);
 
@@ -350,10 +349,22 @@ public class UserInfoServiceImpl implements UserInfoService {
         //获取数据
         List<UserDetail> userDetails = new ArrayList<>();
         userDetails = userInfoRepository.findUserBaseInfos(param, commonParams.getPage(), commonParams.getPagesize());
+        int count = userInfoRepository.findUserBaseInfoCount(param);
 
-        Map<String, ShowUserVo> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("count",count);
+
         ShowUserVo voParam = new ShowUserVo();
         voParam.setUserInfos(userDetails);
+
+        //设置部门
+        List<OrgBaseInfo> allOrg = orgInfoRepository.findBaseAllOrg();
+        voParam.setOrgInfos(allOrg);
+
+        List<RoleBaseInfo> all = roleInfoRepository.findBaseAll();
+
+        voParam.setRoleInfos(all);
+
         //没有结果集
         if(userDetails == null || userDetails.size() < 1){
             map.put("result",voParam);
@@ -432,7 +443,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
         if(operInfo.getWorkStatus() == Constant.STATUS_DISABLE){
-            return MsgVo.fail(ErrorCode.TOKEN_TIMEOUT);
+            return MsgVo.fail(ErrorCode.USER_WORK_DISABLE);
         }
         boolean hrOrSM = userRoleInfoRepository.isHROrSM(oper);
         if(! hrOrSM){
@@ -440,6 +451,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         UserInfo userInfo = userInfoRepository.findByUserId(param.getUserID());
+        if(userInfo == null){
+            return MsgVo.fail(ErrorCode.USER_EMPTY);
+        }
         if(! StringUtil.isEmpty(param.getUserName())){
             userInfo.setUserName(param.getUserName());
         }
@@ -479,22 +493,44 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public MsgVo uploadUserPhoto(String picName, CommonParams commonParams) {
-        Integer userId = commonParams.getUserId();
+    public MsgVo uploadUserPhoto(UploadUserPhoto param, CommonParams commonParams) {
+        Integer oper = commonParams.getUserId();
+        UserInfo operInfo = userInfoRepository.findByUserId(oper);
+        if(operInfo == null || operInfo.getUserStatus() == Constant.STATUS_DISABLE){
+            return MsgVo.fail(ErrorCode.USER_EMPTY);
+        }
+        if(operInfo.getWorkStatus() == Constant.STATUS_DISABLE){
+            return MsgVo.fail(ErrorCode.USER_WORK_DISABLE);
+        }
 
-        PictureInfo userPhoto = pictureInfoRepository.findUserPhoto(userId);
-        if(userPhoto != null){
-            userPhoto.setPicStatus(Constant.STATUS_DISABLE);
-            pictureInfoRepository.save(userPhoto);
+        Integer relId = param.getRelId();
+        Integer relType = param.getRelType();
+
+        if(relType == Constant.REL_TYPE_USER_PHOTO && oper.intValue() != relId.intValue()){
+            boolean hrOrSM = userRoleInfoRepository.isHROrSM(oper);
+            if(! hrOrSM){
+                return MsgVo.fail(ErrorCode.ROLE_ERROR);
+            }
+
+            UserInfo byUserId = userInfoRepository.findByUserId(relId);
+            if(byUserId == null || byUserId.getUserStatus() == Constant.STATUS_DISABLE){
+                return MsgVo.fail(ErrorCode.USER_EMPTY);
+            }
+        }
+
+        PictureInfo photo = pictureInfoRepository.findUPhotoByType(relId,relType);
+        if(photo != null){
+            photo.setPicStatus(Constant.STATUS_DISABLE);
+            pictureInfoRepository.save(photo);
         }
         PictureInfo pictureInfo = new PictureInfo();
-        pictureInfo.setRelId(userId);
+        pictureInfo.setRelId(relId);
         pictureInfo.setRelType(Constant.REL_TYPE_USER_PHOTO);
         pictureInfo.setCreateTime(DateUtil.formatDate());
-        pictureInfo.setPicUrl(picName);
+        pictureInfo.setPicUrl(param.getPicName());
         pictureInfo.setPicStatus(Constant.STATUS_ABLE);
-        pictureInfo.setPicDesc(userId+"的用户头像");
-        pictureInfo.setCreateUserId(userId);
+        pictureInfo.setPicDesc(relId+"的"+EnumerateUtil.translator("picture_info-REL_TYPE-"+relType));
+        pictureInfo.setCreateUserId(oper);
 
         pictureInfoRepository.save(pictureInfo);
 

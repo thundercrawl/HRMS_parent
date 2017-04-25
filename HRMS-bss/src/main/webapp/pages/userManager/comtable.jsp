@@ -109,5 +109,5 @@
 
 
 
-<script src="js/userManager/comTable.js"></script>
+<script src="js/hrms-user/comTable.js"></script>
 <script src="js/pagination.js"></script>

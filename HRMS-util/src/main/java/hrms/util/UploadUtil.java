@@ -1,5 +1,12 @@
 package hrms.util;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,26 +15,19 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 public class UploadUtil {
 	/*private String imagePath = "D://imageFile//"
 			+ new SimpleDateFormat("yyyyMMddHH").format(new Date()) + "";// 配置图片路径
 */
 	//private String imagePath = "D://imageFile//";// 配置图片路径
-	public String[] uploadImage(HttpServletRequest request,HttpServletResponse response,String imagePath,String resolutionRatio)
+	public String uploadImage(HttpServletRequest request,HttpServletResponse response,String imagePath,String resolutionRatio)
 			throws Exception {
 		String filePath = "";
-		String extension = "";
+		String resultName = "";
 		
 		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
@@ -38,16 +38,10 @@ public class UploadUtil {
 				.resolveMultipart(request);
 		// 获得第1张图片（根据前台的name名称得到上传的文件）
 		MultipartFile file = multipartRequest.getFile("imgFile");
+		String relId = (String) request.getParameter("relId");
+		String relType = (String) request.getParameter("relType");
+
 		String getUploadFileName = file.getOriginalFilename();
-		Cookie[] cookies = request.getCookies();
-	    for(int i=0;i<cookies.length;i++){
-	    	if("pathName".equals(cookies[i].getName())){
-	    		filePath = cookies[i].getValue();
-	    	}
-	    	if("extension".equals(cookies[i].getName())){
-	    		extension = cookies[i].getValue();
-	    	}
-	    }
 	    imagePath+=filePath;
 		String getImagePath = imagePath;
 
@@ -58,17 +52,6 @@ public class UploadUtil {
 
 		InputStream stream = file.getInputStream();
 		BufferedImage srcBufferImage = ImageIO.read(stream);
-		if(srcBufferImage==null){
-			String[] resultFileNameArr = new String[1];
-			//保存语音
-			String fileNewName = getUploadFileName+extension;
-			 File targetFile = new File(image, getUploadFileName+extension); 
-			file.transferTo(targetFile);
-			resultFileNameArr[0] = getUploadFileName+extension;
-			System.err.println();
-			response.addCookie(new Cookie("voiceName", fileNewName));
-			return resultFileNameArr;
-		}
 		System.out.println(" w " + srcBufferImage.getWidth() + " h "
 				+ srcBufferImage.getHeight());
 		BufferedImage scaledImage;
@@ -76,17 +59,20 @@ public class UploadUtil {
 		int yw = srcBufferImage.getWidth();
 		int yh = srcBufferImage.getHeight();
 		String[] resolutionRatioSplit = resolutionRatio.split(";");
-		String[] resultFileNameArr = new String[resolutionRatioSplit.length];
+//		String[] resultFileNameArr = new String[resolutionRatioSplit.length];
 		for (int i = 0; i < resolutionRatioSplit.length; i++) {
 			try {
 				String widthAndHeight = resolutionRatioSplit[i];
 				String[] widthAndHeightSplit = widthAndHeight.split(",");
 				int w = Integer.parseInt(widthAndHeightSplit[0]);
 				int h = Integer.parseInt(widthAndHeightSplit[1]);
-				String fileNewName = generateFileName(getUploadFileName, w, h,extension);
+
+				Map<String,String> map = generateFileName(relId,relType,getUploadFileName, w, h);
+				String fileNewName = map.get("fileName");
+				resultName = map.get("resultName");
 				//imagePath = imagePath + "/" + fileNewName;
-				resultFileNameArr[i] = fileNewName;
-				response.addCookie(new Cookie("imageName_"+w+"_"+h, fileNewName));
+//				resultFileNameArr[i] = fileNewName;
+//				response.addCookie(new Cookie("imageName_"+w+"_"+h, fileNewName));
 				// 如果上传图片 宽高 比 压缩的要小 则不压缩
 				if (w > yw && h > yh) {
 					FileOutputStream fos = null;
@@ -124,16 +110,19 @@ public class UploadUtil {
 				}
 			}
 		}
-		return resultFileNameArr;
+		return resultName;
 	}
 
-	private String generateFileName(String fileName, int w, int h,String extension) {
+	private Map<String,String> generateFileName( String relId, String relType, String fileName, int w, int h) {
 		DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		String formatDate = format.format(new Date());
 		int random = new Random().nextInt(10000);
 		/*int position = fileName.lastIndexOf(".");
 		String extension = fileName.substring(position);*/
-		return formatDate + random + "_" + w + "_" + h + extension;
+		Map<String,String> map = new HashMap<>();
+		map.put("fileName",relId+"_"+relType+"_"+formatDate + random + "_" + w + "_" + h );
+		map.put("resultName",relId+"_"+relType+"_"+formatDate + random);
+		return map;
 	}
 
 }
