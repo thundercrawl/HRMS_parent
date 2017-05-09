@@ -1,9 +1,11 @@
 package hrms.po;
 
+import java.io.Serializable;
+
 /**
  * Created by 谢益文 on 2017/3/20.
  */
-public class RegisterUserInfo {
+public class RegisterUserInfo implements Serializable{
 
     private String userName;
     private String userPhone;

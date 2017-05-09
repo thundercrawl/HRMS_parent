@@ -113,23 +113,18 @@ public class OrgMemberServiceImpl implements OrgMemberService {
 
     @Override
     public MsgVo deleteFromOrg(DeleteFromOrg param, CommonParams commonParams) {
-        Integer operID = commonParams.getUserId();
-
-        Integer orgID = param.getOrgID();
-        Integer userID = param.getUserID();
-
-        UserInfo oper = userInfoRepository.findByUserId(operID);
+        UserInfo oper = userInfoRepository.findByUserId(param.getUserID());
         if(oper == null){
             return MsgVo.error(ErrorCode.USER_EMPTY);
         }
         if(oper.getUserStatus() == Constant.STATUS_DISABLE){
             return MsgVo.error(ErrorCode.USER_DISABLE);
         }
-        if(! userRoleInfoRepository.isHROrSM(operID)){
+        if(! userRoleInfoRepository.isHROrSM(commonParams.getUserId())){
             return MsgVo.error(ErrorCode.ONLY_HR);
         }
 
-        OrgInfo orgInfo = orgInfoRepository.findById(orgID);
+        OrgInfo orgInfo = orgInfoRepository.findById(commonParams.getOrgId());
         if(orgInfo == null){
             return MsgVo.error(ErrorCode.ORG_EMPTY);
         }
@@ -137,14 +132,14 @@ public class OrgMemberServiceImpl implements OrgMemberService {
             return MsgVo.error(ErrorCode.ORG_DELETE);
         }
 
-        UserInfo userInfo = userInfoRepository.findByUserId(userID);
+        UserInfo userInfo = userInfoRepository.findByUserId(param.getUserID());
         if(userInfo == null){
             return MsgVo.error(ErrorCode.USER_EMPTY);
         }
 
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(OrgMemberInfo.class);
-        detachedCriteria.add(Restrictions.eq("userId",userID))
-                .add(Restrictions.eq("orgId",orgID))
+        detachedCriteria.add(Restrictions.eq("userId",param.getUserID()))
+                .add(Restrictions.eq("orgId",param.getOrgID()))
                 .add(Restrictions.eq("status",Constant.STATUS_ABLE));
 
         OrgMemberInfo orgMemberInfo = orgMemberInfoRepository.findOne(detachedCriteria);

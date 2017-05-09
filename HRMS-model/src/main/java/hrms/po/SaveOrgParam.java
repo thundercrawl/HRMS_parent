@@ -1,12 +1,18 @@
 package hrms.po;
 
+import java.io.Serializable;
+
 /**
  * Created by 谢益文 on 2017/4/5.
  */
-public class SaveOrgParam {
+public class SaveOrgParam implements Serializable{
     private Integer parentOrgId;
     private String orgName;
     private String desc;
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public Integer getParentOrgId() {
         return parentOrgId;

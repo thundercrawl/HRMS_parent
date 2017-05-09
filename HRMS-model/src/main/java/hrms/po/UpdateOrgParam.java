@@ -7,7 +7,16 @@ public class UpdateOrgParam {
 
     private Integer orgId;
     private String orgName;
+    private Integer parentOrgId;
     private String desc;
+
+    public Integer getParentOrgId() {
+        return parentOrgId;
+    }
+
+    public void setParentOrgId(Integer parentOrgId) {
+        this.parentOrgId = parentOrgId;
+    }
 
     public Integer getOrgId() {
         return orgId;

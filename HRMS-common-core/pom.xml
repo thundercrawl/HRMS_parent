@@ -11,7 +11,7 @@
 
     <name>HRMS-common-core</name>
     <artifactId>HRMS-common-core</artifactId>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
 
     <dependencies>
         <dependency>

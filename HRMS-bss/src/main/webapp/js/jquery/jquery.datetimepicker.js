@@ -864,7 +864,7 @@
 				var timerclick = 0;
 				calendar
 					.on('click.xdsoft','td',function() {
-						debugger;
+						
 						var endDateVal = "";
 						if(input.attr('id')=="endDate"){
 							endDateVal = input.val();
@@ -927,7 +927,7 @@
 						setTimeout(function(){
 							timerclick = 0;
 						},200);
-						getCurrentDateAddMonths();
+						
 						//showEndDate();
 						function showEndDate() {
 							console.log($("#endDate").val())

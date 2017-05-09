@@ -72,6 +72,12 @@ public class UserRoleInfoRepository extends RepositorySupport<UserRoleInfo> {
                 .add(Restrictions.eq("status",Constant.ROLE_ABLE));
         return findOne(detachedCriteria);
     }
+    public List<UserRoleInfo> findByRole(Integer roleID){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserRoleInfo.class);
+        detachedCriteria.add(Restrictions.eq("roleId",roleID))
+                .add(Restrictions.eq("status",Constant.ROLE_ABLE));
+        return findAll(detachedCriteria);
+    }
 
     /**
      * @describe 是否有hr或系统管理员权限
@@ -82,6 +88,19 @@ public class UserRoleInfoRepository extends RepositorySupport<UserRoleInfo> {
         String sql = "select USER_ROLE_ID ,CREATE_TIME ,CREATE_USER_ID ,ROLE_ID ,STATUS,USER_ID " +
                 " from user_role_info " +
                 " where USER_ID=? and ROLE_ID in ( "+Constant.ROLE_HR_VALUE+", "+Constant.ROLE_SYSTEM_MANAGER_VALUE+" )  and STATUS=?";
+
+        List<Object> objects = executeSql(sql, userID, Constant.ROLE_ABLE);
+        if(objects != null && objects.size() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean isFinanceOrSM(Integer userID){
+        String sql = "select USER_ROLE_ID ,CREATE_TIME ,CREATE_USER_ID ,ROLE_ID ,STATUS,USER_ID " +
+                " from user_role_info " +
+                " where USER_ID=? and ROLE_ID in ( "+Constant.ROLE_FINANCE_VALUE+", "+Constant.ROLE_SYSTEM_MANAGER_VALUE+" )  and STATUS=?";
 
         List<Object> objects = executeSql(sql, userID, Constant.ROLE_ABLE);
         if(objects != null && objects.size() > 0){

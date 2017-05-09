@@ -13,7 +13,9 @@
 			<th>手机号</th>
 			<th>职位</th>
 			<th>状态</th>
-			<th>操作</th>
+			<c:if test="${userInfo.isHR eq 1 }">
+				<th>操作</th>
+			</c:if>
 		</tr>
 	</thead>
 		<tbody>
@@ -21,45 +23,37 @@
 		<c:forEach items="${paginator.list}" var="os">
 		<tr>
 			<%--<td class="center"  ><u style="color: #00a6fc">${os.userID}</u></td>--%>
-			<!--<td class="center"><a href="javaScript:void(0);" onclick="showPersonMessage(${os.userID})">${os.userID}</a> </td>-->
-			<td class="center"><a href="/filter/user/showPersonMessage?userID=${os.userID}">${os.userID}</a> </td>
+			<%--<td class="center"><a href="javaScript:void(0);" onclick="showPersonMessage(${os.userID})">${os.userID}</a> </td>--%>
+			<td class="center"><a href="javaScript:void(0);" class="showPersonalPage" data-userId="${os.userID}">${os.userID}</a> </td>
 			<td class="center">${os.userName}</td>
 			<c:if test="${os.userSex eq 1 }">
-			<td class="center">男</td>
+				<td class="center">男</td>
 			</c:if>
-			<c:if test="${os.userSex eq 0 }">
-			<td class="center">女</td>
+			<c:if test="${os.userSex eq 2 }">
+				<td class="center">女</td>
 			</c:if>
 			<td class="center">${os.userAge}</td>
-			<td class="center">${os.orgName}</td>
+				<td class="center"><a href="javaScript:void(0);" class="searchOrg" data-orgName="${os.orgName}">${os.orgName}</a></td>
 			<td class="center">${os.userPhone}</td>
 			<td class="center">${os.jobName}</td>
 			<td class="center">${os.workStatusMessage}</td>
+				<c:if test="${os.hasRole eq 1 }">
+				<td>
+						<input type="button" class="btn btn-primary resetPwd" data-userID="${os.userID}" value="重置密码"  >
+						<input type="button" class="btn btn-primary alter" data-userID="${os.userID}" value="修改" >
+						<c:if test="${os.workStatus eq 0 }">
+							<input type="button" data-userID="${os.userID}" class="btn btn-primary unlockUser" value="解禁"  >
+						</c:if>
+						<c:if test="${os.workStatus eq 1 }">
+							<input type="button"  data-userID="${os.userID}" class="btn  btn-primary lockUser" value="禁用" >
+						</c:if>
+						<c:if test="${! empty os.orgID}">
+							<input type="button" data-userID="${os.userID}"  data-orgId="${os.orgID}" class="btn btn-primary deleteFromOrg" value="移出部门"  >
+						</c:if>
+						<input type="button" data-userID="${os.userID}" class="btn btn-primary deleteUser" value="删除"  >
+				</td>
+			</c:if>
 
-		<td>
-			<c:if test="${os.hasRole eq 1 }">
-				<input type="button" class="btn btn-primary resetPwd" data-userID="${os.userID}" value="重置密码"  >
-				<input type="button" class="btn btn-primary alter" data-userID="${os.userID}" value="修改" >
-				<c:if test="${os.workStatus eq 0 }">
-					<input type="button" id="companyNotDel" class="btn btn-primary" value="解禁"  >
-				</c:if>
-				<c:if test="${os.workStatus eq 1 }">
-					<input type="button"  id="comArea" class="btn  btn-primary " value="禁用" >
-				</c:if>
-				<input type="button" id="companyDel" class="btn btn-primary" value="删除"  >
-			</c:if>
-			<c:if test="${os.hasRole eq 0 }">
-				<input type="button" disabled="true" class="btn btn-primary resetPwd" value="重置密码"  >
-				<input type="button" disabled="true" id="alter" class="btn btn-primary" value="修改" >
-				<c:if test="${os.workStatus eq 0 }">
-					<input type="button" disabled="true" id="companyNotDel" class="btn btn-primary" value="解禁"  >
-				</c:if>
-				<c:if test="${os.workStatus eq 1 }">
-					<input type="button"  disabled="true" id="comArea" class="btn  btn-primary " value="禁用" >
-				</c:if>
-				<input type="button" disabled="true" id="companyDel" class="btn btn-primary" value="删除"  >
-			</c:if>
-		</td>
 			</tr>
 		</c:forEach>
 		</c:if>

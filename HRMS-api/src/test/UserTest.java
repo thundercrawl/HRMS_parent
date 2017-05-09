@@ -12,9 +12,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.junit.Test;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -202,8 +205,6 @@ public class UserTest {
         j.put("object", paramsObject());
         return JSONObject.toJSONString(j);
     }
-    @SuppressWarnings("unused")
-    @Test
     public static void user117(String Url,String str) throws UnsupportedEncodingException{
         @SuppressWarnings({ "resource" })
         HttpClient httpclient = new DefaultHttpClient();

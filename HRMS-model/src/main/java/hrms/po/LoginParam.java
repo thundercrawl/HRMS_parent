@@ -1,9 +1,11 @@
 package hrms.po;
 
+import java.io.Serializable;
+
 /**
  * Created by 谢益文 on 2017/3/22.
  */
-public class LoginParam {
+public class LoginParam implements Serializable {
 
     private String userPhone;
     private String userPasswd;

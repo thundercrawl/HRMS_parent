@@ -1,5 +1,7 @@
 package hrms.vo;
 
+import java.util.List;
+
 /**
  * Created by 谢益文 on 2017/4/2.
  */
@@ -12,6 +14,8 @@ public class UserDetail {
     private Byte userSex;
     private String userSexMessage;
     private String userPhoto;
+
+    private String userEamil;
 
     private Byte workStatus;
     private String workStatusMessage;
@@ -30,10 +34,40 @@ public class UserDetail {
     private Byte isMine;
     private Byte hasRole;  //0:没有操作权限  1：有
 
+    private List<String> workMessages;
+
+    public List<String> getWorkMessages() {
+        return workMessages;
+    }
+
+    public void setWorkMessages(List<String> workMessages) {
+        this.workMessages = workMessages;
+    }
+
     public UserDetail() {
-        hasRole = 0;
-        isMine = 0;
-        isManager = 0;
+        this.userName = "";
+        this.userPhone = "";
+        this.userSexMessage = "";
+        this.userPhoto = "";
+        this.workStatusMessage = "";
+        this.orgID = 0;
+        this.orgName = "";
+        this.jobName = "";
+        this.isManager = 0;
+        this.userCardNumber = "";
+        this.dataOfBirth = "";
+        this.workTime = "";
+        this.isMine = 0;
+        this.hasRole = 0;
+        this.userEamil = "";
+    }
+
+    public String getUserEamil() {
+        return userEamil;
+    }
+
+    public void setUserEamil(String userEamil) {
+        this.userEamil = userEamil;
     }
 
     public Byte getHasRole() {

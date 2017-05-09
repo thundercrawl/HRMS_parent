@@ -13,20 +13,20 @@ public class ShowUserVo {
     private List<OrgBaseInfo> orgInfos;
     private List<RoleBaseInfo> roleInfos;
 
-    public List<RoleBaseInfo> getRoleInfos() {
-        return roleInfos;
-    }
-
-    public void setRoleInfos(List<RoleBaseInfo> roleInfos) {
-        this.roleInfos = roleInfos;
-    }
-
     public List<OrgBaseInfo> getOrgInfos() {
         return orgInfos;
     }
 
     public void setOrgInfos(List<OrgBaseInfo> orgInfos) {
         this.orgInfos = orgInfos;
+    }
+
+    public List<RoleBaseInfo> getRoleInfos() {
+        return roleInfos;
+    }
+
+    public void setRoleInfos(List<RoleBaseInfo> roleInfos) {
+        this.roleInfos = roleInfos;
     }
 
     public List<UserDetail> getUserInfos() {

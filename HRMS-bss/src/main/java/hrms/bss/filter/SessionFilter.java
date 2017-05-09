@@ -1,13 +1,20 @@
 package hrms.bss.filter;
 
+import hrms.vo.LoginInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * 用于检查用户是否登录了系统的过滤器
@@ -32,7 +39,7 @@ public class SessionFilter implements Filter {
  
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-    	
+
     	 // 如果 sessionKey 为空，则直接放行
         if (StringUtils.isBlank(sessionKey)) {
             chain.doFilter(req, res);
@@ -55,13 +62,13 @@ public class SessionFilter implements Filter {
         
         Object sessionObj = request.getSession().getAttribute(sessionKey);
         // 如果Session为空，则跳转到指定页面
-       /* if (sessionObj == null
+        if (sessionObj == null
                 || !(sessionObj instanceof LoginInfo)
                 || ((LoginInfo)sessionObj).getUserId() == null) {
             response.sendRedirect(contextPath + StringUtils.defaultIfEmpty(forwardUrl, "/") + "?redirect=" + URLEncoder.encode(redirect, "UTF-8"));
         } else {
             chain.doFilter(req, res);
-        }*/
+        }
         chain.doFilter(request, response);
     }
  

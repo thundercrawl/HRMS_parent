@@ -7,10 +7,12 @@ import hrms.annotation.HRMSParam;
 import hrms.common.CommonParams;
 import hrms.common.ErrorCode;
 import hrms.exception.InvalidException;
+import hrms.model.UserBaseInfo;
 import hrms.po.*;
 import hrms.service.user.UserInfoService;
 import hrms.util.LoggerWriter;
 import hrms.util.StringUtil;
+import hrms.util.Validator;
 import hrms.vo.MsgVo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -89,7 +91,7 @@ public class UserInfoRestful {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public MsgVo findUsers(@HRMSParam("object")FindUserParam param, CommonParams commonParam){
 		try {
-			if(commonParam.getPage() == null ||
+			if(commonParam == null || commonParam.getPage() == null ||
 					commonParam.getPagesize() == null || commonParam.getUserId() == null){
 				return MsgVo.error(ErrorCode.PARAM_EMPTY);
 			}
@@ -196,6 +198,89 @@ public class UserInfoRestful {
 		}catch (Exception e) {
 			e.printStackTrace();
 			log.error(" 重置用户密码失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/changeStatus")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo changeStatus(@HRMSParam("object")ChangeUserStatusParam param, CommonParams commonParam){
+		try {
+			if(param == null ||param.getUserID() == null ||
+					(StringUtil.isEmpty(param.getUserStatus()) && StringUtil.isEmpty(param.getWorkStatus()))
+					|| commonParam.getOrgId() == null || commonParam.getUserId() == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			if(! StringUtil.isEmpty(param.getUserStatus())){
+				if(!("0".equals(param.getUserStatus()) || "1".equals(param.getUserStatus()))){
+					return MsgVo.error(ErrorCode.PARAMERROR);
+				}
+			}
+			if(! StringUtil.isEmpty(param.getWorkStatus())){
+				if(!("0".equals(param.getWorkStatus()) || "1".equals(param.getWorkStatus()))){
+					return MsgVo.error(ErrorCode.PARAMERROR);
+				}
+			}
+			LoggerWriter.addWrite(log, " 修改用户状态",param,commonParam);
+			MsgVo msgVo = userInfoService.changeStatus(param, commonParam);
+			LoggerWriter.addWrite(log, " 修改用户状态成功",param,commonParam);
+
+			return msgVo;
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error(" 修改用户状态失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/updatePwd")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo updatePwd(@HRMSParam("object")UpdateUserPwd param, CommonParams commonParam){
+		try {
+			if(param == null ||
+					StringUtil.isEmpty(param.getOldPwd()) || StringUtil.isEmpty(param.getNewPwd())
+					|| commonParam.getOrgId() == null || commonParam.getUserId() == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			if(! Validator.isPassword(param.getOldPwd()) || ! Validator.isPassword(param.getNewPwd())){
+				return MsgVo.error(ErrorCode.PARAMERROR);
+			}
+			LoggerWriter.addWrite(log, " 修改用户密码",param,commonParam);
+			MsgVo msgVo = userInfoService.updatePwd(param, commonParam);
+			LoggerWriter.addWrite(log, " 修改用户密码成功",param,commonParam);
+
+			return msgVo;
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error(" 修改用户密码失败 Catch Exception:" + e.getMessage());
+			return MsgVo.fail(ErrorCode.UNKNOW);
+		}
+	}
+
+	@POST
+	@Path("/findAllUserName")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MsgVo findAllUserName(@HRMSParam("object")UserBaseInfo param, CommonParams commonParam){
+		try {
+			if(param == null || commonParam.getOrgId() == null || commonParam.getUserId() == null){
+				return MsgVo.error(ErrorCode.PARAM_EMPTY);
+			}
+			LoggerWriter.addWrite(log, " 查询用户名称",param,commonParam);
+			MsgVo msgVo = userInfoService.findAllUserName(param.getUserName());
+			LoggerWriter.addWrite(log, " 查询用户名称成功",param,commonParam);
+
+			return msgVo;
+		}catch (InvalidException e1){
+			return MsgVo.error(e1.getErrorCode());
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error(" 查询用户名称失败 Catch Exception:" + e.getMessage());
 			return MsgVo.fail(ErrorCode.UNKNOW);
 		}
 	}

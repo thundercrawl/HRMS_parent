@@ -22,6 +22,14 @@
 		<property name="serviceBeans">
 			<list>
 				<bean class="hrms.api.restful.UserInfoRestful" />
+				<bean class="hrms.api.restful.OrgRestful" />
+				<bean class="hrms.api.restful.OrgMemberRestful" />
+				<bean class="hrms.api.restful.RoleRestful" />
+				<bean class="hrms.api.restful.SignRestful" />
+				<bean class="hrms.api.restful.LeaveRestful" />
+				<bean class="hrms.api.restful.WageRestful" />
+				<bean class="hrms.api.restful.BillRestful" />
+				<bean class="hrms.api.restful.DataCountRestful" />
 			</list>
 		</property>
 		<property name="providers">

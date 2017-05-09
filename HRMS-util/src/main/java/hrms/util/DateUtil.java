@@ -371,14 +371,36 @@ public class DateUtil {
 	
 	public static int getCurDayOfWeek(Date dt){
 		Calendar cal = Calendar.getInstance();
-        cal.setTime(dt);
-        int w = cal.get(Calendar.DAY_OF_WEEK)-1;
-        if (w < 0)
-            w = 0;
-        if(w==0){
-        	return 7;
-        }
-        return w;
+		cal.setTime(dt);
+		int w = cal.get(Calendar.DAY_OF_WEEK)-1;
+		if (w < 0)
+			w = 0;
+		if(w==0){
+			return 7;
+		}
+		return w;
+	}
+	public static int getCurDayOfMonth(Date dt){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dt);
+		int w = cal.get(Calendar.DAY_OF_MONTH);
+		if (w < 0)
+			w = 0;
+		/*if(w==0){
+			return 7;
+		}*/
+		return w;
+	}
+	public static int getCurMonthOfYear(Date dt){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dt);
+		int w = cal.get(Calendar.MONTH)+1;
+		if (w < 0)
+			w = 0;
+		/*if(w==0){
+			return 7;
+		}*/
+		return w;
 	}
 	
 	public static String getWeekOfDate(String dateStr) {
@@ -518,6 +540,8 @@ public class DateUtil {
 		int i = startAdd3.compareTo(end);
 		System.out.println(DateUtil.now());
 		System.out.println(formatDateShort(DateUtil.now()));*/
+
+		System.out.println(DateUtil.getCurMonthOfYear(DateUtil.addDays(new Date(),1)));
 	} 
 	
 	

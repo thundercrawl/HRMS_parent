@@ -12,12 +12,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class UploadUtil {
 	/*private String imagePath = "D://imageFile//"
@@ -114,14 +110,14 @@ public class UploadUtil {
 	}
 
 	private Map<String,String> generateFileName( String relId, String relType, String fileName, int w, int h) {
-		DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		/*DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		String formatDate = format.format(new Date());
-		int random = new Random().nextInt(10000);
+		int random = new Random().nextInt(10000);*/
 		/*int position = fileName.lastIndexOf(".");
 		String extension = fileName.substring(position);*/
 		Map<String,String> map = new HashMap<>();
-		map.put("fileName",relId+"_"+relType+"_"+formatDate + random + "_" + w + "_" + h );
-		map.put("resultName",relId+"_"+relType+"_"+formatDate + random);
+		map.put("fileName",relId+"_"+relType+"_"+ "_" + w + "_" + h );
+		map.put("resultName",relId+"_"+relType+"_");
 		return map;
 	}
 

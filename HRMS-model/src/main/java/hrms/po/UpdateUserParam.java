@@ -1,9 +1,11 @@
 package hrms.po;
 
+import java.io.Serializable;
+
 /**
  * Created by 谢益文 on 2017/4/5.
  */
-public class UpdateUserParam {
+public class UpdateUserParam implements Serializable{
 
     private Integer userID;
     private String userName;

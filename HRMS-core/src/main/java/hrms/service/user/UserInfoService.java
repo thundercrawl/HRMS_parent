@@ -64,4 +64,32 @@ public interface UserInfoService {
      * @return
      */
     public MsgVo resetPwd(Integer userID,CommonParams commonParams);
+
+    /**
+     * @describe 修改用户状态
+     * @author xieyw
+     * @param param
+     * @param commonParams
+     * @return
+     */
+    public MsgVo changeStatus(ChangeUserStatusParam param,CommonParams commonParams);
+
+
+    /**
+     * @describe 修改密码
+     * @author xieyw
+     * @param param
+     * @param commonParams
+     * @return
+     */
+    public MsgVo updatePwd(UpdateUserPwd param,CommonParams commonParams);
+
+
+    /**
+     * @describe 根据用户名查找匹配的用户
+     * @author xieyw
+     * @param userName
+     * @return userId  userName
+     */
+    public MsgVo findAllUserName(String userName);
 }

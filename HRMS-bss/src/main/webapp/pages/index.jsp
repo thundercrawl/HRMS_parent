@@ -12,7 +12,7 @@
 				<li><a href="filter/home">首页</a></li>
 			</ul>
 		</div>
-		<div id="page-body"></div>
+		<div id="page-body">欢迎回来</div>
 	</div>
 </div>
 <jsp:include page="common/common_footer.jsp"/>

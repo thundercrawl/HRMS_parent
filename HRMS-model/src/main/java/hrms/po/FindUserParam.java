@@ -1,9 +1,11 @@
 package hrms.po;
 
+import java.io.Serializable;
+
 /**
  * Created by 谢益文 on 2017/4/2.
  */
-public class FindUserParam {
+public class FindUserParam implements Serializable{
     private String userID;
     private String userName;
     private String userPhone;

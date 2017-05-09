@@ -37,7 +37,7 @@
 							<select name="selectOrg">
 								<%--<option selected="selected" value="1">最高部门</option>--%>
 								<c:if test="${!(empty orgInfos)}">
-									<c:forEach items="${orgInfos}" var="o">
+									<c:forEach items="${orgInfos }" var="o">
 										<option value="${o.orgId }">${o.orgName }</option>
 									</c:forEach>
 								</c:if>
@@ -155,15 +155,15 @@
 									<a href="javaScript:void(0);" class="btn btn-primary"
 										id="forUserSearch">查询</a>
 								</div>
-								<div class="input-group col-md-1 colLee" style="margin-right: 23px;">
-									<a class="btn btn-primary" class="btn btn-primary" id="userCreate">创建用户</a>
-								</div>
-								
-                                <div class="input-group col-md-1 colLee" >
-									<a href="javaScript:void(0);" class="btn btn-primary"
-										id="importUserExcel">批量导入</a>
-								</div>
-
+								<c:if test="${userInfo.isHR eq 1 }">
+									<div class="input-group col-md-1 colLee" style="margin-right: 23px;">
+										<a class="btn btn-primary" class="btn btn-primary" id="userCreate">创建用户</a>
+									</div>
+									<div class="input-group col-md-1 colLee" >
+										<a href="javaScript:void(0);" class="btn btn-primary"
+										   id="importUserExcel">批量导入</a>
+									</div>
+								</c:if>
 							</form>
 							<div id="exportCom"></div>
 							<input type="hidden" value="" id="companySearchCondition">
@@ -180,8 +180,4 @@
 </div>
 <script src="js/jquery/jquery.form.js"></script>
 <script src="js/handlebars-v2.0.0.js"></script>
-<!-- <script src="js/virtualMember/company.js"></script>
-<script src="js/virtualMember/createComMem.js"></script>  -->
 <script src="js/hrms-user/user.js"></script>
-<%--
-<script src="js/hrms-user/userSearch.js"></script>--%>

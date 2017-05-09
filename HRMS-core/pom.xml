@@ -11,7 +11,7 @@
 
     <name>HRMS-core</name>
     <artifactId>HRMS-core</artifactId>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
 
     <dependencies>
         <dependency>
@@ -34,13 +34,6 @@
             <artifactId>ezmorph</artifactId>
             <version>${ezmorph.version}</version>
         </dependency>
-        <!-- <dependency>
-            <groupId>com.baidu.yun</groupId>
-            <artifactId>bccs-api</artifactId>
-            <version>${bccsapi.version}</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/bccs-api-3.0.1.jar</systemPath>
-        </dependency> -->
     </dependencies>
 
 </project>

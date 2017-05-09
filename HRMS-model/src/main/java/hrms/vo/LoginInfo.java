@@ -20,6 +20,25 @@ public class LoginInfo implements Serializable{
     private Byte isFINANCE;
     private Byte isSM;
 
+    private Byte isSmOrHr;
+    private Byte isSmOrFin;
+
+    public Byte getIsSmOrHr() {
+        return isSmOrHr;
+    }
+
+    public void setIsSmOrHr(Byte isSmOrHr) {
+        this.isSmOrHr = isSmOrHr;
+    }
+
+    public Byte getIsSmOrFin() {
+        return isSmOrFin;
+    }
+
+    public void setIsSmOrFin(Byte isSmOrFin) {
+        this.isSmOrFin = isSmOrFin;
+    }
+
     private String joinTime;
 
 

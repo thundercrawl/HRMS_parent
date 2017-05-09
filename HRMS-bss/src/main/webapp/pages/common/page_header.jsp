@@ -22,7 +22,7 @@
 	<style type="text/css">
 	#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
 	</style>
-	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EsNhdTOg2zB7wAa39W2ffGw9"></script>
+	<%--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EsNhdTOg2zB7wAa39W2ffGw9"></script>--%>
 
     <!-- The styles -->
 
@@ -40,7 +40,7 @@
 
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" ></script>
     <![endif]-->
 
     <!-- The fav icon -->

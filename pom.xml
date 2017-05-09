@@ -14,6 +14,7 @@
         <module>HRMS-api</module>
         <module>HRMS-core</module>
         <module>HRMS-image</module>
+        <module>HRMS-schedule</module>
     </modules>
     <groupId>HRMS</groupId>
   <artifactId>HRMS_parent</artifactId>

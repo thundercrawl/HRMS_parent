@@ -10,6 +10,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,5 +79,45 @@ public class OrgMemberInfoRepository extends RepositorySupport<OrgMemberInfo> {
         detail.setOrgName(ParseUtil.parseString(o[1]));
         detail.setJobName(ParseUtil.parseString(o[2]));
         return detail;
+    }
+
+    /**
+     * @describe 查询部门下的所有正常状态的成员
+     * author xieyw
+     * @param orgId
+     * @return
+     */
+    public List<OrgMemberInfo> findOrgMembers(Integer orgId){
+        DetachedCriteria detachedCriteria= DetachedCriteria.forClass(OrgMemberInfo.class);
+        detachedCriteria.add(Restrictions.eq("orgId",orgId))
+                    .add(Restrictions.eq("status",Constant.STATUS_ABLE));
+        List<OrgMemberInfo> all = this.findAll(detachedCriteria);
+        if(all == null || all.size() < 1){
+            return null;
+        }
+        return all;
+    }
+
+    /**
+     * @describe 查询个人的职业经历
+     * @author xieyw
+     * @param userId
+     * @return
+     */
+    public List<String> getUserWorkMessage(Integer userId){
+        String sql = "select a.USER_NAME,b.ORG_NAME,c.JOB_NAME,c.JOIN_TIME " +
+                " from user_info a,org_info b,org_member_info c " +
+                " WHERE a.USER_ID=c.OPER_ID AND b.ORG_ID=c.ORG_ID AND c.USER_ID = ? order by c.JOIN_TIME asc";
+        List<Object> objects = this.executeSql(sql, userId);
+        if(objects == null || objects.size() < 1){
+            return null;
+        }
+        List<String> list = new ArrayList<>();
+        for(Object o : objects){
+            Object[] object = (Object[]) o;
+            String message = "您于"+object[3]+"加入"+object[1]+"担任"+object[2]+"一职"+",操作员为:"+object[0];
+            list.add(message);
+        }
+        return list;
     }
 }

@@ -3,11 +3,26 @@ package hrms.service.user.impl;
 import hrms.common.CommonParams;
 import hrms.common.Constant;
 import hrms.common.ErrorCode;
-import hrms.entity.*;
+import hrms.entity.OrgInfo;
+import hrms.entity.OrgManagerInfo;
+import hrms.entity.OrgMemberInfo;
+import hrms.entity.PictureInfo;
+import hrms.entity.RoleInfo;
+import hrms.entity.SysParamConfig;
+import hrms.entity.UserInfo;
+import hrms.entity.UserRoleInfo;
+import hrms.entity.UserSensitiveInfo;
 import hrms.model.OrgBaseInfo;
 import hrms.model.OrgMemberDetail;
 import hrms.model.RoleBaseInfo;
-import hrms.po.*;
+import hrms.model.UserBaseInfo;
+import hrms.po.ChangeUserStatusParam;
+import hrms.po.FindUserParam;
+import hrms.po.LoginParam;
+import hrms.po.RegisterUserInfo;
+import hrms.po.UpdateUserParam;
+import hrms.po.UpdateUserPwd;
+import hrms.po.UploadUserPhoto;
 import hrms.repository.impl.org.OrgInfoRepository;
 import hrms.repository.impl.org.OrgManagerInfoRepository;
 import hrms.repository.impl.org.OrgMemberInfoRepository;
@@ -18,7 +33,12 @@ import hrms.repository.impl.sys.SysParamConfigRepository;
 import hrms.repository.impl.user.UserInfoRepository;
 import hrms.repository.impl.user.UserSensitiveInfoRepository;
 import hrms.service.user.UserInfoService;
-import hrms.util.*;
+import hrms.util.DateUtil;
+import hrms.util.EnumerateUtil;
+import hrms.util.Md5Util;
+import hrms.util.ParseUtil;
+import hrms.util.StringUtil;
+import hrms.util.Validator;
 import hrms.vo.LoginInfo;
 import hrms.vo.MsgVo;
 import hrms.vo.ShowUserVo;
@@ -26,7 +46,13 @@ import hrms.vo.UserDetail;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by 谢益文 on 2017/3/20.
@@ -114,7 +140,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
             //密码为身份证号后6位
             String userCardNumber = registerUserInfo.getUserCardNumber();
-            userInfo.setUserPasswd(Md5Util.md5(userCardNumber.substring(userCardNumber.length()-7)));
+            userInfo.setUserPasswd(Md5Util.md5(userCardNumber.substring(userCardNumber.length()-6)));
 
             userInfo.setCreateTime(DateUtil.formatDate());
             userInfo.setCreateUserId(operId);
@@ -192,6 +218,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             userRoleInfo.setUserId(phoneMap.get(registerUserInfo.getUserPhone()).getUserId());
             userRoleInfo.setCreateUserId(operId);
             userRoleInfo.setStatus(Constant.ROLE_ABLE);
+            userRoleInfo.setCreateTime(DateUtil.formatDate());
             userRoleInfo.setRoleId(registerUserInfo.getRoleID());
             userRoleBatch.add(userRoleInfo);
         }
@@ -291,6 +318,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             for(UserRoleInfo userRoleInfo:userRoles){
                 if(Constant.ROLE_SYSTEM_MANAGER_VALUE == userRoleInfo.getRoleId().intValue()){
                     loginInfo.setIsSM((byte) 1);
+                    loginInfo.setIsHR((byte) 1);
+                    loginInfo.setIsFINANCE((byte) 1);
                 }
                 if(Constant.ROLE_HR_VALUE == userRoleInfo.getRoleId().intValue()){
                     loginInfo.setIsHR((byte) 1);
@@ -319,32 +348,25 @@ public class UserInfoServiceImpl implements UserInfoService {
     public MsgVo findUsers(FindUserParam param, CommonParams commonParams) {
         Integer userID = commonParams.getUserId();
         UserInfo oper = userInfoRepository.findByUserId(userID);
+        OrgMemberDetail memberDetail = orgMemberInfoRepository.findOrg(oper.getUserId());
+        if(memberDetail != null && memberDetail.getOrgID().intValue() != commonParams.getOrgId()){
+            return MsgVo.fail(ErrorCode.NO_AUTH);
+        }
 
-        boolean isOrgManager = false;
-        boolean isHR = false;
-        boolean isSM = false;
+//        boolean isOrgManager = false;
 
         if(oper == null){
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
 
-        List<UserRoleInfo> userRoles = userRoleInfoRepository.findUserRole(userID);
+        boolean isSMOrHR= userRoleInfoRepository.isHROrSM(userID);
 
-        for(UserRoleInfo userRole:userRoles){
-            if(userRole.getRoleId() == Constant.ROLE_SYSTEM_MANAGER_VALUE ){
-                isSM = true;
-                break;
-            }
-            if(userRole.getRoleId() == Constant.ROLE_HR_VALUE){
-                isHR = true;
-            }
-        }
-
-        if(!isSM && ! isHR){
+       /* if(! isSMOrHR ){
             OrgMemberDetail orgDetail = orgMemberInfoRepository.findOrg(oper.getUserId());
-            isOrgManager = orgManagerInfoRepository.isManager(oper.getUserId(), orgDetail.getOrgID());
-        }
-
+            if(orgDetail != null){
+                isOrgManager = orgManagerInfoRepository.isManager(oper.getUserId(), orgDetail.getOrgID());
+            }
+        }*/
 
         //获取数据
         List<UserDetail> userDetails = new ArrayList<>();
@@ -357,14 +379,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         ShowUserVo voParam = new ShowUserVo();
         voParam.setUserInfos(userDetails);
 
-        //设置部门
-        List<OrgBaseInfo> allOrg = orgInfoRepository.findBaseAllOrg();
-        voParam.setOrgInfos(allOrg);
+        List<OrgBaseInfo> baseAllOrg = orgInfoRepository.findBaseAllOrg();
+        voParam.setOrgInfos(baseAllOrg);
 
-        List<RoleBaseInfo> all = roleInfoRepository.findBaseAll();
-
-        voParam.setRoleInfos(all);
-
+        List<RoleBaseInfo> baseAllRole = roleInfoRepository.findBaseAll();
+        voParam.setRoleInfos(baseAllRole);
         //没有结果集
         if(userDetails == null || userDetails.size() < 1){
             map.put("result",voParam);
@@ -376,58 +395,69 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         //设置权限
-        Map<Integer,Integer> userRole = userRoleInfoRepository.findUserRole(userIds);
-        if(userRole != null && userRole.size() > 0){
+        if(isSMOrHR){
             for(UserDetail userDetail:voParam.getUserInfos()){
-
-                if(userDetail.getUserID().intValue() == commonParams.getUserId().intValue()){
-                    userDetail.setIsMine((byte) 1);
-                }else{
-                    userDetail.setIsMine((byte) 0);
-                }
-
-                if(isSM){
-                    userDetail.setHasRole((byte) 1);
-                    continue;
-                }
-                Integer roleId = userRole.get(userDetail.getUserID());
-                if(roleId.intValue() == Constant.ROLE_SYSTEM_MANAGER_VALUE){
-                    userDetail.setHasRole((byte) 0);
-                }
-                else if(roleId.intValue() == Constant.ROLE_HR_VALUE){
-                    if(isSM ){
+                userDetail.setHasRole((byte) 1);
+            }
+        }
+        /*else{
+            if(isOrgManager){
+                for(UserDetail userDetail:voParam.getUserInfos()){
+                    if(userDetail.getOrgID().intValue() == memberDetail.getOrgID().intValue()){
                         userDetail.setHasRole((byte) 1);
-                    }else{
-                        userDetail.setHasRole((byte) 0);
                     }
-                }
-                else if(roleId.intValue() == Constant.ROLE_WORKER_VALUE ||
-                        roleId.intValue() == Constant.ROLE_FINANCE_VALUE){
-                    if(isHR || isSM){
-                        userDetail.setHasRole((byte) 1);
-                    }else{
-                        userDetail.setHasRole((byte) 0);
-                    }
-                }else{
-                    userDetail.setHasRole((byte) 0);
                 }
             }
         }
-
+*/
         map.put("result",voParam);
         return MsgVo.success(map);
     }
 
     @Override
     public MsgVo findUserDetail(Integer userID, CommonParams commonParams) {
+
+        Integer operId = commonParams.getUserId();
+        UserInfo oper = userInfoRepository.findByUserId(operId);
+
+        if(oper == null){
+            return MsgVo.fail(ErrorCode.USER_EMPTY);
+        }
+
+        UserInfo searchUserInfo = userInfoRepository.findByUserId(userID);
+        if(searchUserInfo == null || searchUserInfo.getUserStatus().byteValue() == Constant.STATUS_DISABLE){
+            return MsgVo.fail(ErrorCode.USER_EMPTY);
+        }
+
+        boolean isSMOrHR= userRoleInfoRepository.isHROrSM(operId);
+
         UserDetail userDetail = new UserDetail();
         if(userID.intValue() == commonParams.getUserId()){
-            userDetail.setIsMine((byte) 1);
             userDetail = userInfoRepository.findUserDetail(userID,true);
+            userDetail.setIsMine((byte) 1);
+            userDetail.setHasRole((byte) 1);
         }else{
+            if(isSMOrHR){
+                userDetail = userInfoRepository.findUserDetail(userID,true);
+                userDetail.setHasRole((byte) 1);
+            }else{
+                userDetail = userInfoRepository.findUserDetail(userID,false);
+                userDetail.setHasRole((byte) 0);
+            }
             userDetail.setIsMine((byte) 0);
-            userDetail = userInfoRepository.findUserDetail(userID,false);
         }
+
+        /*职业信息*/
+
+        UserSensitiveInfo sensitiveInfo = userSensitiveInfoRepository.findByID(userID);
+        UserInfo createUser = userInfoRepository.findByUserId(searchUserInfo.getCreateUserId());
+
+        List<String> workMessages = new ArrayList<>();
+        workMessages.add(searchUserInfo.getUserName()+",您于"+searchUserInfo.getCreateTime()+"加入"+Constant.COMPANY_NAME+",您的实际入职时间为："+sensitiveInfo.getWorkTime()+"操作员为："+createUser.getUserName());
+
+        List<String> userWorkMessage = orgMemberInfoRepository.getUserWorkMessage(userID);
+        workMessages.addAll(userWorkMessage);
+        userDetail.setWorkMessages(workMessages);
 
         Map<String,UserDetail> map = new HashMap<>();
         map.put("result",userDetail);
@@ -553,5 +583,52 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoRepository.save(userInfo);
 
         return MsgVo.success(null);
+    }
+
+    @Override
+    public MsgVo changeStatus(ChangeUserStatusParam param, CommonParams commonParams) {
+        boolean hrOrSM = userRoleInfoRepository.isHROrSM(commonParams.getUserId());
+        if(!hrOrSM){
+            return MsgVo.error(ErrorCode.ONLY_HR);
+        }
+        UserInfo userInfo = userInfoRepository.findByUserId(param.getUserID());
+        if(userInfo == null){
+            return MsgVo.error(ErrorCode.USER_EMPTY);
+        }
+        if(! StringUtil.isEmpty(param.getWorkStatus())){
+            userInfo.setWorkStatus(ParseUtil.parseByte(param.getWorkStatus()));
+        }
+        if(! StringUtil.isEmpty(param.getUserStatus())){
+            userInfo.setUserStatus(ParseUtil.parseByte(param.getUserStatus()));
+        }
+
+        userInfoRepository.save(userInfo);
+        return MsgVo.success(null);
+    }
+
+    @Override
+    public MsgVo updatePwd(UpdateUserPwd param, CommonParams commonParams) {
+        UserInfo userInfo = userInfoRepository.findByUserId(commonParams.getUserId());
+        if(userInfo == null){
+            return MsgVo.error(ErrorCode.USER_EMPTY);
+        }
+        if(! userInfo.getUserPasswd().equals(Md5Util.md5(param.getOldPwd()))){
+            return MsgVo.error(ErrorCode.USER_PASSWORD_ERROR);
+        }
+        userInfo.setUserPasswd(Md5Util.md5(param.getNewPwd()));
+        userInfoRepository.save(userInfo);
+        return MsgVo.success(null);
+    }
+
+    @Override
+    public MsgVo findAllUserName(String userName) {
+        List<UserBaseInfo> allUserName = userInfoRepository.findAllUserName(userName);
+        Map map = new HashMap();
+
+        if(allUserName == null){
+            return MsgVo.error(ErrorCode.RESULT_EMPTY);
+        }
+        map.put("result",allUserName);
+        return MsgVo.success(map);
     }
 }
