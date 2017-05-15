@@ -112,4 +112,22 @@ public class BillCountVo {
     public void setMonth_12(BillCountDetail month_12) {
         this.month_12 = month_12;
     }
+
+    @Override
+    public String toString() {
+        return "BillCountVo{" +
+                "month_1=" + month_1 +
+                ", month_2=" + month_2 +
+                ", month_3=" + month_3 +
+                ", month_4=" + month_4 +
+                ", month_5=" + month_5 +
+                ", month_6=" + month_6 +
+                ", month_7=" + month_7 +
+                ", month_8=" + month_8 +
+                ", month_9=" + month_9 +
+                ", month_10=" + month_10 +
+                ", month_11=" + month_11 +
+                ", month_12=" + month_12 +
+                '}';
+    }
 }

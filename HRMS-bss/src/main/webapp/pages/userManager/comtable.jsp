@@ -47,7 +47,7 @@
 						<c:if test="${os.workStatus eq 1 }">
 							<input type="button"  data-userID="${os.userID}" class="btn  btn-primary lockUser" value="禁用" >
 						</c:if>
-						<c:if test="${! empty os.orgID}">
+						<c:if test="${os.orgID ne 0}">
 							<input type="button" data-userID="${os.userID}"  data-orgId="${os.orgID}" class="btn btn-primary deleteFromOrg" value="移出部门"  >
 						</c:if>
 						<input type="button" data-userID="${os.userID}" class="btn btn-primary deleteUser" value="删除"  >

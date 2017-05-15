@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"%>
 <!-- topbar starts -->
 <div id="open-win" class="open-win" style="display:none">
@@ -50,7 +51,6 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-       
 			    <li><a class="ajax-link mytop" href="filter/personal/showAdminPwd" id="userinfo" >个人资料</a></li>
 				<%--<li><a class="ajax-link mytop" href="javaScript:void(0);" id="updatePwd">修改密码</a></li>--%>
 				<li><a calss="ajax-link mytop" href="login/logout" id="logout">注销</a></li>
@@ -76,22 +76,31 @@
 						<li><a class="ajax-link" href="filter/sign/getAllSign"><span> 考勤管理</span></a></li>
 						<li class="accordion"><a href="#"><span>请假出差管理</span></a>
 							<ul class="nav nav-pills nav-stacked">
-								<li><a class="ajax-link" href="filter/leave/getAllLeaves">请假管理</a>
-								<li><a class="ajax-link" href="filter/leave/getAllBusiness">出差管理</a>
+								<li><a class="ajax-link" href="filter/leave/getAllLeaves">请假管理</a></li>
+								<li><a class="ajax-link" href="filter/leave/getAllBusiness">出差管理</a></li>
 								<li><a class="ajax-link" href="filter/leave/getAllApproves">审批管理</a></li>
 							</ul>
 						</li>
 						<li class="accordion"><a href="#"><span>薪资管理</span></a>
 							<ul class="nav nav-pills nav-stacked">
-								<li><a class="ajax-link" href="/filter/wage/getAllBills">个人薪资</a>
-								<li><a class="ajax-link" href="/filter/wage/getAllWages">财务管理</a>
+								<li><a class="ajax-link" href="/filter/wage/getAllBills">个人薪资</a></li>
+								<c:if test="${userInfo.isFINANCE eq 1}">
+									<li><a class="ajax-link" href="/filter/wage/getAllWages">财务管理</a></li>
+								</c:if>
+								<c:if test="${userInfo.isFINANCE eq 1}">
 								<li><a class="ajax-link" href="/filter/wage/getAllFinanceBills">账单管理</a></li>
+								</c:if>
 							</ul>
 						</li>
 						<li class="accordion"><a href="#"><span>统计数据</span></a>
 							<ul class="nav nav-pills nav-stacked">
-								<li><a class="ajax-link" href="/filter/data/getSign">考勤统计</a>
-								<li><a class="ajax-link" href="/filter/data/getBill">财务统计</a>
+								<c:if test="${userInfo.isHR eq 1}">
+									<li><a class="ajax-link" href="/filter/data/getSign">考勤统计</a></li>
+								</c:if>
+								<c:if test="${userInfo.isFINANCE eq  1}">
+									<li><a class="ajax-link" href="/filter/data/getBill">财务统计</a></li>
+								</c:if>
+								<%--<li><a class="ajax-link" href="javaScript:void(0);">财务统计</a>--%>
 							</ul>
 						</li>
 					</ul>

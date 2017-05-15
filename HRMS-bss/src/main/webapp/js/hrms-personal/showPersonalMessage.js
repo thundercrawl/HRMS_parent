@@ -17,39 +17,41 @@
 
 		var flag = true;
 		
-		$("#user-info-btn").hide();	
-		$(".btn-userc").show();			
+		$(".btn-userc").show();
 		$(".btn-userc").click(function(){
 			/*$(".user-form > div > input").removeAttr("readonly");*/
+
+            $('#dataOfBirth').datetimepicker({
+                format: 'Y-m-d',
+                autoclose: true,
+                minView: 0,
+                linkField: "dataOfBirth",
+                linkFormat: "Y-m-d",
+                minuteStep:1,
+                inputMask: true
+            });
+
 			$('#truename').removeAttr("readonly");
 			$('#telephone').removeAttr("readonly");
-			$('#sex').removeAttr("readonly");
-			$('#dataOfBirth').removeAttr("readonly");
-			$('#userEamil').removeAttr("readonly");
+            $('#sex').removeAttr("readonly");
+            $('#userEamil').removeAttr("readonly");
+            $('.user-form > div > p').show();
 			$(".user-form >div >input:eq(0)").attr("readonly","readonly");
-			$("#user-info-btn").show();
 		})
+        $('#dataOfBirth').on("blur",function () {
+            $(this).datetimepicker("remove")
+        })
 		$(".user-info #btn-users").click(function(){
 			$(".user-info >div >input").attr("readonly","readonly");
-			$("#user-info-btn").hide();
 		})
 		$("#btn-userg").click(function(){
 			$(".user-form1 >div >input").attr("readonly","readonly");
-			$("#user-info-btn").hide();
 			$(".user-form >div >span").hide();
+            $('.user-form >div >p').hide();
 			showInfo();
 		})
 		$(".user-form > div >span").hide();
 		$(".user-form1 :input").blur(function(){
-			var regname = /^([\u4e00-\u9fa5]+|([a-zA-Z]+\s?)+)$/;
-			if($(this).is("#truename")){
-				if(!regname.test(this.value)){
-					$(this).siblings("span").show();
-					$('#namespan').html("<font color=\"#FF6A6A\" size=\"2\">请输入正确的姓名</font>");
-				}else{
-					$(this).siblings("span").hide();
-				}
-			}
 			var regphone = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/;
 			if($(this).is("#telephone")){
 				if(!regphone.test(this.value)){
@@ -110,19 +112,26 @@
 
 		//修改个人信息，不修改
 		$("#btn-users").click(function(){
+			$('.user-form > div > p').hide();
+            var userId = $("#btn-users").attr("data-userID")
             if(flag) {
                 $.ajax({
                     type: 'POST',
-                    url: "filter/user/updateCurrent",
+                    url: "filter/user/updateUser",
                     data: {
-                        userName: $("#truename").val(),
-                        userPhone: $("#telephone").val(),
-                        userSex: sexInput,
-                        birthOfDate: $("#birthOfDate").val(),
-                        userEmail: $("#userEmail").val()
+                    	"userID":userId,
+                        "userName": $("#truename").val(),
+                        "userPhone": $("#telephone").val(),
+                        "userSex": sexInput,
+                        "birthOfDate": $("#birthOfDate").val(),
+                        "userEmail": $("#userEmail").val()
                     },
                     dataType: 'json',
                     success: function (data) {
+                    	if(data.code == "0000")
+                    	alert("请求成功")
+						else
+							alert("请求失败："+data.message);
                     }
                 });
 

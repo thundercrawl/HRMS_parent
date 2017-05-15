@@ -7,6 +7,8 @@
 		<tr>
 			<th>审批流水号</th>
 			<th>提交人</th>
+			<th>请假开始时间</th>
+			<th>请假结束时间</th>
 			<th>提交时间</th>
 			<th>审核人</th>
 			<th>审核时间</th>
@@ -20,6 +22,8 @@
 			<tr>
 				<td class="center">${os.leaveCode}</td>
 				<td class="center">${os.userName}</td>
+				<td class="center">${os.startTime}</td>
+				<td class="center">${os.endTime}</td>
 				<td class="center">${os.upTime}</td>
 				<td class="center"><a href="javaScript:void(0);" data-param="${os.approveUserName}" class="searchApproveUser">${os.approveUserName}</a></td>
 				<td class="center">${os.approveTime}</td>

@@ -34,11 +34,11 @@
 						<label for="userOrg">用户部门:</label>
 							<%--</label> <input type="text"
 																										  id="userOrgInput" />--%>
-							<select name="selectOrg">
+							<select name="selectOrg" id="orgNameIn">
 								<%--<option selected="selected" value="1">最高部门</option>--%>
 								<c:if test="${!(empty orgInfos)}">
 									<c:forEach items="${orgInfos }" var="o">
-										<option value="${o.orgId }">${o.orgName }</option>
+										<option value="${o.orgName }">${o.orgName }</option>
 									</c:forEach>
 								</c:if>
 							</select>

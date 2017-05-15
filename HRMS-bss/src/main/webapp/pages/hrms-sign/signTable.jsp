@@ -28,7 +28,9 @@
 </table>
 
 <jsp:include page="../common/paginator.jsp">
-	<jsp:param value="filter/sign/searchSign" name="url"/>
+	<jsp:param value="filter/sign/searchSign?userName=${searchParam.userName}&orgName=${searchParam.orgName}
+&startTime=${searchParam.startTime}&endTime=${searchParam.endTime}&isLater=${searchParam.isLater}
+&isEarly=${searchParam.isEarly}" name="url"/>
 	<jsp:param value="tid" name="loadCmp"/>
 </jsp:include>
 </div>

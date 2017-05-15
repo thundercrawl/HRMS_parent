@@ -6,6 +6,8 @@
 		<tr>
 			<th>审批流水号</th>
 			<th>提交人</th>
+			<th>开始时间</th>
+			<th>结束时间</th>
 			<th>提交时间</th>
 			<th>审核状态</th>
 			<th>事由</th>
@@ -18,6 +20,8 @@
 			<tr>
 				<td class="center" class="showApprove" data-leaveId="${os.leaveId}">${os.leaveCode}</td>
 				<td class="center">${os.userName}</td>
+				<td class="center">${os.startTime}</td>
+				<td class="center">${os.endTime}</td>
 				<td class="center">${os.upTime}</td>
 				<td class="center">待审核</td>
 				<td class="center">${os.leaveContent}</td>

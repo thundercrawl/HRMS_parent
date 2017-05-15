@@ -207,6 +207,10 @@
                     },
                     dataType: 'json',
                     success: function (data) {
+                    	if(data.code == "0000")
+                    		alert("请求成功");
+                    	else
+                    		alert("请求失败："+data.message);
                     }
                 });
 
@@ -233,7 +237,6 @@
 				$('#span3').show();
 				return;
 			}
-			debugger
 			if($("#password").val().length==0||$("#new-password").val().length==0||$("#new-password1").val().length==0){
 				return;
 			}
@@ -244,8 +247,8 @@
 				type : 'POST',
 				url :"filter/personal/updatePwd",
 				data : {
-					oldPsw : $("#password").val(),
-					newpassword : $("#new-password").val(),
+					"oldPwd" : $("#password").val(),
+					"newPwd" : $("#new-password").val()
 				},
 				dataType : 'json',
 				success : function(data) {
@@ -258,6 +261,7 @@
 							$(".save-succ").hide();
 						},3000);
 					} else {
+                       $('#btn-users2').attr("disabled","disabled");
 						$('#alertInfo').css('background','#98D1F5');
 						$('#alertInfo').text('密码保存成功');
 						$(".save-succ").show();	
@@ -274,10 +278,15 @@
 				}
 				});
 		});
-		
-		$(".header-title").find("li").eq(1).click(function(){
+		$('#btn-userg2').click(function () {
+			$('#password').val("");
+			$('#new-password').val("");
+			$('#new-password1').val("");
+        })
+
+		/*$(".header-title").find("li").eq(1).click(function(){
 			$("#btn-users2").addClass("btn-user");
-		})
+		})*/
         $("#alterPwd").on('click',function () {
             $('.user-form2').show();
             $('.user-form1').hide();

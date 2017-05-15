@@ -402,4 +402,16 @@ public class Validator {
 		}
 		return true;
 	}
+
+
+	public static void main(String[] args){
+		System.out.println(StringUtil.isEmpty("IT Org"));
+		System.out.println(StringUtil.isEmpty("才子佳人"));
+		System.out.println(!Validator.isIDCard("32223332233212"));
+		System.out.println(! Validator.isEmail("352344@chyx.com"));
+		System.out.println((1 != 2 && 1 != 1));
+		System.out.println((0 != 0 && 0 != 1));
+		System.out.println(! Validator.isTimeNoSecond("1909-11-22"));
+		System.out.println(! Validator.isTimeNoSecond("1909-11-22"));
+	}
 }

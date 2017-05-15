@@ -10,6 +10,7 @@ import hrms.repository.impl.user.UserInfoRepository;
 import hrms.repository.impl.wage.UserWageBillDetailRepository;
 import hrms.repository.impl.wage.UserWageBillRepository;
 import hrms.util.DateUtil;
+import hrms.util.ParseUtil;
 import hrms.util.StringUtil;
 import hrms.vo.BillCountDetail;
 import hrms.vo.BillCountVo;
@@ -266,15 +267,13 @@ public class DataCountServiceImpl implements DataCountService {
 
         Date currentDay = DateUtil.parse(startOfYear);
 
-
-
         while(currentDay.before(DateUtil.parse(endOfYear))){
             BigDecimal baseWage = new BigDecimal(0);
             BigDecimal subsidy = new BigDecimal(0);
             BigDecimal subsidyIns = new BigDecimal(0);
             BigDecimal leaveDeduction = new BigDecimal(0);
             BigDecimal businessSubsidy = new BigDecimal(0);
-            BigDecimal signSubsidy = new BigDecimal(0);
+            BigDecimal signDeduction = new BigDecimal(0);
             BigDecimal subBill = new BigDecimal(0);
             Byte hasBill = 0 ;
 
@@ -288,23 +287,23 @@ public class DataCountServiceImpl implements DataCountService {
             }else{
                 List<UserWageBill> bills = billMap.get(month);
                 for(UserWageBill bill:bills){
-                    baseWage.add(bill.getBaseWage());
-                    subsidy.add(bill.getSubsidy());
-                    subsidyIns.add(bill.getSubsidyIns());
-                    leaveDeduction.add(bill.getLeaveDeduction());
-                    businessSubsidy.add(bill.getBusinessSubsidy());
-                    signSubsidy.add(bill.getSignDeduction());
-                    subBill.add(bill.getSubBill());
+                    baseWage = baseWage.add(bill.getBaseWage());
+                    subsidy = subsidy.add(bill.getSubsidy());
+                    subsidyIns = subsidyIns.add(bill.getSubsidyIns());
+                    leaveDeduction = leaveDeduction.add(bill.getLeaveDeduction());
+                    businessSubsidy = businessSubsidy.add(bill.getBusinessSubsidy());
+                    signDeduction = signDeduction.add(bill.getSignDeduction());
+                    subBill = subBill.add(bill.getSubBill());
                 }
 
 
-                detail.setSubsidyIns(subsidyIns);
-                detail.setSubsidy(subsidy);
-                detail.setBaseWage(baseWage);
-                detail.setBusinessSubsidy(businessSubsidy);
-                detail.setLeaveDeduction(leaveDeduction);
-                detail.setSignSubsidy(signSubsidy);
-                detail.setSubBill(subBill);
+                detail.setSubsidyIns(ParseUtil.parseString(subsidyIns));
+                detail.setSubsidy(ParseUtil.parseString(subsidy));
+                detail.setBaseWage(ParseUtil.parseString(baseWage));
+                detail.setBusinessSubsidy(ParseUtil.parseString(businessSubsidy));
+                detail.setLeaveDeduction(ParseUtil.parseString(leaveDeduction));
+                detail.setSignDeduction(ParseUtil.parseString(signDeduction));
+                detail.setSubBill(ParseUtil.parseString(subBill));
                 detail.setHasBill((byte) 1);
             }
 

@@ -21,11 +21,11 @@
 					  method="post" action="" style="margin-left: 25px;margin-bottom: 20px"  enctype="multipart/form-data">
 					<div>
 						<label>请假开始时间:</label>
-						<input type="text" name="start_time" id="startTime" >
+						<input type="text" name="start_time" id="startTime1" >
 					</div>
 					<div>
 						<label>请假结束时间:</label>
-						<input type="text"  name="end_time" id="endTime" >
+						<input type="text"  name="end_time" id="endTime1" >
 					</div>
 					<div>
 						<label>请假事由:</label> <input type="text"
@@ -53,7 +53,7 @@
 								<div class="input-group col-md-3"
 									 style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">审批状态</span>
-									<select id="leaveStatus" class="form-control" placeholder="审批状态">
+									<select class="form-control" placeholder="审批状态" id="leaveStatusIn">
 										<option value="0" selected="selected">全选</option>
 										<option value="1">待审核</option>
 										<option value="2">审核通过</option>

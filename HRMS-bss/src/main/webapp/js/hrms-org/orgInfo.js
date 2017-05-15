@@ -36,7 +36,7 @@ $(function(){
                     if(data.code != "0000"){
                         alert("创建失败:"+data.message);
                     }else {
-                        $("#transfer-alert2").dialog('destroy');
+                        $('#transfer-createOrg').dialog('destroy');
                         alert("创建成功");
                         $('#forOrgSearch').click();
                     }

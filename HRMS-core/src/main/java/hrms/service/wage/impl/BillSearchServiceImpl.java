@@ -116,7 +116,13 @@ public class BillSearchServiceImpl implements BillSearchService {
         for(Integer userId:integers){
             List<UserWageBill> userWageBills = billMap.get(userId);
             for(UserWageBill wageBill:userWageBills){
-                BillDetail detail = userMap.get(userId);
+                BillDetail detail = new BillDetail();
+
+                detail.setUserId(userId);
+                detail.setUserName(userMap.get(userId).getUserName());
+                detail.setUserPhone(userMap.get(userId).getUserPhone());
+                detail.setOrgName(userMap.get(userId).getOrgName());
+                detail.setJobName(userMap.get(userId).getJobName());
 
                 detail.setBillId(wageBill.getBillId());
                 detail.setBillDate(wageBill.getBillDate());

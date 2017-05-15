@@ -21,6 +21,7 @@ import hrms.repository.impl.role.UserRoleInfoRepository;
 import hrms.repository.impl.user.UserInfoRepository;
 import hrms.service.org.OrgInfoService;
 import hrms.util.DateUtil;
+import hrms.util.StringUtil;
 import hrms.vo.FindOrgVo;
 import hrms.vo.MsgVo;
 import hrms.vo.OrgInfoVo;
@@ -165,11 +166,15 @@ public class OrgInfoServiceImpl implements OrgInfoService {
         if(orgInfo == null || orgInfo.getOrgStatus() == Constant.STATUS_DISABLE){
             return MsgVo.fail(ErrorCode.PARENT_ORG_EMPTY);
         }
-        OrgInfo orgByName = orgInfoRepository.findOrgByName(orgParam.getOrgName());
-        if(orgByName != null){
-            return MsgVo.fail(ErrorCode.NAME_REPEAT);
+
+        if(! StringUtil.isEmpty(orgParam.getOrgName()) && orgParam.getOrgName().equals(orgInfo.getOrgName())){
+            OrgInfo orgByName = orgInfoRepository.findOrgByName(orgParam.getOrgName());
+            if(orgByName != null){
+                return MsgVo.fail(ErrorCode.NAME_REPEAT);
+            }
         }
-        if(orgParam.getParentOrgId() != null && orgParam.getParentOrgId().intValue() == orgByName.getOrgId().intValue()){
+
+        if(orgParam.getParentOrgId() != null && orgParam.getParentOrgId().intValue() == orgInfo.getOrgId().intValue()){
             return MsgVo.fail(ErrorCode.PARENT_ORG_ERROR);
         }
         if(orgParam.getParentOrgId() != null && orgParam.getParentOrgId().intValue() == 0){

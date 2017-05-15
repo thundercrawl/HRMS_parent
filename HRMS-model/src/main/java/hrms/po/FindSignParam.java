@@ -74,4 +74,16 @@ public class FindSignParam implements Serializable{
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    @Override
+    public String toString() {
+        return "FindSignParam{" +
+                "startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", isLater=" + isLater +
+                ", isEarly=" + isEarly +
+                '}';
+    }
 }

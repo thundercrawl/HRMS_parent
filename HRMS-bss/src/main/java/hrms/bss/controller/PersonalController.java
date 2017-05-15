@@ -9,7 +9,6 @@ import hrms.vo.UserDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -18,7 +17,6 @@ public class PersonalController extends BaseController{
 
     private static final int pageSize = 5;
 
-    @ResponseBody
     @RequestMapping(value = "/updatePwd")
     public ModelAndView updatePwd(UpdateUserPwd param, ModelMap modelMap){
         String url = "userInfo/updatePwd";
@@ -36,9 +34,9 @@ public class PersonalController extends BaseController{
         modelMap.put("message",postJson.getString("message"));
 
         return new ModelAndView("login",modelMap);
+//        return JSON.toJSONString(modelMap);
     }
 
-    @ResponseBody
     @RequestMapping(value = "/personalMessage")
     public ModelAndView personalMessage(Integer userId, ModelMap modelMap){
         String url = "userInfo/findUserDetail";
@@ -52,7 +50,7 @@ public class PersonalController extends BaseController{
 
         FindUserDetailParam param = new FindUserDetailParam();
         if(userId == null){
-            param.setUserID(1);
+            param.setUserID(getCurrentUser().getUserId());
         }else{
             param.setUserID(userId);
         }
@@ -65,7 +63,7 @@ public class PersonalController extends BaseController{
             System.err.println(data);
             if(data!=null){
                 UserDetail userDetail = JSONObject.parseObject(data.get("result").toString(),UserDetail.class);
-                modelMap.put("userInfo", userDetail);
+                modelMap.put("userDetail", userDetail);
             }
 
         }
@@ -74,7 +72,6 @@ public class PersonalController extends BaseController{
         return new ModelAndView("hrms-personal/showPersonalMessage",modelMap);
     }
 
-    @ResponseBody
     @RequestMapping(value = "/showAdminPwd")
     public ModelAndView showAdminPwd(ModelMap modelMap){
         String url = "userInfo/findUserDetail";
@@ -87,7 +84,7 @@ public class PersonalController extends BaseController{
         commonParams.setOrgId(getCurrentUser().getOrgId());
 
         FindUserDetailParam param = new FindUserDetailParam();
-        param.setUserID(1);
+        param.setUserID(getCurrentUser().getUserId());
 
         JSONObject postJson = BssReturnJson.postJson(url, param, commonParams, JSONObject.class);
 
@@ -97,7 +94,7 @@ public class PersonalController extends BaseController{
             System.err.println(data);
             if(data!=null){
                 UserDetail userDetail = JSONObject.parseObject(data.get("result").toString(),UserDetail.class);
-                modelMap.put("userInfo", userDetail);
+                modelMap.put("userDetail", userDetail);
             }
 
         }

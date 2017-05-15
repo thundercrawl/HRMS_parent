@@ -1,5 +1,6 @@
 package hrms.bss.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.model.common.Paginator;
@@ -190,7 +191,7 @@ public class WageController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/findWageDetail")
-    public Grid findWageDetail(Integer userId, ModelMap model){
+    public String findWageDetail(Integer userId, ModelMap model){
         String url = "wage/findWageDetail";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -218,12 +219,12 @@ public class WageController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value = "/updateUserWage")
-    public Grid updateUserWage(UpdateUserWageParam param, ModelMap model){
+    public String updateUserWage(UpdateUserWageParam param, ModelMap model){
         String url = "wage/updateUserWage";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -240,7 +241,7 @@ public class WageController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 
@@ -294,7 +295,7 @@ public class WageController extends BaseController{
 
     @RequestMapping(value = "/exportInfo")
     @ResponseBody
-    public Grid exportInfo(HttpServletRequest request) throws Exception{
+    public String exportInfo(HttpServletRequest request) throws Exception{
         Grid grid=new Grid();
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
                 request.getSession().getServletContext());
@@ -376,7 +377,7 @@ public class WageController extends BaseController{
             grid.setMessage("fail");
             e.printStackTrace();
         }
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 }

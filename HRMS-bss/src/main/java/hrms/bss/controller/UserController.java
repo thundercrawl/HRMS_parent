@@ -1,5 +1,6 @@
 package hrms.bss.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.common.Constant;
@@ -102,7 +103,7 @@ public class UserController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/resetPwd")
-    public Grid resetPwd(Integer userID, ModelMap modelMap){
+    public String resetPwd(Integer userID, ModelMap modelMap){
 
         String url = "userInfo/resetPwd";
 
@@ -119,12 +120,12 @@ public class UserController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value = "/updateUser")
-    public Grid updateUser(UpdateUserParam param, ModelMap modelMap){
+    public String updateUser(UpdateUserParam param, ModelMap modelMap){
 
         String url = "userInfo/updateUser";
 
@@ -141,7 +142,7 @@ public class UserController extends BaseController{
             Grid grid = new Grid();
             grid.setCode("1111");
             grid.setMessage("时间格式错误：yyyyMMdd");
-            return grid;
+            return JSON.toJSONString(grid);
         }
 
         JSONObject postJson = BssReturnJson.postJson(url, param, commonParams, JSONObject.class);
@@ -150,13 +151,13 @@ public class UserController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 
     @ResponseBody
     @RequestMapping(value = "/updateCurrent")
-    public Grid updateCurrent(UpdateUserParam param, ModelMap modelMap){
+    public String updateCurrent(UpdateUserParam param, ModelMap modelMap){
 
         String url = "userInfo/updateUser";
 
@@ -175,7 +176,7 @@ public class UserController extends BaseController{
             Grid grid = new Grid();
             grid.setCode("1111");
             grid.setMessage("时间格式错误：yyyyMMdd");
-            return grid;
+            return JSON.toJSONString(grid);
         }
 
         JSONObject postJson = BssReturnJson.postJson(url, param, commonParams, JSONObject.class);
@@ -184,12 +185,12 @@ public class UserController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value = "/createUser")
-    public Grid createUser(RegisterUserInfo registerUserInfo,ModelMap modelMap){
+    public String createUser(RegisterUserInfo registerUserInfo,ModelMap modelMap){
         String url = "userInfo/saveUser";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -210,12 +211,12 @@ public class UserController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value = "/changeUserStatus")
-    public Grid changeUserStatus(ChangeUserStatusParam param,ModelMap modelMap){
+    public String changeUserStatus(ChangeUserStatusParam param,ModelMap modelMap){
         String url = "userInfo/changeStatus";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -231,28 +232,31 @@ public class UserController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value = "/deleteUser")
-    public Grid deleteUser(Integer userID,ModelMap modelMap){
+    public String deleteUser(Integer userID,ModelMap modelMap){
         ChangeUserStatusParam param = new ChangeUserStatusParam();
         param.setUserStatus(Constant.STATUS_DISABLE+"");
         param.setUserID(userID);
         return changeUserStatus(param, modelMap);
     }
-    @ResponseBody
+
     @RequestMapping(value = "/lockUser")
-    public Grid lockUser(Integer userID,ModelMap modelMap){
+    @ResponseBody
+    public String lockUser(Integer userID,ModelMap modelMap){
         ChangeUserStatusParam param = new ChangeUserStatusParam();
         param.setWorkStatus(Constant.STATUS_DISABLE+"");
         param.setUserID(userID);
-        return changeUserStatus(param, modelMap);
+        return JSON.toJSONString(changeUserStatus(param, modelMap));
+//        return ;
     }
-    @ResponseBody
+
     @RequestMapping(value = "/unlockUser")
-    public Grid unlockUser(Integer userID,ModelMap modelMap){
+    @ResponseBody
+    public String unlockUser(Integer userID,ModelMap modelMap){
         ChangeUserStatusParam param = new ChangeUserStatusParam();
         param.setWorkStatus(Constant.STATUS_ABLE+"");
         param.setUserID(userID);
@@ -260,9 +264,10 @@ public class UserController extends BaseController{
     }
 
 
-    @ResponseBody
+
     @RequestMapping(value = "/deleteFromOrg")
-    public Grid deleteFromOrg(DeleteFromOrg param, ModelMap modelMap){
+    @ResponseBody
+    public String deleteFromOrg(DeleteFromOrg param, ModelMap modelMap){
         String url = "orgMember/deleteFromOrg";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -278,12 +283,12 @@ public class UserController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @RequestMapping(value = "/exportInfo")
     @ResponseBody
-    public Grid exportInfo(HttpServletRequest request) throws Exception{
+    public String exportInfo(HttpServletRequest request) throws Exception{
         Grid grid=new Grid();
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
                 request.getSession().getServletContext());
@@ -398,7 +403,7 @@ public class UserController extends BaseController{
             grid.setMessage("fail");
             e.printStackTrace();
         }
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 }

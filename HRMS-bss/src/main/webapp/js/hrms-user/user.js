@@ -13,6 +13,37 @@ $(function(){
     $('#userCreQuit').on('click', function() {
         $('#transfer-alert2').dialog('destroy');
     });
+
+    $("#userBirthInput").on('click',function () {
+        $(this).datetimepicker({
+            format: 'Y-m-d',
+            autoclose: true,
+            minView: 4,
+            startView:4,
+            linkField: "userBirthInput",
+            linkFormat: "Y-m-d",
+            minuteStep:1,
+            inputMask: true
+        })
+    })
+    $('#userBirthInput').on("blur",function () {
+        $(this).datetimepicker("remove")
+    })
+    $("#userWorkInput").on('click',function () {
+        $(this).datetimepicker({
+            format: 'Y-m-d',
+            autoclose: true,
+            minView: 4,
+            startView:4,
+            linkField: "userWorkInput",
+            linkFormat: "Y-m-d",
+            minuteStep:1,
+            inputMask: true
+        })
+    })
+    $('#userWorkInput').on("blur",function () {
+        $(this).datetimepicker("remove")
+    })
     /*创建用户*/
     $('#userCreSure').on('click', function() {
         var userName = $("#userNameInput").val();
@@ -24,7 +55,7 @@ $(function(){
         var workTime = $("#userWorkInput").val();
         var roleID = $('select[name="selectRole"]').val();
         var isOrgManager = $('input[name="userManagerInput"]:checked').val();
-        var orgName = $('select[name="selectOrg"]').val();
+        var orgName = $("#orgNameIn").val();
         var jobName = $("#jobNameInput").val();
 
         var flag = true;
@@ -42,17 +73,17 @@ $(function(){
                 url : '/filter/user/createUser',
                 type : 'POST',
                 data : {
-                    userName:userName,
-                    userPhone:userPhone,
-                    sex:sex,
-                    userEmail:userEmail,
-                    userCardNumber:userCardNumber,
-                    dataOfBirth:dataOfBirth,
-                    workTime:workTime,
-                    roleID:roleID,
-                    isOrgManager:isOrgManager,
-                    orgName:orgName,
-                    jobName:jobName
+                    "userName":userName,
+                    "userPhone":userPhone,
+                    "sex":sex,
+                    "userEmail":userEmail,
+                    "userCardNumber":userCardNumber,
+                    "dataOfBirth":dataOfBirth,
+                    "workTime":workTime,
+                    "roleID":roleID,
+                    "isOrgManager":isOrgManager,
+                    "orgName":orgName,
+                    "jobName":jobName
                 },
                 cache : false,
                 dataType : 'json',

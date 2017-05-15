@@ -11,17 +11,20 @@ $(function(){
         var orgName = $("#orgName").val();
         var startTime = $("#startTime").val();
         var endTime = $("#endTime").val();
-        var isLater = $('input[name="isLater"]:checked').val();
-        var isEarly = $('input[name="isEarly"]:checked').val();
+        var isLater = $('input[id="isLater"]:checked').val();
+        var isEarly = $('input[id="isEarly"]:checked').val();
 
-        console.info("isLater:"+isLater);
-        console.info("isEarly"+isEarly);
+        console.info("startTime:"+startTime+"  endTime:"+endTime);
 
-        $('#companySearchCondition').val($('#forid').serialize());
-        /*$('#content').load("filter/user/searchUserIndex",$('#companySearchCondition').val(),function() {
-            $('.pagination>li>a').on('click', pageFunc());
-        });*/
-        $('#content').load("filter/sign/searchSignIndex",$('#forid').serialize(), function(){
+        if(isLater == undefined){
+            isLater = 0;
+        }
+        if(isEarly == undefined){
+            isEarly = 0;
+        }
+
+        $('#content').load("filter/sign/searchSignIndex?userName="+userName+"&orgName="+orgName+"&startTime="+startTime
+            +"&endTime="+endTime+"&isLater="+isLater+"&isEarly="+isEarly, function(){
             $('.pagination>li>a').on('click', pageFunc);
         });
     })

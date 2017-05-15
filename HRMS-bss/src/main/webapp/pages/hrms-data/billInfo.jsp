@@ -30,7 +30,8 @@
 							<div id="exportCom"></div>
 							<input type="hidden" value="" id="companySearchCondition">
 							<div id="tid" style="margin-top: 8px;">
-								<jsp:include page="signTable.jsp"></jsp:include>
+								<div align="center" id="billChart" style="width: 500px;height: 400px">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -42,4 +43,5 @@
 </div>
 <script src="js/jquery/jquery.form.js"></script>
 <script src="js/handlebars-v2.0.0.js"></script>
-<script src="js/hrms-data/signInfo.js"></script>
+<script src="js/hrms-data/billInfo.js"></script>
+<script src="js/echarts.min.js"></script>

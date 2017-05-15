@@ -32,28 +32,28 @@
 				<div class="btn-userc">修改</div>
 					<div>
 						<label for="truename">真实姓名</label> <input type="text"
-							id="truename" readonly="readonly" value="${userInfo.userName}"/>
+							id="truename" readonly="readonly" value="${userDetail.userName}"/>
 						<p>请输入与身份证相同的姓名</p>
 						<span id="namespan"></span>
 					</div>
 					<div>
 						<label for="telephone">电话号码</label> <input type="text"
-							id="telephone" readonly="readonly" value="${userInfo.userPhone}"/>
+							id="telephone" readonly="readonly" value="${userDetail.userPhone}"/>
 						<p>请确保输入可以联系到本人的号码</p>
 						<span id="phonespan"></span>
 					</div>
 					<div>
 						<label for="idnum">身份证号</label> <input type="text" id="idnum"
-							readonly="readonly" value="${userInfo.userCardNumber}"/>
-						<p>请确保输入本人有效的身份证号</p>
+							readonly="readonly" value="${userDetail.userCardNumber}"/>
+						<p>本人有效的身份证号(不可修改)</p>
 						<span id="idCardspan"></span>
 					</div>
 					<div>
 						<label for="sexL">性别</label>
-						<c:if test="${userInfo.userSex eq 1}" >
+						<c:if test="${userDetail.userSex eq 1}" >
 							<input type="text" id="sex" readonly="readonly" value="男">
 						</c:if>
-						<c:if test="${userInfo.userSex eq 2}" >
+						<c:if test="${userDetail.userSex eq 2}" >
 							<input type="text" id="sex" readonly="readonly" value="女">
 						</c:if>
 						<p>请填写“男”或“女”</p>
@@ -61,15 +61,15 @@
 					</div>
 					<div>
 						<label for="age">年龄</label> <input type="text" id="age"
-							readonly="readonly" value="${userInfo.userAge}"/>
+							readonly="readonly" value="${userDetail.userAge}"/>
 					</div>
 					<div>
-						<label for="dataOfBirth">出身年月</label> <input type="text" id="dataOfBirth"
-														   readonly="readonly" value="${userInfo.dataOfBirth}"/>
+						<label for="dataOfBirth">出身年月日</label> <input type="text" id="dataOfBirth"
+														   readonly="readonly" value="${userDetail.dataOfBirth}"/>
 					</div>
 					<div>
 						<label for="email">邮箱</label> <input type="text" id="userEamil"
-							readonly="readonly" value="${userInfo.userEamil}"/>
+							readonly="readonly" value="${userDetail.userEamil}"/>
 					</div>
 					
 						<div class="input-group col-md-5 colLee  col-md-pull-1" style="display:inline-block;text-align: right;">
@@ -79,13 +79,6 @@
 					<div class="input-group col-md-4 colLee" style="display:inline-block;">
 						<a class="btn btn-info" id="btn-userg">取消</a>
 					</div>
-					
-					<!-- <div id="user-info-btn">
-						<div class="btn-user" id="btn-users">保存
-							<input type="button" class="btn1-users">
-						</div>
-						<div class="btn-user" id="btn-userg">取消</div>
-					</div> -->
 				</form>
 				
 			
@@ -114,7 +107,7 @@
 					</div>
 					
 					<div class="input-group col-md-4 colLee" style="display:inline-block;">
-						<a class="btn btn-info" id="btn-userg">取消</a>
+						<a class="btn btn-info" id="btn-userg2">取消</a>
 					</div>
 					
 				</form>

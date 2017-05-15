@@ -1,5 +1,6 @@
 package hrms.bss.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.model.common.Paginator;
@@ -83,7 +84,7 @@ public class SignController extends BaseController{
 
     @RequestMapping(value = "/exportInfo")
     @ResponseBody
-    public Grid exportInfo(HttpServletRequest request) throws Exception{
+    public String exportInfo(HttpServletRequest request) throws Exception{
         Grid grid=new Grid();
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
                 request.getSession().getServletContext());
@@ -170,7 +171,7 @@ public class SignController extends BaseController{
             grid.setMessage("报错：文件格式不正确");
             e.printStackTrace();
         }
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 }

@@ -1,5 +1,6 @@
 package hrms.bss.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.common.Constant;
@@ -76,9 +77,10 @@ public class LeaveController extends BaseController{
         return new ModelAndView("hrms-leave/businessTable", model);
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/upBusinessApprove")
-    public Grid upBusinessApprove(UpApproveParam param, ModelMap model){
+    @ResponseBody
+    public String upBusinessApprove(UpApproveParam param, ModelMap model){
         String url = "leave/upApprove";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -103,7 +105,7 @@ public class LeaveController extends BaseController{
             grid.setMessage("网络错误");
         }
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 
@@ -158,7 +160,7 @@ public class LeaveController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/upLeaveApprove")
-    public Grid upLeaveApprove(UpApproveParam param, ModelMap model){
+    public String upLeaveApprove(UpApproveParam param, ModelMap model){
         String url = "leave/upApprove";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -180,7 +182,7 @@ public class LeaveController extends BaseController{
             grid.setMessage(postJson.getString("message"));
         }
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     /*   approve    */
@@ -228,7 +230,7 @@ public class LeaveController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/showApproveDetail")
-    public Grid showApproveDetail(FindApproveParam param, ModelMap model){
+    public String showApproveDetail(FindApproveParam param, ModelMap model){
         String url = "leave/findApproveDetail";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -254,12 +256,12 @@ public class LeaveController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value = "/passApprove")
-    public Grid passApprove(FindApproveParam param, ModelMap model){
+    public String passApprove(FindApproveParam param, ModelMap model){
         String url = "leave/passApprove";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -276,11 +278,11 @@ public class LeaveController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
     @ResponseBody
     @RequestMapping(value = "/rejectApprove")
-    public Grid rejectApprove(FindApproveParam param, ModelMap model){
+    public String rejectApprove(FindApproveParam param, ModelMap model){
         String url = "leave/rejectApprove";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -297,6 +299,6 @@ public class LeaveController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 }

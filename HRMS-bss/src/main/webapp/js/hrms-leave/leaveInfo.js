@@ -10,21 +10,21 @@ $(function(){
         inputMask: true
     });*/
 
-    $('#startTime').datetimepicker({
-        format: 'Y-m-d H:i',
+    $('#startTime1').datetimepicker({
+        format: 'Y-m-d',
         autoclose: true,
         minView: 0,
-        linkField: "startTime",
-        linkFormat: "Y-m-d H:i",
+        linkField: "startTime1",
+        linkFormat: "Y-m-d",
         minuteStep:1,
         inputMask: true
     });
-    $('#endTime').datetimepicker({
-        format: 'Y-m-d H:i',
+    $('#endTime1').datetimepicker({
+        format: 'Y-m-d',
         autoclose: true,
         minView: 0,
-        linkField: "endTime",
-        linkFormat: "Y-m-d H:i",
+        linkField: "endTime1",
+        linkFormat: "Y-m-d",
         minuteStep:1,
         inputMask: true
     });
@@ -42,15 +42,14 @@ $(function(){
 
     /*提交请假申请*/
     $('#upLeaveSure').on('click', function() {
-        var startTime = $("#startTime").val();
-        var endTime = $("#endTime").val();
+        var startTime = $("#startTime1").val();
+        var endTime = $("#endTime1").val();
         var leaveContent = $("#leaveContent1").val();
 
         var flag = true;
-        if(startTime == null || startTime=="" ||endTime == null || endTime=="" || leaveContent == null || leaveContent=="" ){
+        if(startTime == null || startTime=="" ||endTime == null || endTime=="" ){
 
-            console.info("start:"+startTime+" end:"+endTime+" content:"+leaveContent);
-
+            console.info("startTime:"+startTime+" endTime:"+endTime);
             flag = false;
             alert("信息填写不完整!");
         }
@@ -60,8 +59,8 @@ $(function(){
                 url : '/filter/leave/upLeaveApprove',
                 type : 'POST',
                 data : {
-                    "startTime":startTime+":00",
-                    "endTime":endTime+":00",
+                    "startTime":startTime+" 00:00:00",
+                    "endTime":endTime+" 00:00:00",
                     "leaveContent":leaveContent
                 },
                 cache : false,
@@ -86,7 +85,8 @@ $(function(){
     /*查询*/
     $('#forLeaveSearch').on('click',function(){
         var leaveCode = $("#leaveCode").val();
-        var leaveStatus = $('select[name="leaveStatus"]').val();
+        // var leaveStatus = $('select[name="leaveStatus"]').val();
+        var leaveStatus = $('#leaveStatusIn').val();
 
         $('#content').load("filter/leave/searchLeaveIndex?leaveCode="+leaveCode+"&leaveStatus="+leaveStatus, function(){
             $('.pagination>li>a').on('click', pageFunc);

@@ -36,10 +36,12 @@
 									<a href="javaScript:void(0);" class="btn btn-primary"
 										id="forWageSearch">查询</a>
 								</div>
-								<div class="input-group col-md-1 colLee" >
-									<a href="javaScript:void(0);" class="btn btn-primary"
-									   id="importWageExcel">批量导入</a>
-								</div>
+								<c:if test="${userInfo.isFINANCE eq 1}">
+									<div class="input-group col-md-1 colLee" >
+										<a href="javaScript:void(0);" class="btn btn-primary"
+										   id="importWageExcel">批量导入</a>
+									</div>
+								</c:if>
 							</form>
 							<div id="exportCom"></div>
 							<input type="hidden" value="" id="companySearchCondition">

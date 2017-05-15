@@ -34,6 +34,8 @@ public class UserDetail {
     private Byte isMine;
     private Byte hasRole;  //0:没有操作权限  1：有
 
+
+
     private List<String> workMessages;
 
     public List<String> getWorkMessages() {

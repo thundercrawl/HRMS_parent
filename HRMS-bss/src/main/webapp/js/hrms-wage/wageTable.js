@@ -65,7 +65,7 @@ $(function(){
                     if(data.code=="0000"){
                         alert("调整用户薪资成功");
                         $('#transfer-alertWage').dialog('destroy');
-                        $('#tid').load("filter/wage/getAllWages",$('#forid').serialize(), function(){
+                        $('#content').load("filter/wage/getAllWages",$('#forid').serialize(), function(){
                             $('.pagination>li>a').on('click', pageFunc);
                         });
                     }else{

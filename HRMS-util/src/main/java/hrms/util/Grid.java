@@ -4,10 +4,16 @@ public class Grid implements java.io.Serializable {
 
 	private String message;
 	private String code;
-
 	private Object data;
 
+	public Grid() {
+	}
 
+	public Grid(String message, String code, Object data) {
+		this.message = message;
+		this.code = code;
+		this.data = data;
+	}
 
 	public String getCode() {
 		return code;
@@ -33,4 +39,12 @@ public class Grid implements java.io.Serializable {
 		this.data = data;
 	}
 
+	@Override
+	public String toString() {
+		return "Grid{" +
+				"message='" + message + '\'' +
+				", code='" + code + '\'' +
+				", data=" + data +
+				'}';
+	}
 }

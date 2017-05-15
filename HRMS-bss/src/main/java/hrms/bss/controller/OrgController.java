@@ -1,6 +1,7 @@
 package hrms.bss.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.model.OrgBaseInfo;
@@ -77,7 +78,7 @@ public class OrgController extends BaseController{
 
 	@ResponseBody
 	@RequestMapping(value="/updateOrg")
-    public Grid updateOrg(UpdateOrgParam param, ModelMap modelMap){
+    public String updateOrg(UpdateOrgParam param, ModelMap modelMap){
         String url = "orgInfo/update";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -93,12 +94,12 @@ public class OrgController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("messge"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value="/createOrg")
-    public Grid createOrg(SaveOrgParam param,ModelMap modelMap){
+    public String createOrg(SaveOrgParam param,ModelMap modelMap){
         String url = "orgInfo/save";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -114,12 +115,12 @@ public class OrgController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("messge"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value="/deleteOrg")
-    public Grid deleteOrg(OrgBaseInfo param, ModelMap modelMap){
+    public String deleteOrg(OrgBaseInfo param, ModelMap modelMap){
         String url = "orgInfo/deleteOrg";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -135,13 +136,13 @@ public class OrgController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("messge"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 
     @ResponseBody
     @RequestMapping(value = "/findAllUserName")
-    public Grid findAllUserName(FindOrgParam orgParam,@RequestParam("userName")String userName, ModelMap modelMap){
+    public String findAllUserName(FindOrgParam orgParam, @RequestParam("userName")String userName, ModelMap modelMap){
         String url = "userInfo/findAllUserName";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -167,16 +168,17 @@ public class OrgController extends BaseController{
             System.err.println(data);
             if(data!=null){
 //                ArrayList list = JSONObject.parseObject(data.get("result").toString(), ArrayList.class);
-                grid.setData(JSONObject.parseArray(data.get("result").toString()));
+                grid.setData(data.get("result").toString());
+                return JSON.toJSONString(grid);
             }
         }
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
     @ResponseBody
     @RequestMapping(value="/addMember")
-    public Grid addMember(AddOrgMember param, ModelMap modelMap){
+    public String addMember(AddOrgMember param, ModelMap modelMap){
         String url = "orgInfo/addMember";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -192,7 +194,7 @@ public class OrgController extends BaseController{
         grid.setCode(postJson.getString("status"));
         grid.setMessage(postJson.getString("message"));
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 }

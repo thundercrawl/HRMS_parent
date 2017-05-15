@@ -484,11 +484,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(userInfo == null){
             return MsgVo.fail(ErrorCode.USER_EMPTY);
         }
-        if(! StringUtil.isEmpty(param.getUserName())){
+        if(! StringUtil.isEmpty(param.getUserName()) && ! param.getUserName().equals(userInfo.getUserName())){
             userInfo.setUserName(param.getUserName());
         }
         if(! StringUtil.isEmpty(param.getUserPhone()) &&
-                Validator.isMobile(param.getUserPhone())){
+                Validator.isMobile(param.getUserPhone()) &&
+                ! param.getUserPhone().equals(userInfo.getUserPhone())){
             UserInfo byPhone = userInfoRepository.findByPhone(param.getUserPhone());
             if(byPhone != null){
                 return MsgVo.fail(ErrorCode.REGISTER_REPEAT);
@@ -496,24 +497,27 @@ public class UserInfoServiceImpl implements UserInfoService {
             userInfo.setUserPhone(param.getUserPhone());
         }
         if(! StringUtil.isEmpty(param.getUserSex()) &&
-                (param.getUserSex() ==1 ||param.getUserSex() ==0 )){
+                (param.getUserSex() ==1 ||param.getUserSex() ==0 )
+                && param.getUserSex().byteValue() != param.getUserSex().byteValue()){
             userInfo.setSex(param.getUserSex().toString());
         }
         if(! StringUtil.isEmpty(param.getUserEmail()) &&
-                Validator.isEmail(param.getUserEmail())){
+                Validator.isEmail(param.getUserEmail()) &&
+                ! param.getUserEmail().equals(userInfo.getUserEmail())){
             userInfo.setUserEmail(param.getUserEmail());
         }
         if(! StringUtil.isEmpty(param.getBirthOfDate()) &&
                 DateUtil.now().after(DateUtil.parse(param.getBirthOfDate(),DateUtil.BASE_DATE_FORMAT))){
             UserSensitiveInfo userSensitiveInfo = userSensitiveInfoRepository.findByID(param.getUserID());
-            userSensitiveInfo.setDataOfBirth(param.getBirthOfDate());
-            userSensitiveInfoRepository.save(userSensitiveInfo);
-
-            //更新年龄
-            UserSensitiveInfo one = userSensitiveInfoRepository.findByID(userInfo.getUserId());
-            int betweenTwoDate = DateUtil.yearBetweenTwoDate(one.getDataOfBirth(), DateUtil.formatDate());
-            if(betweenTwoDate != userInfo.getUserAge()){
-                userInfo.setUserAge(betweenTwoDate);
+            if(! userSensitiveInfo.getDataOfBirth().equals(param.getBirthOfDate())){
+                userSensitiveInfo.setDataOfBirth(param.getBirthOfDate());
+                userSensitiveInfoRepository.save(userSensitiveInfo);
+                //更新年龄
+                UserSensitiveInfo one = userSensitiveInfoRepository.findByID(userInfo.getUserId());
+                int betweenTwoDate = DateUtil.yearBetweenTwoDate(one.getDataOfBirth(), DateUtil.formatDate());
+                if(betweenTwoDate != userInfo.getUserAge()){
+                    userInfo.setUserAge(betweenTwoDate);
+                }
             }
         }
 

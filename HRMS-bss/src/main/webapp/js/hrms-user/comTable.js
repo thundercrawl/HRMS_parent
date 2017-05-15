@@ -100,6 +100,7 @@ $(function() {
                 cache : false,
                 dataType : 'json',
                 success : function(data) {
+                    console.info(data);
                     if(data.code=="0000"){
                         alert("解禁成功");
                         $('#content').load("filter/user/searchUserIndex?",$('#forid').serialize(),function(){
@@ -110,6 +111,7 @@ $(function() {
                     }
                 },
                 error:function(data){
+                    console.info(data);
                     alert("网络异常");
                 }
             });
@@ -130,13 +132,14 @@ $(function() {
                 cache : false,
                 dataType : 'json',
                 success : function(data) {
-                    if(data.code=="0000"){
+                    var data1 = $.parseJSON(data);
+                    if(data1.code=="0000"){
                         alert("禁用成功");
                         $('#content').load("filter/user/searchUserIndex?",$('#forid').serialize(),function(){
                             $('.pagination>li>a').on('click', pageFunc);
                         });
                     }else{
-                        alert("禁用失败："+data.message);
+                        alert("禁用失败："+data1.message);
                     }
                 },
                 error:function(data){

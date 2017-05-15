@@ -1,15 +1,21 @@
 $(function(){
-    $('#monthParam').datetimepicker({
-        format: 'Y-m',
-        autoclose: true,
-        minView: 0,
-        linkField: "monthParam",
-        linkFormat: "Y-m",
-        minuteStep:1,
-        minView:3,
-        startView:3,
-        inputMask: true
-    });
+
+    $('#monthParam').on('click',function () {
+        $(this).datetimepicker({
+            format: 'Y-m',
+            autoclose: true,
+            minView: 0,
+            linkField: "monthParam",
+            linkFormat: "Y-m",
+            minuteStep:1,
+            minView:3,
+            startView:3,
+            inputMask: true
+        })
+    })
+    $('#monthParam').on('blur',function () {
+        $(this).datetimepicker("remove")
+    })
 
     /*查询*/
     $('#forBillSearch').on('click',function(){

@@ -18,11 +18,11 @@
 					  method="post" action="" style="margin-left: 25px;margin-bottom: 20px"  enctype="multipart/form-data">
 					<div>
 						<label>出差开始时间:</label> <input type="text"
-																		 id="startTime" />
+																		 id="startTime1" />
 					</div>
 					<div>
 						<label>出差结束时间:</label> <input type="text"
-													  id="endTime" />
+													  id="endTime1" />
 					</div>
 					<div>
 						<label>出差事由:</label> <input type="text"
@@ -80,4 +80,4 @@
 </div>
 <script src="js/jquery/jquery.form.js"></script>
 <script src="js/handlebars-v2.0.0.js"></script>
-<script src="js/hrms-business/businessInfo.js"></script>
+<script src="js/hrms-leave/businessInfo.js"></script>

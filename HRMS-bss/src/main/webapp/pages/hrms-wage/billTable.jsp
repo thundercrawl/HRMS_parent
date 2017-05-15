@@ -4,6 +4,10 @@
 <table class="table table-striped table-bordered bootstrap-datatable dataTable responsive" id="projectable_meet">
 	<thead>
 		<tr>
+			<th>姓名</th>
+			<th>手机号码</th>
+			<th>部门</th>
+			<th>职位</th>
 			<th>月份</th>
 			<th>基本工资</th>
 			<th>补贴</th>
@@ -19,6 +23,10 @@
 	<c:if test="${!(empty paginator.list)}">
 		<c:forEach items="${paginator.list}" var="os">
 			<tr>
+				<td class="center">${os.userName}</td>
+				<td class="center">${os.userPhone}</td>
+				<td class="center">${os.orgName}</td>
+				<td class="center">${os.jobName}</td>
 				<td class="center">${os.billDate}</td>
 				<td class="center">${os.baseWage}</td>
 				<td class="center">${os.subsidy}</td>
@@ -37,10 +45,10 @@
 </table>
 
 <jsp:include page="../common/paginator.jsp">
-	<jsp:param value="filter/wage/searchBill" name="url"/>
+	<jsp:param value="filter/wage/searchFinanceBill" name="url"/>
 	<jsp:param value="tid" name="loadCmp"/>
 </jsp:include>
 </div>
 
-<script src="js/hrms-wage/personalBillTable.js"></script>
+<script src="js/hrms-wage/billTable.js"></script>
 <script src="js/pagination.js"></script>

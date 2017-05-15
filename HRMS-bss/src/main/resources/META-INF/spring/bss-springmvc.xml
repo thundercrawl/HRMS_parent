@@ -29,14 +29,14 @@
 	</bean>
 
 	<!-- 支持自动将java对象转为json -->
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	<!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
 			</list>
 		</property>
 	</bean>
-
+-->
 	<mvc:annotation-driven />
 
 	<mvc:resources mapping="/js/**" location="/js/" />
@@ -46,6 +46,5 @@
 	<mvc:resources mapping="/plugin/**" location="/plugin/" />
 	<mvc:resources mapping="/fonts/**" location="/fonts/" />
 	<mvc:resources mapping="/smiley/**" location="/smiley/" />
-	<mvc:resources mapping="/fileUpload/**" location="/fileUpload/" />
 
 </beans>

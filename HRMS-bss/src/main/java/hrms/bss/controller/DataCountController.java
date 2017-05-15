@@ -1,5 +1,6 @@
 package hrms.bss.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import hrms.common.CommonParams;
 import hrms.po.DataCountParam;
@@ -21,12 +22,12 @@ public class DataCountController extends BaseController{
 
     @RequestMapping(value = "/getSign")
     public ModelAndView gethSign(String year, ModelMap model){
-//        searchSign(null,model);
         return new ModelAndView("hrms-data/signInfo", model);
     }
-    @ResponseBody
+
     @RequestMapping(value = "/searchSign")
-    public Grid searchSign(String year, ModelMap model){
+    @ResponseBody
+    public String searchSign(String year, ModelMap model){
 
         String url = "data/signCount";
 
@@ -48,7 +49,6 @@ public class DataCountController extends BaseController{
             if(resultStatus.equals("0000")){
                 JSONObject data = postJson.getJSONObject("data");
                 if(data!=null){
-//                model.put("data",JSONObject.parseObject(data.get("result").toString()));
                     grid.setData(JSONObject.parseObject(data.get("result").toString()));
                 }
             }
@@ -58,7 +58,7 @@ public class DataCountController extends BaseController{
             e.printStackTrace();
         }
 
-        return grid;
+        return JSON.toJSONString(grid);
     }
 
 
@@ -66,11 +66,11 @@ public class DataCountController extends BaseController{
 
     @RequestMapping(value = "/getBill")
     public ModelAndView getBill(String year, ModelMap model){
-        searchBill(null,model);
         return new ModelAndView("hrms-data/billInfo", model);
     }
     @RequestMapping(value = "/searchBill")
-    public ModelAndView searchBill(String year, ModelMap model){
+    @ResponseBody
+    public String searchBill(String year, ModelMap model){
         String url = "data/billCount";
 
         BssReturnJson BssReturnJson=new BssReturnJson(appProperties);
@@ -83,18 +83,23 @@ public class DataCountController extends BaseController{
         DataCountParam param = new DataCountParam();
         param.setYear(year);
 
+        Grid grid =  new Grid();
+
         JSONObject postJson = BssReturnJson.postJson(url, param, commonParams, JSONObject.class);
         String resultStatus = postJson.getString("status");
+        grid.setCode(postJson.getString("status"));
+        grid.setMessage(postJson.getString("message"));
         if(resultStatus.equals("0000")){
             JSONObject data = postJson.getJSONObject("data");
             if(data!=null){
-                model.put("data",JSONObject.parseObject(data.get("result").toString()));
+                grid.setData(data.get("result").toString());
             }
         }
 
-        model.put("yearInput",year);
+        return JSON.toJSONString(grid);
 
-        return new ModelAndView("hrms-data/billInfo", model);
+//        return grid;
     }
+
 
 }

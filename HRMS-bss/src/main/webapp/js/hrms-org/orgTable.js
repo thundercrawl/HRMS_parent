@@ -26,7 +26,12 @@ $(function() {
             success : function(data) {
                 if(data.code == "0000"){
                     $('#transfer-inputMember').dialog('destroy');
-                    var arr= (data.data);
+                    var arr;
+                    if(! $.isArray(data.data)){
+                        arr = $.parseJSON(data.data);
+                    }else{
+                        arr= (data.data);
+                    }
                     var html = "";
                     $.each(arr,function (index,o) {
                         html += '<option value="'+o.userId+' ">'+o.userName+'</option>';
@@ -35,7 +40,7 @@ $(function() {
                     $("#transfer-addMember").dialog({ modal:true,autoOpen: true,height:'auto', width:360,resizable:false,
                     });
                 }else{
-                    alert(data.message);
+                    alert("请求失败："+data.message);
                 }
 
             },

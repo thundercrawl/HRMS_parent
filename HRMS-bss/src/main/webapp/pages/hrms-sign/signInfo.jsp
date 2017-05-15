@@ -7,7 +7,7 @@
 		<li><a href="javaScipt:void(0);">考勤管理</a></li>
 	</ul>
 </div>
-<div class="row" id="memSchi">
+<div class="row" >
 	<div class="box col-md-12">
 		<div class="box-inner">
 			<div class="box-content"
@@ -35,26 +35,24 @@
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">用户名称</span> <input type="text"
-										class="form-control" placeholder="用户名称" id="userName"
-										name="userName" value="${searchParam.userName}">
+										class="form-control" placeholder="用户名称" id="userName" value="${searchParam.userName}">
 								</div>
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">部门</span> <input type="text"
-										class="form-control" placeholder="部门" id="orgName"
-										name="orgName" value="${searchParam.orgName}">
+										class="form-control" placeholder="部门" id="orgName" value="${searchParam.orgName}">
 								</div>
 								<div class="input-group col-md-3"
 									style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">开始时间</span> <input
 										type="text" class="form-control" placeholder="开始时间"
-										id="startTime" name="startTime" value="${searchParam.startTime}">
+										id="startTime" value="${searchParam.startTime}">
 								</div>
 								<div class="input-group col-md-3"
 									 style="margin: 2px 0; display: inline-table;">
 									<span class="input-group-addon">结束时间</span> <input
 										type="text" class="form-control" placeholder="结束时间"
-										id="endTime" name="endTime" value="${searchParam.endTime}">
+										id="endTime" value="${searchParam.endTime}">
 								</div>
 								<div class="input-group col-md-3"
 									 style="margin: 2px 0; display: inline-table;">
@@ -62,11 +60,11 @@
 									<c:if test="${searchParam.isLater eq 1}">
 										<input
 												type="checkbox" class="form-control" placeholder="迟到"
-												id="isLater" style="width: 40px;height: auto" value="1" name="isLater" checked="checked">
+												id="isLater" style="width: 40px;height: auto" value="1" checked="checked">
 									</c:if>
 									<c:if test="${searchParam.isLater ne 1}">
 										<input type="checkbox" class="form-control" placeholder="迟到"
-												id="isLater" style="width: 40px;height: auto" value="1" name="isLater">
+												id="isLater" style="width: 40px;height: auto" value="1" >
 									</c:if>
 								</div>
 								<div class="input-group col-md-3"
@@ -74,11 +72,11 @@
 									<span class="input-group-addon">早退</span>
 									<c:if test="${searchParam.isEarly eq 1}">
 										<input type="checkbox" class="form-control" placeholder="早退"
-												id="isEarly" style="width: 40px;height: auto" value="1" name="isEarly" checked="checked">
+												id="isEarly" style="width: 40px;height: auto" value="1" checked="checked">
 									</c:if>
 									<c:if test="${searchParam.isEarly ne 1}">
 										<input type="checkbox" class="form-control" placeholder="早退"
-											   id="isEarly" style="width: 40px;height: auto" value="1" name="isEarly">
+											   id="isEarly" style="width: 40px;height: auto" value="1" >
 									</c:if>
 								</div>
 
